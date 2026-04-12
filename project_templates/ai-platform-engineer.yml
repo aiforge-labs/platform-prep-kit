@@ -1,0 +1,182 @@
+role: ai-platform-engineer
+version: 1
+
+projects:
+  - id: rag-eval-dashboard
+    title: "RAG Evaluation Dashboard"
+    description: >
+      Build an end-to-end RAG system with a lightweight evaluation harness.
+      Ingest a set of documents, chunk and embed them, implement retrieval,
+      generate answers, and measure quality with retrieval and generation
+      metrics.  Output a visual dashboard showing precision@k, faithfulness,
+      and answer relevance over time.
+    track_id: rag-knowledge-systems
+    topics:
+      - rag-architecture
+      - chunking-strategies
+      - vector-databases
+      - retrieval-evaluation
+    difficulty: intermediate
+    estimated_hours: 12
+    skills_demonstrated:
+      - "RAG pipeline design (ingest → retrieve → generate)"
+      - "Chunking strategy selection and tuning"
+      - "Vector database setup and querying"
+      - "Retrieval metrics (precision@k, MRR)"
+      - "Generation quality measurement (faithfulness, relevance)"
+      - "Dashboard / visualization"
+    rubric:
+      - description: "Document ingestion pipeline loads at least 10 documents"
+      - description: "Chunking strategy is configurable (size, overlap)"
+      - description: "Embeddings stored in a vector database (any: FAISS, Qdrant, pgvector)"
+      - description: "Retrieval returns top-k results with similarity scores"
+      - description: "Answer generation uses retrieved context (not just LLM knowledge)"
+      - description: "Evaluation harness computes at least 2 retrieval metrics"
+      - description: "Evaluation harness computes at least 1 generation metric"
+      - description: "Dashboard visualizes metrics (CLI table, HTML, or Streamlit)"
+      - description: "README explains architecture decisions and trade-offs"
+      - description: "Code is runnable with clear setup instructions"
+    starter_files:
+      README.md: |
+        # RAG Evaluation Dashboard
+
+        ## Goal
+        Build a RAG system with built-in evaluation metrics.
+
+        ## Architecture
+        <!-- Describe your pipeline: ingestion → chunking → embedding → retrieval → generation → eval -->
+
+        ## Quick Start
+        ```bash
+        pip install -r requirements.txt
+        python ingest.py --docs ./data/
+        python query.py "What is ...?"
+        python eval.py
+        ```
+
+        ## Trade-offs & Decisions
+        <!-- Why did you choose this chunking strategy? This vector DB? This eval metric? -->
+      requirements.txt: |
+        # Add your dependencies
+        # e.g. langchain, chromadb, sentence-transformers, ragas
+      ingest.py: |
+        """Document ingestion pipeline: load → chunk → embed → store."""
+      query.py: |
+        """Query pipeline: retrieve → generate → return answer."""
+      eval.py: |
+        """Evaluation harness: compute retrieval + generation metrics."""
+    resources:
+      - "RAGAS docs: https://docs.ragas.io/"
+      - "LangChain RAG tutorial: https://python.langchain.com/docs/tutorials/rag/"
+
+  - id: multi-agent-observability
+    title: "Multi-Agent Workflow with Observability"
+    description: >
+      Design a multi-agent system where an orchestrator delegates tasks
+      to specialist agents (e.g., researcher + writer + reviewer).
+      Instrument the system with tracing so every agent step, tool call,
+      and LLM invocation is logged with latency, tokens, and cost.
+    track_id: llmops-orchestration
+    topics:
+      - orchestration-frameworks
+      - agentic-systems
+      - llm-observability
+    difficulty: advanced
+    estimated_hours: 14
+    skills_demonstrated:
+      - "Multi-agent architecture (orchestrator + specialists)"
+      - "Tool/function calling design"
+      - "Agent loop control (step limits, fallbacks)"
+      - "LLM observability and tracing"
+      - "Cost and latency monitoring"
+    rubric:
+      - description: "At least 2 specialist agents with distinct responsibilities"
+      - description: "Orchestrator routes tasks and aggregates results"
+      - description: "Agents use tool/function calling (not just prompts)"
+      - description: "Agent loop has a step limit to prevent runaway execution"
+      - description: "Every LLM call is traced with latency and token count"
+      - description: "Traces are viewable (logs, JSON, or UI like Langfuse/Phoenix)"
+      - description: "Total cost per workflow run is computed"
+      - description: "Error handling: agent failures don't crash the system"
+      - description: "README explains agent design and observability setup"
+      - description: "Demo script runs an end-to-end workflow"
+    starter_files:
+      README.md: |
+        # Multi-Agent Workflow with Observability
+
+        ## Goal
+        Build a multi-agent system with full tracing and cost monitoring.
+
+        ## Agents
+        <!-- Describe each agent's role and tools -->
+
+        ## Observability
+        <!-- How are traces collected? What metrics are tracked? -->
+
+        ## Quick Start
+        ```bash
+        pip install -r requirements.txt
+        python run_workflow.py "Research and write about ..."
+        python view_traces.py
+        ```
+      requirements.txt: |
+        # Add your dependencies
+      run_workflow.py: |
+        """Execute a multi-agent workflow with tracing enabled."""
+      view_traces.py: |
+        """Display traces from the last workflow run."""
+    resources:
+      - "Anthropic — Building Effective Agents: https://www.anthropic.com/research/building-effective-agents"
+      - "Langfuse tracing: https://langfuse.com/docs/tracing"
+
+  - id: llm-cost-optimizer
+    title: "LLM Cost Optimization Toolkit"
+    description: >
+      Build a toolkit that demonstrates three cost optimization
+      techniques for LLM applications: semantic caching, prompt
+      compression, and model routing by cost/capability.
+      Benchmark each technique showing latency and cost savings.
+    track_id: ai-observability-evals
+    topics:
+      - cost-management
+      - inference-fundamentals
+    difficulty: starter
+    estimated_hours: 8
+    skills_demonstrated:
+      - "Semantic caching implementation"
+      - "Prompt compression techniques"
+      - "Multi-model routing logic"
+      - "Benchmarking and cost analysis"
+    rubric:
+      - description: "Semantic cache stores and retrieves similar queries"
+      - description: "Cache hit rate is measured and reported"
+      - description: "Prompt compression reduces token count measurably"
+      - description: "Model router selects between at least 2 models based on query complexity"
+      - description: "Benchmark compares cost with and without optimizations"
+      - description: "Results are displayed in a table or chart"
+      - description: "README explains when each technique is appropriate"
+    starter_files:
+      README.md: |
+        # LLM Cost Optimization Toolkit
+
+        ## Goal
+        Demonstrate and benchmark three cost optimization techniques.
+
+        ## Techniques
+        1. **Semantic Caching** — avoid redundant LLM calls
+        2. **Prompt Compression** — reduce token count
+        3. **Model Routing** — use cheaper models when possible
+
+        ## Quick Start
+        ```bash
+        pip install -r requirements.txt
+        python benchmark.py
+        ```
+      requirements.txt: |
+        # Add your dependencies
+      benchmark.py: |
+        """Run benchmarks for each optimization technique."""
+    resources:
+      - "GPTCache: https://gptcache.readthedocs.io/"
+      - "LLMLingua: https://llmlingua.com/"
+      - "LiteLLM routing: https://docs.litellm.ai/"

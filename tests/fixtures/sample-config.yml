@@ -1,0 +1,49 @@
+version: 1
+
+profile:
+  name: "Jane Doe"
+  current_role: "Senior Security Engineer"
+
+target:
+  role: "Cloud Security Lead"
+  company: "Acme Corp"
+  job_url: ""
+  location: "New York, NY"
+
+timeline:
+  start_date: "2026-04-01"
+  end_date: "2026-05-27"
+  weeks: 8
+  hours_per_week: 15
+  study_days: [mon, tue, wed, thu, sat, sun]
+
+reminders:
+  enabled: true
+  morning_time: "07:00"
+  evening_time: "19:00"
+  method: "desktop"
+
+strengths:
+  - "Cloud security (10 years)"
+  - "AWS and Azure"
+  - "Python and JavaScript"
+
+gaps:
+  - id: "owasp-llm"
+    topic: "OWASP LLM Top 10"
+    priority: critical
+    estimated_hours: 6
+  - id: "nist-ai-rmf"
+    topic: "NIST AI Risk Management Framework"
+    priority: critical
+    estimated_hours: 6
+  - id: "mitre-atlas"
+    topic: "MITRE ATLAS"
+    priority: high
+    estimated_hours: 4
+
+certifications: []
+content_plan: []
+
+ai_integration:
+  provider: "none"

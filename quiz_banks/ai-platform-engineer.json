@@ -1,0 +1,284 @@
+{
+  "topic_id": "ai-platform-engineer",
+  "title": "AI Platform Engineering",
+  "version": 1,
+  "questions": [
+    {
+      "id": "aipe-01",
+      "question": "In a RAG pipeline, what is the PRIMARY purpose of a re-ranker (cross-encoder)?",
+      "type": "multiple_choice",
+      "options": [
+        "A) To reduce the number of chunks stored in the vector database",
+        "B) To re-score the initial top-k retrieved chunks using a more accurate but slower model, improving relevance before passing context to the LLM",
+        "C) To compress the retrieved chunks so they fit within the LLM's context window",
+        "D) To translate retrieved chunks into the same language as the user's query"
+      ],
+      "answer": "B",
+      "explanation": "A bi-encoder (the embedding model) retrieves top-k candidates quickly but imprecisely. A cross-encoder re-ranker then scores each candidate against the full query using a slower, more accurate model that considers query-chunk interaction directly. This two-stage approach gets the speed of ANN search with closer-to-optimal relevance ranking.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "aipe-02",
+      "question": "What is 'train-serve skew' in the context of embedding models?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Using a different embedding model version at index time vs query time, causing similarity scores to be meaningless",
+        "B) The difference in GPU memory used during training vs inference",
+        "C) Latency differences between training a new model and serving the old one",
+        "D) Using different tokenizers for the LLM and the embedding model"
+      ],
+      "answer": "A",
+      "explanation": "Embeddings are only comparable when produced by the exact same model version. If you index your knowledge base with embedding-model-v1 and then upgrade to embedding-model-v2 for queries at serve time, the vector representations are in different spaces — cosine similarity between them is meaningless. You must re-embed the entire knowledge base when changing embedding models.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "aipe-03",
+      "question": "Which retrieval approach is BEST for a query like 'show me all documents about the SKU-4821 product recall'?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Dense retrieval only — embeddings capture the full semantic meaning",
+        "B) Sparse retrieval (BM25) only — the exact SKU identifier is a keyword that embeddings may not handle reliably",
+        "C) Hybrid retrieval — combines dense semantic matching with sparse keyword matching to handle both the concept and the exact identifier",
+        "D) No retrieval — the LLM can answer from training data"
+      ],
+      "answer": "C",
+      "explanation": "Dense retrieval excels at semantic similarity but can miss exact identifiers like SKUs, product codes, or reference numbers if they're rare or out-of-vocabulary. Sparse retrieval (BM25/TF-IDF) is excellent at exact term matching. Hybrid search combining both approaches handles queries that contain both semantic intent ('product recall') and exact identifiers ('SKU-4821').",
+      "difficulty": "medium"
+    },
+    {
+      "id": "aipe-04",
+      "question": "What does 'continuous batching' in LLM inference servers (like vLLM) solve compared to static batching?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It continuously retrains the model on new data while serving requests",
+        "B) It adds new requests to a running batch as slots free up from completed requests, rather than waiting for the entire batch to finish, dramatically improving GPU utilization",
+        "C) It splits large prompts into batches of tokens to overcome context length limits",
+        "D) It caches batches of requests to reduce redundant computation"
+      ],
+      "answer": "B",
+      "explanation": "In static batching, the server waits for a full batch and releases all results together — short requests wait for the longest one. Continuous batching (also called in-flight batching) inserts new sequences into batch slots as existing ones complete, keeping the GPU continuously utilized regardless of varying sequence lengths. This is why vLLM and TGI can serve many concurrent users efficiently.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "aipe-05",
+      "question": "You are designing a RAG system for a company with documents across 10 departments, where each user should only see documents from their department. What is the correct architectural approach?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Train a separate embedding model per department",
+        "B) Use a single vector store with metadata-based filtering — tag each chunk with department, then filter by user's department at query time",
+        "C) Store each department's documents in a separate vector database instance",
+        "D) Use the LLM to determine which documents the user should see based on their question"
+      ],
+      "answer": "B",
+      "explanation": "Metadata filtering is the standard pattern for multi-tenant RAG. Every chunk is tagged with access metadata (department, role, classification). At query time, the retrieval layer applies a pre-filter so only permitted chunks enter the similarity search. Option C is operationally expensive for 10+ departments. Option D (LLM-based access control) is unreliable — never use LLM judgment for security-critical decisions.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "aipe-06",
+      "question": "In the context of RAG evaluation, what does 'faithfulness' measure?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Whether the answer correctly responds to what the user asked",
+        "B) Whether the answer is factually consistent with the retrieved context — the LLM does not add claims not supported by the context",
+        "C) Whether the retrieved chunks contain the answer to the question",
+        "D) Whether the answer matches information from the LLM's training data"
+      ],
+      "answer": "B",
+      "explanation": "Faithfulness (in RAGAS) measures whether every claim in the generated answer can be attributed to the retrieved context. A low faithfulness score means the LLM is hallucinating — generating content not grounded in what was retrieved. It is distinct from 'answer relevance' (does the answer address the question?) and 'context recall' (did retrieval find all needed information?).",
+      "difficulty": "easy"
+    },
+    {
+      "id": "aipe-07",
+      "question": "What is HyDE (Hypothetical Document Embeddings) and when is it useful?",
+      "type": "multiple_choice",
+      "options": [
+        "A) A technique to compress document embeddings to reduce storage costs",
+        "B) A pre-retrieval technique where the LLM generates a hypothetical answer to the query, then that hypothetical answer is embedded and used to retrieve similar real documents",
+        "C) A method for dynamically generating vector database schemas based on document structure",
+        "D) A caching technique that stores embeddings of frequently asked questions"
+      ],
+      "answer": "B",
+      "explanation": "HyDE addresses the query-document embedding mismatch problem: short queries often have very different embedding representations than the longer, detailed documents they're trying to find. By asking the LLM to generate what the ideal answer might look like, then searching for documents similar to that hypothetical answer, retrieval quality improves — especially for domain-specific or technical queries.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "aipe-08",
+      "question": "An LLM agent has access to five tools: web_search, send_email, read_database, write_database, and generate_report. A prompt injection attack succeeds. What is the correct principle to limit blast radius?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Remove all tools from the agent — agents should not use tools",
+        "B) Apply least-privilege: only grant the agent the tools it needs for the current task, require human approval before irreversible actions (send_email, write_database)",
+        "C) Use a more powerful LLM that can detect injection attempts",
+        "D) Rate-limit tool calls to one per minute to slow down attackers"
+      ],
+      "answer": "B",
+      "explanation": "Least-privilege for agent tools is analogous to IAM least-privilege: an agent answering a research question should not have send_email or write_database enabled. Irreversible or high-impact actions (sending email, writing to databases) should require explicit human confirmation before execution. This is Excessive Agency (OWASP LLM08) mitigation — even if injection succeeds, the attacker cannot cause irreversible harm if those capabilities aren't active.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "aipe-09",
+      "question": "What is the KV cache in LLM inference, and what memory management problem does it create at scale?",
+      "type": "multiple_choice",
+      "options": [
+        "A) A Redis cache that stores token embeddings — it grows linearly with request volume",
+        "B) A GPU memory structure that stores key and value attention matrices for processed tokens — it grows with sequence length and batch size, and can become a memory bottleneck for long contexts or large batches",
+        "C) A database cache for prompt templates — it stores the most frequently used prompts",
+        "D) A distributed cache for model weights — it allows sharing model parameters across multiple inference servers"
+      ],
+      "answer": "B",
+      "explanation": "The KV cache stores the attention key-value pairs computed for each token so they don't need to be recomputed for future tokens in the same sequence. Memory usage = (2 × num_layers × num_heads × head_dim × sequence_length × batch_size × bytes_per_element). For a 70B model with 8k context and 100 concurrent requests, KV cache alone can require tens of GB of VRAM. PagedAttention (used in vLLM) addresses fragmentation of this memory.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "aipe-10",
+      "question": "Which chunking strategy is MOST appropriate for a knowledge base built from a mix of Markdown technical documentation with headers, tables, and code blocks?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Fixed-size chunking at 512 characters — consistent chunk sizes simplify the system",
+        "B) Document-structure-aware chunking that respects Markdown headers as section boundaries and keeps code blocks intact as single chunks",
+        "C) Sentence-level chunking — each sentence becomes one chunk for maximum granularity",
+        "D) Semantic chunking — split wherever embedding similarity drops"
+      ],
+      "answer": "B",
+      "explanation": "Fixed-size chunking will split code blocks and tables mid-way, making them unusable for retrieval. Sentence-level chunking produces chunks too small to provide useful context. Document-structure-aware chunking uses the existing semantic boundaries (headers, code fences) in the document format, preserving coherent units of meaning. Code blocks especially should stay intact — a half-function is useless retrieved context.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "aipe-11",
+      "question": "What is semantic caching and what is the primary risk of using it in a RAG application?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Caching model weights in GPU memory — risk is high memory usage",
+        "B) Caching responses indexed by query embedding similarity — risk is serving stale answers when the underlying knowledge base updates",
+        "C) Caching vector database query results — risk is cache invalidation when new documents are added",
+        "D) Caching LLM API credentials — risk is credential exposure"
+      ],
+      "answer": "B",
+      "explanation": "Semantic caching returns a previously generated response when a new query is semantically similar to a cached one (cosine similarity above a threshold). The primary risk: if the knowledge base is updated (new documents, corrections), cached responses reflect old information. Users asking the same question before and after a knowledge update may get different answers depending on cache state. Mitigation: TTL-based cache expiry and cache invalidation on knowledge base updates.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "aipe-12",
+      "question": "You need to select between pgvector and a dedicated vector database (Pinecone, Qdrant) for a RAG application with 500,000 document chunks. What is the most important factor in the decision?",
+      "type": "multiple_choice",
+      "options": [
+        "A) pgvector always wins — it's free and open source",
+        "B) Dedicated vector databases always win — they have better performance",
+        "C) The operational context: if you already operate PostgreSQL well and query volume is moderate, pgvector simplifies the stack. If you need horizontal scaling, advanced filtering, or very high query throughput, purpose-built vector databases are better suited",
+        "D) The number of dimensions in your embedding model determines which to use"
+      ],
+      "answer": "C",
+      "explanation": "At 500k chunks, pgvector with HNSW indexing performs well for most workloads and avoids adding another operational system. The decision hinges on operational maturity (do you run Postgres already?), query throughput requirements, need for advanced filtering, and whether you need horizontal scaling. Dedicated vector databases shine at hundreds of millions of vectors, complex multi-tenant filtering, or very high concurrent query rates.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "aipe-13",
+      "question": "What is DSPy and how does it differ from LangChain?",
+      "type": "multiple_choice",
+      "options": [
+        "A) DSPy is a Python library for GPU-accelerated inference; LangChain is for application development",
+        "B) DSPy treats prompt engineering as a compilation problem — it automatically optimizes prompts and few-shot examples given a metric and dataset, rather than requiring manual prompt crafting as in LangChain",
+        "C) DSPy is for structured data processing; LangChain is for unstructured text",
+        "D) DSPy is an agent framework; LangChain is a retrieval framework"
+      ],
+      "answer": "B",
+      "explanation": "LangChain is a framework for composing LLM applications by manually wiring chains, prompts, and tools. DSPy treats prompts as learnable parameters — you define your pipeline structure and a metric, then DSPy's teleprompter automatically searches for the best prompt instructions and few-shot examples. DSPy is particularly valuable when you want systematic prompt optimization rather than manual iteration.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "aipe-14",
+      "question": "An LLM-based customer support bot's faithfulness score drops from 0.85 to 0.55 over three weeks. No changes were made to the RAG pipeline. What are the most likely root causes to investigate?",
+      "type": "open",
+      "key_points": [
+        "Silent model update by provider: many managed LLM APIs update underlying model versions without notice — the model's behavior may have shifted toward more confident hallucination",
+        "Knowledge base drift: new documents added to the knowledge base may be poorly chunked, have low-quality content, or introduce conflicting information that confuses retrieval",
+        "Query distribution shift: the types of questions users ask may have changed — new topics outside the knowledge base, or phrasing that retrieves less relevant context",
+        "Embedding model update: if the embedding model was updated (managed service), the index may now contain stale embeddings computed by the old model version",
+        "Investigation approach: first isolate whether the problem is retrieval (context precision/recall metrics) or generation (faithfulness given retrieved context). If retrieval looks healthy, pin model versions and re-run the eval. If retrieval degraded, check for knowledge base changes or embedding model updates"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "aipe-15",
+      "question": "Design the evaluation strategy for a new AI assistant that answers questions about a company's HR policies. What metrics would you track, how would you build the evaluation dataset, and how would you run evaluations in production?",
+      "type": "open",
+      "key_points": [
+        "Offline evaluation dataset: collect 100-200 real questions from HR or test users, have HR manually write ground-truth answers, tag each with the source policy document. Refresh quarterly as policies change",
+        "Retrieval metrics: context precision (are retrieved chunks relevant?), context recall (did retrieval find all needed policy sections?). Low precision = noisy context; low recall = incomplete answers",
+        "Generation metrics: faithfulness (does the answer stick to retrieved policy text?), answer correctness (does it match ground truth?). For HR policies, faithfulness is critical — hallucinated policy information is a legal risk",
+        "Production monitoring: sample 5-10% of live queries for human review. Track cost per query, latency, and user feedback signals (thumbs up/down, follow-up clarification questions suggest answer was incomplete)",
+        "Eval gates: run offline eval suite on every change to prompts, chunking config, or embedding model. Block deployment if faithfulness drops below 0.80 or context recall below 0.75",
+        "LLM-as-judge for scale: use a separate LLM judge to score faithfulness and answer relevance on the full production sample, with periodic human calibration to ensure judge quality"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "aipe-16",
+      "question": "What is the difference between 'context window' and 'context length' in practice, and why does context window size not directly translate to useful context in RAG?",
+      "type": "open",
+      "key_points": [
+        "Context window: the maximum number of tokens the model can process in a single call (input + output combined). Context length: the actual number of tokens in a specific request",
+        "'Lost in the middle' problem: LLMs demonstrate stronger recall for information at the beginning and end of their context than information in the middle. A 128k context window does not mean all 128k tokens are equally attended to",
+        "Cost and latency: larger contexts cost more (proportional to input tokens) and have higher latency. Using 100k tokens when 5k suffices is wasteful",
+        "Quality vs quantity: retrieving more chunks to fill the context window often hurts quality — irrelevant chunks introduce noise and can distract the model. Typically 3-8 high-quality, relevant chunks outperform 20 mediocre ones",
+        "Practical recommendation: retrieve top 5-8 chunks after re-ranking, compress with LLMLingua if prompts are long, and monitor context utilization (what fraction of retrieved context actually appears in the answer)"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "aipe-17",
+      "question": "Compare prompt caching (as offered by Anthropic and AWS Bedrock) with semantic caching (GPTCache). When would you use each?",
+      "type": "open",
+      "key_points": [
+        "Prompt prefix caching: the provider caches the KV state for a repeated prompt prefix (e.g., a long system prompt or document). Subsequent calls with the same prefix skip recomputing those tokens — cost is ~10x cheaper for cached input tokens, latency is lower. No accuracy risk since computation is identical",
+        "Semantic caching: caches complete responses indexed by query embedding. Returns a previous answer for semantically similar new queries — skips the LLM call entirely. Bigger cost savings but risks: stale answers, false positives (different question treated as similar), cache poisoning",
+        "Use prompt prefix caching when: you have a large, repeated system prompt or document (>1000 tokens) that stays the same across many requests. Zero accuracy risk, easy to implement",
+        "Use semantic caching when: your application has a high volume of near-duplicate queries (FAQ-style), answer freshness is not critical, and you have a cache invalidation strategy",
+        "Avoid semantic caching when: queries are diverse, knowledge base updates frequently, or answers must reflect current state (real-time data applications)"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "aipe-18",
+      "question": "You are building a multi-agent system where a 'researcher' agent searches the web and a 'writer' agent produces a report. The researcher agent returns 15 sources. What architectural decisions determine whether this system is reliable in production?",
+      "type": "open",
+      "key_points": [
+        "Inter-agent communication schema: define a strict schema for what the researcher passes to the writer (structured JSON with source URL, extracted content, relevance score). Avoid passing raw LLM text between agents — structured handoffs prevent hallucination propagation",
+        "Grounding the writer: the writer agent must be constrained to only cite and reference sources actually provided by the researcher. Prompt must make clear that fabricating sources is not allowed. Use faithfulness evaluation on the writer's output",
+        "Error handling and fallbacks: what happens if the researcher returns 0 sources? Or if web search fails? Define fallback behaviors explicitly — don't let undefined states propagate silently",
+        "Observability: log the full researcher output, the writer's input, and the final report. Enable tracing so you can debug which source led to which claim in the report",
+        "Parallelism with correctness: if researcher fetches 15 sources in parallel, ensure deduplication and relevance filtering before passing to writer — don't just concatenate all 15 URLs into context",
+        "Human checkpoints: if the report will be published externally, insert a human review step before publication. The multi-agent chain amplifies errors — a bad researcher result becomes a confidently written but wrong report"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "aipe-19",
+      "question": "What is quantization in the context of LLM inference, and what are the trade-offs between INT8, INT4, and FP16?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Quantization means running the model on fewer GPUs to reduce cost — INT8 uses 8 GPUs, INT4 uses 4 GPUs",
+        "B) Quantization reduces model weight precision from FP32/FP16 to lower bit representations, trading a small quality reduction for significant memory reduction and faster inference — INT8 halves memory vs FP16 with minimal quality loss; INT4 halves again but can degrade quality on reasoning tasks",
+        "C) Quantization is a training technique that reduces the number of training epochs",
+        "D) Quantization converts float weights to integers permanently, and models cannot be de-quantized"
+      ],
+      "answer": "B",
+      "explanation": "FP16 (2 bytes/param) is the standard serving precision. INT8 (1 byte/param) roughly halves VRAM requirements with typically <1% quality degradation — good for most production use cases. INT4 (0.5 bytes/param) halves again (a 70B INT4 model fits in ~35GB VRAM) but quality loss is measurable on complex reasoning. GPTQ and AWQ are post-training quantization methods that minimize quality degradation. GGUF (llama.cpp) enables CPU inference with quantized models.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "aipe-20",
+      "question": "Walk me through how you would design and run a prompt regression test suite in CI/CD. What would you test, how would you create the test dataset, and what would a passing vs failing run look like?",
+      "type": "open",
+      "key_points": [
+        "Test dataset creation: collect 50-150 representative queries (real production queries + edge cases) with ground-truth answers. Include happy-path queries, edge cases, adversarial inputs, and format requirements. Version control the dataset alongside the prompts",
+        "What to test: (1) answer correctness against ground truth, (2) output format compliance (JSON schema, required fields), (3) instruction-following (does it adhere to persona, length, tone constraints?), (4) safety (no harmful outputs on adversarial inputs), (5) faithfulness for RAG applications",
+        "CI/CD integration: on every PR touching prompts, retrieval config, or model version — run the eval suite automatically. Use LLM-as-judge for semantic correctness. Use exact-match for format and field checks. Post a metric summary as a PR comment",
+        "Pass/fail thresholds: define per-metric thresholds (e.g., answer correctness > 0.85, format compliance = 1.0, faithfulness > 0.80). Fail the CI check if any metric drops more than X% below the baseline. Alert on regression, block merge if beyond threshold",
+        "Baseline management: store baseline metrics from the last merged version. Compare each PR's results against this baseline, not a fixed absolute threshold — prevents creeping degradation over many small changes",
+        "Limitations: LLM-as-judge has its own errors; calibrate the judge periodically with human reviews. Eval datasets go stale as usage patterns evolve — schedule quarterly refresh"
+      ],
+      "difficulty": "hard"
+    }
+  ]
+}

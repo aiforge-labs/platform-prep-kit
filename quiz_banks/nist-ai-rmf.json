@@ -1,0 +1,210 @@
+{
+  "topic_id": "nist-ai-rmf",
+  "title": "NIST AI Risk Management Framework",
+  "version": 1,
+  "questions": [
+    {
+      "id": "nist-rmf-01",
+      "question": "Which of the four AI RMF functions is described as 'foundational' and applies across the entire organization rather than to individual AI systems?",
+      "type": "multiple_choice",
+      "options": [
+        "A) MAP",
+        "B) MEASURE",
+        "C) MANAGE",
+        "D) GOVERN"
+      ],
+      "answer": "D",
+      "explanation": "GOVERN is the foundational function that establishes organizational structures, policies, and processes for AI risk management. Unlike MAP, MEASURE, and MANAGE which are applied to specific AI systems, GOVERN sets the organizational context in which all AI risk management occurs. Without effective governance, the other functions lack direction and accountability.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "nist-rmf-02",
+      "question": "What is the PRIMARY purpose of the MAP function in the AI RMF?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Quantifying AI risks using metrics and benchmarks",
+        "B) Allocating resources to address identified AI risks",
+        "C) Identifying and documenting the context, risks, and potential impacts of an AI system",
+        "D) Establishing organizational policies for AI governance"
+      ],
+      "answer": "C",
+      "explanation": "MAP is about understanding what you are building, who it affects, and what can go wrong. It produces the risk register and context documentation that MEASURE and MANAGE will work from. Without MAP, organizations are managing risks without a clear understanding of the system's context, stakeholders, and potential failure modes.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "nist-rmf-03",
+      "question": "Which of the following is NOT one of the seven trustworthy AI characteristics defined in the AI RMF?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Valid and Reliable",
+        "B) Profitable and Efficient",
+        "C) Secure and Resilient",
+        "D) Fair — with Harmful Bias Managed"
+      ],
+      "answer": "B",
+      "explanation": "The seven trustworthy AI characteristics are: (1) Valid and Reliable, (2) Safe, (3) Secure and Resilient, (4) Accountable and Transparent, (5) Explainable and Interpretable, (6) Privacy-Enhanced, and (7) Fair — with Harmful Bias Managed. Profitability and efficiency are business considerations, not trustworthiness characteristics in the AI RMF.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "nist-rmf-04",
+      "question": "A company discovers that their AI hiring tool disproportionately rejects candidates from a specific demographic. Which AI RMF functions should have caught this, and in what order?",
+      "type": "multiple_choice",
+      "options": [
+        "A) MANAGE first (to fix the problem), then MAP (to understand context)",
+        "B) MAP (to identify fairness risks), then MEASURE (to detect bias), then MANAGE (to remediate)",
+        "C) GOVERN (to set policies), then MEASURE (to test), then MAP (to document)",
+        "D) MEASURE only — this is purely a measurement problem"
+      ],
+      "answer": "B",
+      "explanation": "MAP should have identified fairness as a high-priority risk for a hiring tool and documented the affected populations. MEASURE should have established bias metrics, tested for disparate impact before deployment, and monitored ongoing performance across demographics. MANAGE should have defined remediation actions (retrain, adjust thresholds, add human review) and triggers for when to act. GOVERN underpins all of this with policies that require fairness assessment for high-risk AI systems.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "nist-rmf-05",
+      "question": "The AI RMF describes a tension between transparency and security. Which of the following best illustrates this tension?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Publishing model architecture helps users understand decisions but also helps attackers craft adversarial inputs",
+        "B) Encrypting model weights protects IP but increases inference latency",
+        "C) Open-sourcing training data improves fairness but increases storage costs",
+        "D) Rate limiting the API improves security but reduces user satisfaction"
+      ],
+      "answer": "A",
+      "explanation": "The transparency-security tension is about information disclosure. Making AI systems more transparent (revealing architecture, training data, decision logic) helps users understand and challenge decisions (supporting accountability). However, the same information helps adversaries understand the model's weaknesses and craft more effective attacks. Organizations must balance these competing needs based on their risk context.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "nist-rmf-06",
+      "question": "What does the NIST AI 600-1 (GenAI Profile) add to the base AI RMF 1.0?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It replaces the AI RMF for all generative AI systems",
+        "B) It maps GenAI-specific risks (confabulation, CBRN, deepfakes) to the existing GOVERN/MAP/MEASURE/MANAGE functions",
+        "C) It adds a fifth function called GENERATE to the AI RMF",
+        "D) It provides mandatory compliance requirements for GenAI in the US"
+      ],
+      "answer": "B",
+      "explanation": "NIST AI 600-1 is a companion document (not a replacement) that identifies risks unique to or amplified by generative AI — such as confabulation, CBRN information generation, deepfakes, and homogenization — and maps them to the existing four AI RMF functions. It does not add new functions or create mandatory requirements; it extends the voluntary framework with GenAI-specific guidance.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "nist-rmf-07",
+      "question": "How does 'confabulation' (as defined in NIST AI 600-1) differ from a traditional software bug?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Confabulation only occurs in open-source models, while bugs affect all software",
+        "B) Confabulation produces plausible but fabricated outputs that are difficult to detect programmatically, whereas traditional bugs produce consistently wrong or unexpected outputs that can be caught with deterministic tests",
+        "C) Confabulation is intentional behavior, while bugs are unintentional",
+        "D) Confabulation can be fully eliminated through better training data, while bugs require code fixes"
+      ],
+      "answer": "B",
+      "explanation": "Confabulation (hallucination) is fundamentally different from a traditional bug because: (1) the output looks correct and plausible, making detection hard, (2) it is non-deterministic — the same input may or may not trigger it, (3) it cannot be fully eliminated through testing because the model generates novel text each time, and (4) it requires different mitigations (grounding, retrieval augmentation, confidence calibration) than traditional bug fixes.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "nist-rmf-08",
+      "question": "Which statement best describes the relationship between the NIST AI RMF and the EU AI Act?",
+      "type": "multiple_choice",
+      "options": [
+        "A) They are identical frameworks with different names",
+        "B) The AI RMF is voluntary and process-oriented; the EU AI Act is mandatory and outcome-oriented with risk-tier classifications",
+        "C) The EU AI Act supersedes the AI RMF in all jurisdictions",
+        "D) The AI RMF only applies to government AI systems, while the EU AI Act applies to commercial systems"
+      ],
+      "answer": "B",
+      "explanation": "The NIST AI RMF is a voluntary framework that describes HOW to manage AI risk (processes and organizational structures). The EU AI Act is a mandatory regulation that defines WHAT outcomes must be achieved (prohibited practices, high-risk system requirements, transparency obligations) with specific risk-tier classifications. Organizations operating in the EU can use the AI RMF processes to help achieve EU AI Act compliance, but the AI RMF alone does not satisfy EU AI Act requirements.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "nist-rmf-09",
+      "question": "The GOVERN function includes GV-6: policies for third-party AI risks. In the context of an organization using a third-party foundation model API, what are the most critical governance considerations?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Ensuring the third-party model has the highest possible accuracy on benchmarks",
+        "B) Negotiating the lowest possible API pricing",
+        "C) Vendor assessment, contractual requirements for data handling, incident response coordination, and contingency plans",
+        "D) Requiring the third-party to open-source their model weights"
+      ],
+      "answer": "C",
+      "explanation": "GV-6 addresses supply chain governance for AI. When using a third-party foundation model, organizations must assess the vendor's security and privacy practices, establish contractual requirements for how data is handled (is data used for training? how long is it retained?), coordinate incident response (what happens if the model produces harmful outputs?), and have contingency plans (what if the vendor discontinues the service or changes terms?).",
+      "difficulty": "hard"
+    },
+    {
+      "id": "nist-rmf-10",
+      "question": "The MEASURE function emphasizes continuous monitoring. Which of the following is a GenAI-specific monitoring concern that does not apply to traditional software?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Uptime and latency monitoring",
+        "B) Data drift detection where model performance degrades as real-world data distributions shift away from training data",
+        "C) CPU and memory utilization",
+        "D) Error rate tracking"
+      ],
+      "answer": "B",
+      "explanation": "Data drift is an AI/ML-specific concern. Traditional software behaves consistently regardless of input distribution changes — a function that correctly sorts a list today will sort it correctly tomorrow. AI models, however, can degrade when the real-world data they encounter shifts away from their training data distribution. This requires continuous monitoring of model performance against changing inputs, which is unique to AI systems.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "nist-rmf-11",
+      "question": "You are tasked with implementing the AI RMF at a mid-sized company that has 15 AI/ML projects at various stages. Describe your approach to getting started, including how you would prioritize and which function you would focus on first.",
+      "type": "open",
+      "key_points": [
+        "Start with GOVERN: Establish organizational commitment, assign leadership, and create a cross-functional AI governance committee before trying to manage individual systems",
+        "Tier the 15 projects by risk level (critical/high/medium/low based on impact, autonomy, and affected populations) and apply proportional rigor — not every project needs the same depth of risk management",
+        "Integrate into existing risk management processes rather than creating a parallel AI risk structure. Use existing ERM frameworks and add AI-specific risk categories",
+        "Use the AI RMF Playbook as a starting self-assessment tool to identify the biggest gaps in current practices",
+        "Start with the highest-risk AI system for a full MAP-MEASURE-MANAGE cycle as a pilot, then apply lessons learned to the broader portfolio"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "nist-rmf-12",
+      "question": "Explain the difference between 'explainability' and 'interpretability' as defined in the AI RMF. Why does this distinction matter for different stakeholders?",
+      "type": "open",
+      "key_points": [
+        "Explainability refers to describing the MECHANISM — how the model works at a technical level (architecture, features, decision boundaries)",
+        "Interpretability refers to describing the MEANING — why the model produced a specific output in terms that the audience can understand and act upon",
+        "Different stakeholders need different levels: A data scientist needs explainability (model mechanics), a loan applicant needs interpretability (why was my application denied), a regulator needs both",
+        "This distinction matters because a model can be technically explainable (we can describe its architecture) but not interpretable to end users (they cannot understand why a specific decision was made)"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "nist-rmf-13",
+      "question": "A healthcare organization wants to deploy an AI system for preliminary radiology screening. Using the MAP function, identify the key risks and stakeholders they should document.",
+      "type": "open",
+      "key_points": [
+        "Stakeholders: Patients (affected by diagnostic accuracy), radiologists (workflow impact, liability), hospital administration (liability, cost), regulators (FDA SaMD requirements), insurance companies (coverage decisions)",
+        "Safety risks: False negatives (missed diagnoses leading to delayed treatment), false positives (unnecessary procedures, patient anxiety), and edge cases where the model is unreliable (rare conditions, demographics underrepresented in training data)",
+        "Regulatory context: FDA Software as Medical Device (SaMD) classification, HIPAA for patient data privacy, and clinical validation requirements",
+        "Fairness risks: Model performance across demographics (age, sex, ethnicity) — training data representation matters because disease presentation varies across populations",
+        "Operational risks: Radiologist overreliance on AI screening, workflow disruption, and the need for clear human override mechanisms"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "nist-rmf-14",
+      "question": "How would you measure the effectiveness of the MANAGE function for a deployed AI system? What metrics or indicators would tell you that risk management is working?",
+      "type": "open",
+      "key_points": [
+        "Track whether identified risks are being actively mitigated: percentage of high-priority risks with documented treatment plans, mean time to implement mitigations",
+        "Monitor mitigation effectiveness: Are the controls actually reducing the risk? Measure residual risk after treatment and compare to pre-treatment levels",
+        "Incident metrics: Number and severity of AI-related incidents over time, mean time to detect and respond, and whether incidents correlate with identified risks (if an incident occurs for an unidentified risk, MAP needs updating)",
+        "Feedback loop health: How quickly do findings from MEASURE flow into MANAGE actions? Are lessons learned being incorporated into policies (feeding back to GOVERN)?",
+        "Stakeholder satisfaction: Are affected communities and end users reporting fewer issues? Is the governance committee satisfied with the risk posture?"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "nist-rmf-15",
+      "question": "The AI RMF identifies a tension between privacy and fairness. Explain this tension with a concrete example and describe how you would navigate it.",
+      "type": "open",
+      "key_points": [
+        "The tension: To detect and correct bias (fairness), you need to know the demographic characteristics of the affected population. But collecting and using demographic data raises privacy concerns",
+        "Example: A lending model may discriminate against certain racial groups. To detect this, you need to compare approval rates across races — but collecting race data for this purpose creates privacy risks and may conflict with fair lending regulations that prohibit using race in lending decisions",
+        "Navigation strategies: Use aggregate statistical analysis rather than individual-level tracking. Apply differential privacy when analyzing demographic performance. Use proxy metrics where direct demographic data is unavailable. Engage affected communities in the design of fairness testing approaches",
+        "Context matters: The appropriate balance depends on the use case, regulatory environment, and organizational values. Document the trade-off decision and revisit it as circumstances change"
+      ],
+      "difficulty": "hard"
+    }
+  ]
+}

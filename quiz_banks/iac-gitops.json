@@ -1,0 +1,217 @@
+{
+  "topic_id": "iac-gitops",
+  "title": "Infrastructure as Code & GitOps",
+  "version": 1,
+  "questions": [
+    {
+      "id": "iac-01",
+      "question": "What is the purpose of the Terraform state file and why must it be stored remotely in team environments?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It stores the Terraform binary and provider plugins for offline use",
+        "B) It maps Terraform resource identifiers to real cloud resource IDs and stores metadata about known resource state — remote storage enables team sharing, state locking to prevent concurrent modifications, and encryption of sensitive values",
+        "C) It is a log file that records all Terraform commands run",
+        "D) It stores environment variables and provider credentials"
+      ],
+      "answer": "B",
+      "explanation": "The state file is Terraform's database. Without it, Terraform cannot know which cloud resources it manages or detect drift. Stored locally: only one person can work with it, no locking, risky. Remote backends (S3+DynamoDB, GCS, Terraform Cloud) provide: (1) shared access for teams, (2) state locking to prevent concurrent applies that could corrupt state, (3) encryption at rest for sensitive values (passwords, keys) stored in outputs, (4) versioning for recovery. Treat state files as sensitive — they often contain secrets.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "iac-02",
+      "question": "What is the difference between terraform count and for_each?",
+      "type": "multiple_choice",
+      "options": [
+        "A) count is for creating resources; for_each is for creating modules",
+        "B) count creates N identical resources addressed by index (e.g., aws_instance.web[0]). for_each creates resources from a map or set, addressed by key (e.g., aws_instance.web[\"prod\"]). for_each is preferred because removing a middle element from count renumbers all subsequent resources",
+        "C) count supports conditional creation; for_each does not",
+        "D) They are equivalent; for_each is just newer syntax"
+      ],
+      "answer": "B",
+      "explanation": "The key practical difference: count uses integer indices. If you have count=3 and remove the second instance, Terraform renumbers [2] to [1] and tries to destroy and recreate it. With for_each using a map key, removing one entry only affects that specific resource. For almost all real infrastructure (S3 buckets per environment, security groups per service), for_each with meaningful string keys is safer and produces clearer plans.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "iac-03",
+      "question": "A terraform apply fails halfway through with an error. Some resources were created; others were not. What is the correct recovery approach?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Run terraform destroy immediately to clean up everything and start over",
+        "B) Fix the error, then run terraform plan and terraform apply again — Terraform will only act on the remaining resources that weren't created, leaving the successfully created ones intact",
+        "C) Manually delete all created resources in the cloud console before retrying",
+        "D) The state file is now corrupted and must be restored from backup"
+      ],
+      "answer": "B",
+      "explanation": "Terraform apply is idempotent: resources already created are in the state file. Re-running plan shows only the remaining undeployed resources. Fix the error that caused the failure, run plan to verify the delta is what you expect, then apply. The state file accurately reflects partial success. Running destroy would delete already-created production resources unnecessarily. This is one of the key benefits of Terraform's declarative model vs scripting.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "iac-04",
+      "question": "What problem does Terragrunt solve that Terraform workspaces do not fully address?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Terragrunt supports more cloud providers than Terraform",
+        "B) Terragrunt eliminates repetitive backend configuration and provider configuration across environments using DRY inheritance (find_in_parent_folders), while Terraform workspaces share the same backend config and only differentiate variable values — they don't help with different backends per environment",
+        "C) Terragrunt provides better support for count and for_each",
+        "D) Terragrunt encrypts the state file automatically"
+      ],
+      "answer": "B",
+      "explanation": "Terraform workspaces: switch between workspaces to isolate state within the SAME backend. All workspaces share the same backend config — they are not designed for complete environment isolation with different backends, providers, or configs. Terragrunt: a wrapper that finds and merges terragrunt.hcl files from parent directories. Define backend config once at the root; each environment inherits and overrides only what differs. Eliminates copy-pasted backend blocks across 20 environments. Also provides dependency management between modules.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "iac-05",
+      "question": "In Conftest/OPA, write the mental model for a Terraform plan deny rule. What is 'input' and how do you access resource changes?",
+      "type": "open",
+      "key_points": [
+        "input: the JSON-format Terraform plan (generated with 'terraform show -json plan.bin'). The plan contains: resource_changes (array of planned changes), configuration, prior_state, and variables",
+        "Each resource_change has: address (e.g., 'aws_s3_bucket.my_bucket'), type (e.g., 'aws_s3_bucket'), change.actions (['create'] or ['update'] or ['delete']), change.before (current state), change.after (desired state after apply)",
+        "Deny rule pattern: iterate resource_changes, filter by type, check a field in change.after, emit a message if the field is non-compliant",
+        "Example: deny S3 buckets without encryption: resource := input.resource_changes[_] / resource.type == 'aws_s3_bucket' / resource.change.actions[_] == 'create' / not resource.change.after.server_side_encryption_configuration / msg := sprintf(\"unencrypted bucket: %v\", [resource.address])",
+        "Important: only check resources with action 'create' or 'update', not 'delete' or 'no-op' — checking 'no-op' resources would block applies unnecessarily"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "iac-06",
+      "question": "What is drift detection in IaC and how would you implement it?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Detecting when new cloud services become available that Terraform doesn't support yet",
+        "B) Detecting when cloud resources have been modified outside of Terraform (out-of-band changes). Implemented by running 'terraform plan' on a schedule and alerting if the plan shows unexpected changes",
+        "C) Detecting when Terraform provider versions become outdated",
+        "D) Detecting when the Terraform state file becomes corrupted"
+      ],
+      "answer": "B",
+      "explanation": "Drift = divergence between the Terraform-declared desired state and the actual cloud state. Causes: manual changes via console/CLI, other tools modifying resources, cloud services making automatic changes. Implementation: run terraform plan in a read-only pipeline on a schedule (e.g., daily cron). If the plan is non-empty (changes would be made), alert the team. CI systems like Atlantis and Terraform Cloud have built-in drift detection. Drifted resources should be either: (1) updated in Terraform config to match reality, or (2) restored to declared state via apply.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "iac-07",
+      "question": "What is an AWS Service Control Policy (SCP) and how does it differ from an IAM policy?",
+      "type": "multiple_choice",
+      "options": [
+        "A) SCPs are attached to users; IAM policies are attached to organizations",
+        "B) SCPs define the maximum permissions available within an AWS account or OU — they do not grant permissions but can restrict what IAM can grant. IAM policies grant specific permissions within the bounds SCPs allow",
+        "C) SCPs are for EC2 resources; IAM policies are for all other services",
+        "D) SCPs and IAM policies are equivalent but SCPs are evaluated first"
+      ],
+      "answer": "B",
+      "explanation": "SCPs are organizational guardrails — even the root account of a member account cannot exceed SCP boundaries. Example: an SCP denying 'ec2:RunInstances' in regions outside us-east-1 cannot be overridden by any IAM policy in that account, even for the root user. IAM policies grant permissions within SCP bounds. The effective permissions for any action = intersection of (SCP allows AND IAM allows). SCPs do NOT grant permissions — they only restrict.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "iac-08",
+      "question": "How does Atlantis enforce GitOps for Terraform? Walk through the workflow from PR creation to apply.",
+      "type": "open",
+      "key_points": [
+        "PR opened with Terraform changes → Atlantis detects changed .tf files and automatically runs terraform plan",
+        "Plan output posted as PR comment — reviewers can see exactly what will be created/modified/destroyed before approving",
+        "apply_requirements in atlantis.yaml determine what's needed to apply: typically 'approved' (at least one approval) and 'mergeable' (no outstanding review requests)",
+        "Merge PR → Atlantis runs terraform apply automatically (if autoplan configured) or on explicit 'atlantis apply' comment",
+        "Apply output posted as PR comment; PR is closed",
+        "Key security properties: (1) developers don't need direct cloud credentials — Atlantis runs apply with its own service account, (2) all plans and applies are logged in PR comments for auditability, (3) required approvals enforce team review before infrastructure changes"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "iac-09",
+      "question": "What does Checkov's 'suppress' mechanism do and when is it appropriate to use?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It pauses Checkov scanning for a specified number of hours",
+        "B) It allows marking specific findings as intentional exceptions with a required justification comment — appropriate for accepted risks where the finding is a false positive or the control genuinely doesn't apply",
+        "C) It removes the failed resource from the scan results permanently",
+        "D) It lowers the severity of a finding from HIGH to LOW"
+      ],
+      "answer": "B",
+      "explanation": "Suppression syntax in Terraform: add a comment #checkov:skip=CKV_AWS_XX:reason with a justification. This is appropriate for: (1) false positives where the control logic doesn't apply to the specific resource, (2) accepted risk that has been reviewed and documented (e.g., intentionally public S3 bucket hosting a website). Best practices: suppressions should require code review, log a ticket reference in the reason, and be reviewed periodically. Suppressing without justification is an anti-pattern that hides real issues.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "iac-10",
+      "question": "You have 50 Terraform modules in a monorepo. A developer opens a PR changing one module. How would you design the CI pipeline to only test the changed module and its dependents, not all 50?",
+      "type": "open",
+      "key_points": [
+        "Dependency graph: build a directed graph of which modules depend on which (module A uses module B → A depends on B). Terraform doesn't expose this natively; tools like Terragrunt or custom scripts can parse source attributes",
+        "Changed file detection: use 'git diff --name-only' to identify which .tf files changed, then map to module paths",
+        "Impacted module set: the changed module + any module that calls it (direct or transitive dependents). This requires the dependency graph",
+        "Per-module CI: run terraform validate, tflint, and Checkov for each impacted module in parallel. Run Terratest for changed module only (too slow for all)",
+        "Implementation options: GitHub Actions path filters, a Makefile with dependency targets, or a custom CI script. Terragrunt's run-all with dependency graph is the most mature solution for this pattern",
+        "Fallback for safety: always run static analysis (Checkov, validate) on all modules — it's fast. Reserve integration tests (Terratest, actual deployment) for impacted modules only"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "iac-11",
+      "question": "What is 'terraform import' and when would you use it?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Importing Terraform modules from the Terraform Registry",
+        "B) Bringing an existing cloud resource (created manually or by another tool) under Terraform management without destroying and recreating it — adds it to the state file so future applies manage it",
+        "C) Importing environment variables from a .tfvars file",
+        "D) Migrating a Terraform state file from one backend to another"
+      ],
+      "answer": "B",
+      "explanation": "terraform import <resource_address> <cloud_resource_id> adds an existing resource to state. After import: (1) run terraform plan to see the diff between the existing resource config and your .tf file, (2) update your .tf to match, (3) confirm plan shows no changes. Use cases: migrating manually-created resources to IaC, importing resources created by another team's Terraform, recovering from state file corruption. Terraform 1.5+ supports import blocks in .tf files for declarative import workflows.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "iac-12",
+      "question": "How would you design a Terraform module versioning strategy for a platform team with 15 consuming teams?",
+      "type": "open",
+      "key_points": [
+        "Semantic versioning: major.minor.patch. Major = breaking API change (callers must update). Minor = backwards-compatible new features. Patch = bug fixes, no API changes",
+        "Git tags as versions: tag releases with v1.2.3. Callers pin to specific version: source = 'git::https://github.com/myorg/tf-modules.git//modules/rds?ref=v1.2.3'",
+        "Changelog: maintain CHANGELOG.md per module. Breaking changes call out migration steps clearly",
+        "Testing before release: run Terratest for every release. Gate the release tag on test passing",
+        "Version pinning in caller modules: always use version = '~> 1.2' (allow patch updates, block minor/major). Never use 'latest' or no version constraint",
+        "Deprecation process: announce deprecated versions in CHANGELOG, give 60-90 day migration window, provide migration guide. Don't delete old versions — callers may still be using them",
+        "Private registry: publish modules to Terraform Cloud private registry or a self-hosted registry for discoverability and version management at scale"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "iac-13",
+      "question": "What is the ArgoCD sync wave feature and what problem does it solve?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Sync waves control the frequency of ArgoCD reconciliation loops",
+        "B) Sync waves define the order in which resources are applied during a sync — resources with lower wave numbers are applied first and must be healthy before higher wave resources are applied, solving deployment ordering dependencies",
+        "C) Sync waves enable parallel syncing across multiple clusters",
+        "D) Sync waves are a rollback mechanism that rolls back one wave at a time"
+      ],
+      "answer": "B",
+      "explanation": "Use case: a Namespace must exist before a Deployment can be created. Or a CRD must be installed before a Custom Resource that uses it. Sync waves: annotate resources with argocd.argoproj.io/sync-wave: '0' (applied first), '1' (applied after wave 0 is healthy), etc. Resources without annotation default to wave 0. This solves the chicken-and-egg problem of dependent resources in a single Application. For complex dependencies between different Applications, use App-of-Apps with sync policies.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "iac-14",
+      "question": "What is Kustomize and how does it differ from Helm for managing Kubernetes configuration across environments?",
+      "type": "open",
+      "key_points": [
+        "Kustomize: a Kubernetes-native overlay system. A 'base' directory contains common config; 'overlay' directories per environment contain patches (strategic merge patches or JSON patches) that customize the base. No templating language — pure YAML manipulation",
+        "Helm: a package manager with a templating engine (Go templates). Charts are parameterized with values.yaml. Consumers install charts with different values for different environments",
+        "Key difference: Kustomize uses patches to modify existing YAML; Helm uses templates to generate YAML. Kustomize overlays are easier to diff and audit. Helm charts are self-contained reusable packages",
+        "When to use Kustomize: you own the base manifests, environments have minor variations, you want plain YAML in Git, GitOps-native (kubectl kustomize is built-in)",
+        "When to use Helm: consuming third-party software (install nginx-ingress with a Helm chart), distributing software as a reusable package, need complex conditional logic in manifests",
+        "Combination: Helm renders base manifests, Kustomize applies environment-specific patches on top (post-rendering). This is common in ArgoCD and Flux"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "iac-15",
+      "question": "How would you handle sensitive values (passwords, API keys) in a GitOps Terraform workflow where the state file is in S3 and PRs are reviewed in GitHub?",
+      "type": "open",
+      "key_points": [
+        "Never commit secrets to Git: Terraform .tfvars files with passwords should not be committed. Use .gitignore for *.tfvars files containing secrets",
+        "State file encryption: enable S3 server-side encryption (SSE-KMS) on the state bucket. The state file may contain sensitive outputs (database passwords, generated credentials)",
+        "Variable injection at runtime: Atlantis or CI injects secret variables via environment variables (TF_VAR_db_password) pulled from AWS Secrets Manager or HashiCorp Vault at plan/apply time — secrets never touch Git",
+        "Secrets Manager as the source of truth: for passwords and API keys, generate them in AWS Secrets Manager and reference them via data sources: data.aws_secretsmanager_secret_version.db_pass — only the secret name is in .tf files, not the value",
+        "State file access control: restrict S3 state bucket access to only the Atlantis service account. Bucket logging enabled. MFA delete enabled. Version the bucket for recovery",
+        "Sensitive output marking: mark any Terraform outputs containing secrets as sensitive = true to prevent them from printing in plan/apply logs"
+      ],
+      "difficulty": "hard"
+    }
+  ]
+}

@@ -1,0 +1,493 @@
+name: "AI Platform Engineer"
+description: "Preparation plan for an AI Platform Engineer role — building, deploying, and operating GenAI and LLM-powered systems at production scale"
+version: 1
+suggested_timeline: "10-12 weeks"
+
+bridge_from:
+  software_engineering:
+    strengths:
+      - "API design and service architecture"
+      - "Containerization and CI/CD pipelines"
+      - "Debugging, profiling, and code quality practices"
+    gaps:
+      - "LLM application architecture patterns (RAG, agents, chains)"
+      - "Vector databases and embedding pipelines"
+      - "Model lifecycle management and LLMOps tooling"
+      - "AI-specific observability (hallucination detection, drift, evals)"
+    recommended_start: "genai-foundations"
+  ml_engineering:
+    strengths:
+      - "Model training pipelines and experiment tracking"
+      - "Feature engineering and data preprocessing"
+      - "Model evaluation metrics and validation"
+    gaps:
+      - "LLM-specific serving infrastructure (vLLM, TGI, Triton)"
+      - "RAG system design and retrieval evaluation"
+      - "Prompt engineering and prompt versioning"
+      - "Cost and latency optimization for inference at scale"
+    recommended_start: "rag-knowledge-systems"
+  cloud_engineering:
+    strengths:
+      - "Cloud infrastructure provisioning and IAM"
+      - "Managed service integration and cost management"
+      - "Networking, storage, and compute fundamentals"
+    gaps:
+      - "LLM-specific cloud services (Bedrock, Vertex AI, Azure OpenAI)"
+      - "GPU/accelerator scheduling and resource allocation"
+      - "AI observability and model monitoring tooling"
+      - "Embedding pipeline design and vector store management"
+    recommended_start: "cloud-ai-services"
+  backend_engineering:
+    strengths:
+      - "Service design, REST/gRPC APIs, and async patterns"
+      - "Database design and query optimization"
+      - "Performance profiling and scalability patterns"
+    gaps:
+      - "LLM context window management and prompt construction"
+      - "Semantic search and embedding similarity concepts"
+      - "LLM workflow orchestration frameworks"
+      - "AI evaluation frameworks and quality measurement"
+    recommended_start: "genai-foundations"
+
+tracks:
+  - id: genai-foundations
+    name: "GenAI & LLM Foundations"
+    description: "Core concepts required to reason about and build LLM-powered systems"
+    topics:
+      - id: llm-core-concepts
+        name: "LLM Core Concepts"
+        estimated_hours: 8
+        priority: high
+        description: "Transformer architecture fundamentals, tokenization, context windows, temperature and sampling parameters, model families (GPT, Llama, Mistral, Gemini), and the difference between base, instruction-tuned, and chat models"
+        resources:
+          - title: "Andrej Karpathy — Let's build GPT from scratch"
+            url: "https://www.youtube.com/watch?v=kCc8FmEb1nY"
+            type: video
+            free: true
+          - title: "The Illustrated Transformer — Jay Alammar"
+            url: "https://jalammar.github.io/illustrated-transformer/"
+            type: article
+            free: true
+          - title: "DeepLearning.AI — ChatGPT Prompt Engineering for Developers"
+            url: "https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/"
+            type: course
+            free: true
+
+      - id: embeddings-and-vector-search
+        name: "Embeddings & Semantic Search"
+        estimated_hours: 6
+        priority: high
+        description: "What embeddings represent, embedding model families (OpenAI ada, sentence-transformers, Cohere), cosine similarity vs dot product vs Euclidean distance, approximate nearest neighbor (ANN) algorithms (HNSW, IVF), and when to use dense vs sparse vs hybrid search"
+        resources:
+          - title: "Sentence Transformers Documentation"
+            url: "https://www.sbert.net/docs/quickstart.html"
+            type: documentation
+            free: true
+          - title: "Pinecone — What are Vector Embeddings"
+            url: "https://www.pinecone.io/learn/vector-embeddings/"
+            type: article
+            free: true
+          - title: "OpenAI Embeddings Guide"
+            url: "https://platform.openai.com/docs/guides/embeddings"
+            type: documentation
+            free: true
+
+      - id: prompt-engineering
+        name: "Prompt Engineering"
+        estimated_hours: 6
+        priority: high
+        description: "Zero-shot, few-shot, chain-of-thought, and tree-of-thought prompting. System vs user vs assistant roles. Instruction formatting, role assignment, output format enforcement via JSON schema, and prompt templates vs dynamic composition"
+        resources:
+          - title: "Prompt Engineering Guide — promptingguide.ai"
+            url: "https://www.promptingguide.ai/"
+            type: documentation
+            free: true
+          - title: "Anthropic Prompt Engineering Guide"
+            url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+            type: documentation
+            free: true
+          - title: "OpenAI Prompt Engineering Best Practices"
+            url: "https://platform.openai.com/docs/guides/prompt-engineering"
+            type: documentation
+            free: true
+
+  - id: rag-knowledge-systems
+    name: "RAG & Knowledge Systems"
+    description: "Design and implementation of Retrieval-Augmented Generation systems"
+    topics:
+      - id: rag-architecture
+        name: "RAG Architecture Fundamentals"
+        estimated_hours: 8
+        priority: high
+        description: "Naive RAG vs advanced RAG vs modular RAG patterns. Indexing pipeline (load, split, embed, store) vs retrieval pipeline (query, retrieve, rerank, generate). Understanding where each stage can fail and how to measure quality at each step"
+        resources:
+          - title: "LangChain RAG Conceptual Guide"
+            url: "https://python.langchain.com/docs/concepts/rag/"
+            type: documentation
+            free: true
+          - title: "LlamaIndex — Building RAG from Scratch"
+            url: "https://docs.llamaindex.ai/en/stable/understanding/rag/"
+            type: documentation
+            free: true
+          - title: "Anthropic — Contextual Retrieval"
+            url: "https://www.anthropic.com/news/contextual-retrieval"
+            type: article
+            free: true
+
+      - id: chunking-strategies
+        name: "Chunking & Indexing Strategies"
+        estimated_hours: 5
+        priority: high
+        description: "Fixed-size vs recursive vs semantic vs document-structure-aware chunking. Chunk overlap strategies. Metadata enrichment for filtering. Parent-child document retrieval. Hierarchical indexing. Trade-offs between chunk size, retrieval precision, and context utilization"
+        resources:
+          - title: "LangChain — Text Splitters Documentation"
+            url: "https://python.langchain.com/docs/concepts/text_splitters/"
+            type: documentation
+            free: true
+          - title: "Greg Kamradt — Chunking Strategies"
+            url: "https://www.youtube.com/watch?v=8OJC21T2SL4"
+            type: video
+            free: true
+
+      - id: vector-databases
+        name: "Vector Databases"
+        estimated_hours: 6
+        priority: high
+        description: "Purpose-built vector stores (Pinecone, Weaviate, Qdrant, Milvus) vs general databases with vector extensions (pgvector, Redis). Indexing algorithms (HNSW vs IVF). Filtering and hybrid search. Managed vs self-hosted trade-offs. Namespace and collection design for multi-tenant applications"
+        resources:
+          - title: "Pinecone — Vector Database Guide"
+            url: "https://www.pinecone.io/learn/vector-database/"
+            type: article
+            free: true
+          - title: "Qdrant Documentation — Getting Started"
+            url: "https://qdrant.tech/documentation/quick-start/"
+            type: documentation
+            free: true
+          - title: "pgvector GitHub and Documentation"
+            url: "https://github.com/pgvector/pgvector"
+            type: documentation
+            free: true
+
+      - id: retrieval-evaluation
+        name: "Retrieval & RAG Evaluation"
+        estimated_hours: 6
+        priority: high
+        description: "Retrieval metrics: precision@k, recall@k, MRR, nDCG. Generation metrics: faithfulness, answer relevance, context precision, context recall. RAGAS framework. Creating ground-truth evaluation datasets. Offline vs online evaluation. Continuous quality monitoring in production"
+        resources:
+          - title: "RAGAS — RAG Evaluation Framework"
+            url: "https://docs.ragas.io/en/latest/"
+            type: documentation
+            free: true
+          - title: "DeepEval Documentation"
+            url: "https://docs.confident-ai.com/"
+            type: documentation
+            free: true
+          - title: "MTEB Leaderboard — Embedding Model Benchmarks"
+            url: "https://huggingface.co/spaces/mteb/leaderboard"
+            type: documentation
+            free: true
+
+  - id: model-serving-inference
+    name: "Model Serving & Inference"
+    description: "Deploying and operating LLM inference infrastructure at scale"
+    topics:
+      - id: inference-fundamentals
+        name: "Inference Optimization Fundamentals"
+        estimated_hours: 6
+        priority: high
+        description: "Latency vs throughput trade-offs. KV cache mechanics. Quantization (GPTQ, AWQ, GGUF, INT8, INT4). Continuous batching vs static batching. Speculative decoding. Flash Attention. Understanding GPU memory layout and why model size ≠ VRAM requirement directly"
+        resources:
+          - title: "Hugging Face — LLM Inference Optimization"
+            url: "https://huggingface.co/docs/transformers/llm_optims"
+            type: documentation
+            free: true
+          - title: "vLLM Blog — Efficient LLM Serving"
+            url: "https://blog.vllm.ai/2023/06/20/vllm.html"
+            type: article
+            free: true
+
+      - id: serving-frameworks
+        name: "LLM Serving Frameworks"
+        estimated_hours: 8
+        priority: high
+        description: "vLLM (OpenAI-compatible, high throughput), Text Generation Inference/TGI (HuggingFace), Ollama (local dev), Triton Inference Server (NVIDIA, multi-framework). When to use each. OpenAI-compatible API design. Streaming responses with server-sent events. Health checks, readiness probes, and graceful shutdown for LLM services"
+        resources:
+          - title: "vLLM Documentation"
+            url: "https://docs.vllm.ai/en/latest/"
+            type: documentation
+            free: true
+          - title: "Text Generation Inference (TGI) Documentation"
+            url: "https://huggingface.co/docs/text-generation-inference/en/index"
+            type: documentation
+            free: true
+          - title: "Ollama Documentation"
+            url: "https://ollama.ai/docs"
+            type: documentation
+            free: true
+
+      - id: model-deployment-patterns
+        name: "Model Deployment Patterns"
+        estimated_hours: 5
+        priority: medium
+        description: "Blue-green and canary deployments for model updates. Shadow mode testing. A/B testing LLM versions. Model rollback strategies. Multi-model routing (routing by cost, latency, capability). Edge vs cloud inference trade-offs. Serverless inference (AWS Lambda, Google Cloud Run) vs always-on GPU instances"
+        resources:
+          - title: "AWS — Deploying ML Models with Blue/Green Strategy"
+            url: "https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-blue-green.html"
+            type: documentation
+            free: true
+          - title: "LiteLLM — Multi-Model Routing"
+            url: "https://docs.litellm.ai/docs/"
+            type: documentation
+            free: true
+
+  - id: ai-observability-evals
+    name: "AI Observability & Evaluation"
+    description: "Monitoring, tracing, and quality measurement for AI systems in production"
+    topics:
+      - id: llm-observability
+        name: "LLM Observability & Tracing"
+        estimated_hours: 6
+        priority: high
+        description: "Why LLM observability differs from traditional APM. Tracing multi-step chains and agent loops. Key metrics: token usage, latency per step, cost per request, cache hit rate. Tools: Langfuse, Phoenix (Arize), Helicone, LangSmith. OpenTelemetry for AI (OpenLLMetry). Structured logging for LLM pipelines"
+        resources:
+          - title: "Langfuse Documentation"
+            url: "https://langfuse.com/docs"
+            type: documentation
+            free: true
+          - title: "Arize Phoenix Documentation"
+            url: "https://docs.arize.com/phoenix"
+            type: documentation
+            free: true
+          - title: "OpenLLMetry — OpenTelemetry for LLMs"
+            url: "https://github.com/traceloop/openllmetry"
+            type: documentation
+            free: true
+
+      - id: hallucination-detection
+        name: "Hallucination Detection & Quality Monitoring"
+        estimated_hours: 5
+        priority: high
+        description: "Types of hallucinations (factual, faithfulness, coherence). Automated detection approaches: NLI-based, model-based judges, groundedness scoring. Production monitoring patterns: statistical sampling, threshold alerting, human-in-the-loop review queues. Building LLM-as-judge evaluation pipelines"
+        resources:
+          - title: "TruLens Documentation — Feedback Functions"
+            url: "https://www.trulens.org/trulens/getting_started/quickstarts/quickstart/"
+            type: documentation
+            free: true
+          - title: "G-Eval — LLM Evaluation using GPT-4"
+            url: "https://arxiv.org/abs/2303.16634"
+            type: article
+            free: true
+
+      - id: cost-management
+        name: "AI Cost Management & Optimization"
+        estimated_hours: 4
+        priority: medium
+        description: "Token economics: input vs output token pricing across providers. Prompt compression techniques (LLMLingua). Semantic caching (GPTCache). Model routing by cost/capability (LiteLLM). Batch inference for async workloads. Estimating and budgeting cloud AI spend. FinOps for GPU compute"
+        resources:
+          - title: "LLMLingua — Prompt Compression"
+            url: "https://llmlingua.com/"
+            type: documentation
+            free: true
+          - title: "GPTCache Documentation"
+            url: "https://gptcache.readthedocs.io/en/latest/"
+            type: documentation
+            free: true
+
+  - id: llmops-orchestration
+    name: "LLMOps & Workflow Orchestration"
+    description: "Operating LLM applications in production — versioning, pipelines, and agent frameworks"
+    topics:
+      - id: orchestration-frameworks
+        name: "LLM Orchestration Frameworks"
+        estimated_hours: 8
+        priority: high
+        description: "LangChain (chains, agents, tools ecosystem), LlamaIndex (data-focused RAG, query engines), DSPy (programmatic prompt optimization), CrewAI (multi-agent). Framework selection criteria. Avoiding over-engineering: when plain Python is better than a framework. Framework lock-in risks"
+        resources:
+          - title: "LangChain Documentation"
+            url: "https://python.langchain.com/docs/introduction/"
+            type: documentation
+            free: true
+          - title: "LlamaIndex Documentation"
+            url: "https://docs.llamaindex.ai/en/stable/"
+            type: documentation
+            free: true
+          - title: "DSPy Documentation"
+            url: "https://dspy.ai/"
+            type: documentation
+            free: true
+
+      - id: agentic-systems
+        name: "Agentic System Design"
+        estimated_hours: 8
+        priority: high
+        description: "ReAct pattern (Reason + Act). Tool/function calling design. Multi-agent architectures (orchestrator + sub-agents). Agent memory: in-context, external, episodic. Human-in-the-loop checkpoints. Controlling agent loops: step limits, confidence thresholds, fallback paths. Failure modes unique to agentic systems"
+        resources:
+          - title: "Anthropic — Building Effective Agents"
+            url: "https://www.anthropic.com/research/building-effective-agents"
+            type: article
+            free: true
+          - title: "OpenAI — Function Calling Guide"
+            url: "https://platform.openai.com/docs/guides/function-calling"
+            type: documentation
+            free: true
+          - title: "LangGraph Documentation"
+            url: "https://langchain-ai.github.io/langgraph/"
+            type: documentation
+            free: true
+
+      - id: prompt-versioning-cicd
+        name: "Prompt Versioning & LLMOps CI/CD"
+        estimated_hours: 5
+        priority: medium
+        description: "Treating prompts as code: version control, change review, rollback. Prompt registry patterns. Automated regression testing for prompts. LLMOps pipelines: eval on merge, canary prompt rollouts. Dataset versioning for eval sets. Integrating LLM evals into CI/CD (GitHub Actions, automated gates)"
+        resources:
+          - title: "Langfuse Prompt Management"
+            url: "https://langfuse.com/docs/prompts/get-started"
+            type: documentation
+            free: true
+          - title: "Weights & Biases — LLMOps Guide"
+            url: "https://wandb.ai/site/articles/a-guide-to-llmops"
+            type: article
+            free: true
+
+  - id: cloud-ai-services
+    name: "Cloud AI Services"
+    description: "Leveraging managed AI services across major cloud providers"
+    topics:
+      - id: aws-bedrock
+        name: "AWS Bedrock & SageMaker"
+        estimated_hours: 8
+        priority: high
+        description: "Bedrock model access (Anthropic, Meta, Mistral, Amazon Titan), Bedrock Agents, Bedrock Knowledge Bases (managed RAG), Bedrock Guardrails. SageMaker JumpStart for fine-tuning. SageMaker Endpoints for custom model serving. IAM roles for AI services. VPC endpoints for private AI access. Cost management via token quotas"
+        resources:
+          - title: "AWS Bedrock Documentation"
+            url: "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+            type: documentation
+            free: true
+          - title: "AWS SageMaker JumpStart Documentation"
+            url: "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html"
+            type: documentation
+            free: true
+
+      - id: gcp-vertex-ai
+        name: "Google Vertex AI"
+        estimated_hours: 6
+        priority: medium
+        description: "Vertex AI Model Garden, Gemini API via Vertex, Vertex AI Search (managed RAG), Vector Search (managed ANN), Model Registry, and Pipelines. Choosing between Vertex AI and direct Gemini API. Google AI Studio for rapid prototyping vs Vertex for production"
+        resources:
+          - title: "Google Vertex AI Documentation"
+            url: "https://cloud.google.com/vertex-ai/docs/start/introduction-unified-platform"
+            type: documentation
+            free: true
+          - title: "Google — Generative AI on Vertex AI"
+            url: "https://cloud.google.com/vertex-ai/generative-ai/docs/learn/overview"
+            type: documentation
+            free: true
+
+      - id: azure-openai-service
+        name: "Azure OpenAI Service"
+        estimated_hours: 5
+        priority: medium
+        description: "Model deployments and capacity management, Azure OpenAI Studio, content filtering configuration, private endpoints and network isolation, managed identity for auth, Azure AI Search integration for RAG, provisioned throughput vs pay-as-you-go, responsible AI policies"
+        resources:
+          - title: "Azure OpenAI Service Documentation"
+            url: "https://learn.microsoft.com/en-us/azure/ai-services/openai/overview"
+            type: documentation
+            free: true
+          - title: "Azure AI Search — RAG Integration"
+            url: "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview"
+            type: documentation
+            free: true
+
+  - id: interview-preparation
+    name: "Interview Preparation"
+    description: "Structured practice for AI Platform Engineer technical interviews"
+    topics:
+      - id: ai-system-design
+        name: "AI System Design Practice"
+        estimated_hours: 10
+        priority: high
+        description: "Practice designing complete AI systems end-to-end: customer support chatbot, internal knowledge assistant, code review assistant, document Q&A system. Cover: data ingestion, chunking strategy, embedding model selection, retrieval design, LLM selection, response generation, evaluation, and monitoring"
+        quiz_bank: "ai-platform-engineer"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: ai-tradeoff-discussions
+        name: "Trade-off & Debugging Scenarios"
+        estimated_hours: 6
+        priority: high
+        description: "Common interview scenarios: RAG not retrieving correct chunks (diagnose and fix), LLM giving inconsistent outputs (root cause analysis), inference costs spiking (optimization approach), agent loop not terminating (debugging strategy). Practice articulating trade-offs between cost, latency, accuracy, and complexity"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: portfolio-projects
+        name: "Portfolio Projects"
+        estimated_hours: 12
+        priority: medium
+        description: "Build demonstrable projects: (1) end-to-end RAG system with evaluation dashboard, (2) multi-agent workflow with observability, (3) LLM fine-tuning experiment with before/after eval metrics. Publish on GitHub. Write accompanying blog posts explaining architectural decisions"
+
+certifications_suggested:
+  - name: "AWS Certified Machine Learning – Specialty"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-machine-learning-specialty/"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "Google Professional Machine Learning Engineer"
+    provider: "Google Cloud"
+    url: "https://cloud.google.com/learn/certification/machine-learning-engineer"
+    priority: high
+    estimated_prep_hours: 50
+  - name: "DeepLearning.AI LLMOps Specialization"
+    provider: "DeepLearning.AI / Coursera"
+    url: "https://www.coursera.org/specializations/llmops"
+    priority: medium
+    estimated_prep_hours: 30
+  - name: "Databricks Generative AI Engineer Associate"
+    provider: "Databricks"
+    url: "https://www.databricks.com/learn/certification/generative-ai-engineer-associate"
+    priority: medium
+    estimated_prep_hours: 30
+  - name: "Azure AI Engineer Associate (AI-102)"
+    provider: "Microsoft"
+    url: "https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-engineer/"
+    priority: low
+    estimated_prep_hours: 40
+
+interview_questions:
+  technical:
+    - "Design a document Q&A system for a company with 100,000 internal documents. Walk me through every component from ingestion to response, and explain the trade-offs you'd make."
+    - "A RAG system is returning irrelevant context 40% of the time. How would you diagnose and fix this systematically?"
+    - "Compare vLLM and Text Generation Inference. When would you choose one over the other for a production deployment?"
+    - "Explain the KV cache in LLM inference. How does it affect memory usage and what happens when it fills up?"
+    - "How would you design a cost management strategy for an LLM service that receives 1 million requests per day?"
+    - "Walk me through how you would evaluate whether upgrading from GPT-3.5 to GPT-4 is worth the cost increase for a specific use case."
+    - "An agent is getting stuck in an infinite tool-calling loop. How would you design the system to prevent this, and how would you debug it in production?"
+    - "Explain the difference between dense retrieval, sparse retrieval, and hybrid search. When would you use each?"
+    - "How would you implement semantic caching for an LLM application, and what are the risks of getting it wrong?"
+    - "What is the difference between a faithfulness hallucination and a relevance hallucination? How would you detect each in production?"
+  leadership:
+    - "A product team wants to ship an LLM feature in two weeks. You know the evaluation framework isn't ready. How do you handle this?"
+    - "How do you decide when to use a managed AI service (e.g., Bedrock) versus self-hosting an open-source model?"
+    - "How would you build an internal knowledge base about your team's LLM architecture decisions so new engineers can onboard faster?"
+    - "Describe how you would measure the success of an AI platform you built. What metrics would you track and why?"
+    - "An LLM in production starts producing noticeably worse outputs after a provider silently updates the underlying model. How do you respond?"
+
+content_suggestions:
+  - type: blog_post
+    title: "RAG in Production: What Nobody Tells You About Chunking"
+    description: "A practical guide covering chunking strategy selection based on document type, how chunk size affects retrieval precision and context utilization, and a benchmark of five chunking strategies on three document types. Include code examples and real retrieval metric comparisons."
+    audience: "Engineers building their first or second RAG system"
+  - type: blog_post
+    title: "Choosing a Vector Database: A Decision Framework"
+    description: "Cut through the hype with a structured comparison of Pinecone, Qdrant, Weaviate, and pgvector across five dimensions: query latency at scale, filtering capabilities, managed vs self-hosted operational burden, multi-tenancy patterns, and hybrid search support. Include a decision flowchart."
+    audience: "Engineers evaluating vector database options for production"
+  - type: project
+    title: "Open-Source RAG Evaluation Dashboard"
+    description: "Build and publish a lightweight RAG evaluation harness that measures retrieval precision/recall and generation faithfulness using RAGAS, outputs a visual dashboard, and integrates as a GitHub Actions step. This becomes a reusable tool and demonstrates production engineering thinking."
+    audience: "The AI engineering community — useful for anyone building RAG systems"

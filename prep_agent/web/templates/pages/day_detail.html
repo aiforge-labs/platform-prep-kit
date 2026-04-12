@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% set active_page = "study" %}
+{% block title %}Day {{ entry.day_num if entry else '?' }}: {{ entry.topic if entry else '' }} - Career Prep Agent{% endblock %}
+
+{% block content %}
+{% if entry %}
+
+<!-- Navigation -->
+<div class="day-nav">
+    {% if prev_entry %}<a href="/study/day/{{ prev_entry.day_num }}">&larr; Day {{ prev_entry.day_num }}</a>{% else %}<span></span>{% endif %}
+    <a href="/study">All Days</a>
+    {% if next_entry %}<a href="/study/day/{{ next_entry.day_num }}">Day {{ next_entry.day_num }} &rarr;</a>{% else %}<span></span>{% endif %}
+</div>
+
+<!-- Header -->
+<h2>Day {{ entry.day_num }}: {{ entry.topic }}</h2>
+<div class="day-meta">
+    <span class="badge badge-{{ entry.status }}">{{ entry.status }}</span>
+    <span class="text-muted">{{ entry.date }}</span>
+    <span class="text-muted">Track: {{ entry.track_id }}</span>
+</div>
+
+{% if entry.morning_focus or entry.evening_focus %}
+<div class="day-focus-cards">
+    {% if entry.morning_focus %}
+    <div class="focus-card">
+        <div class="focus-label">Morning Focus</div>
+        <div class="focus-text">{{ entry.morning_focus }}</div>
+    </div>
+    {% endif %}
+    {% if entry.evening_focus %}
+    <div class="focus-card">
+        <div class="focus-label">Evening Focus</div>
+        <div class="focus-text">{{ entry.evening_focus }}</div>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Action Buttons -->
+<div class="day-actions-bar">
+    {% if knowledge_slug %}
+    <a href="/knowledge/{{ knowledge_slug }}" class="btn btn-accent">Study Material</a>
+    {% endif %}
+    {% if quiz_bank_id %}
+    <a href="/quiz/start?topic={{ quiz_bank_id }}&num=5" class="btn btn-outline">Quick Quiz (5 Qs)</a>
+    {% endif %}
+    {% if not knowledge_slug and not quiz_bank_id %}
+    <a href="/knowledge" class="btn btn-outline">Browse Knowledge Packs</a>
+    <a href="/quiz" class="btn btn-outline">Browse Quizzes</a>
+    {% endif %}
+</div>
+
+<!-- Study Material Preview -->
+{% if knowledge_html %}
+<div class="section">
+    <div class="section-header-bar">
+        <h3>Study Material</h3>
+        {% if knowledge_slug %}
+        <a href="/knowledge/{{ knowledge_slug }}" class="btn btn-small btn-outline">Open Full Pack</a>
+        {% endif %}
+    </div>
+    <div class="knowledge-preview-box">
+        <div class="rendered-content">
+            {{ knowledge_html|safe }}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Mark Done / Completed Summary -->
+{% if entry.status != 'done' %}
+<div class="section" id="mark-done-section">
+    <h3>Mark Complete</h3>
+    <p class="text-muted">Finished studying? Log your progress below.</p>
+    <form hx-post="/study/day/{{ entry.day_num }}/done" hx-target="body" class="done-form">
+        <div class="form-row">
+            <label>What did you learn? (notes)</label>
+            <textarea name="notes" rows="3" placeholder="Key takeaways, things to review, questions...">{{ entry.notes or '' }}</textarea>
+        </div>
+        <div class="form-row-inline">
+            <div class="form-row">
+                <label>Confidence score (1-10)</label>
+                <input type="number" name="score" min="1" max="10" placeholder="How well do you know this?">
+            </div>
+            <div class="form-row">
+                <label>Time spent (minutes)</label>
+                <input type="number" name="minutes" min="1" placeholder="How long did you study?">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">Mark Day Complete</button>
+    </form>
+</div>
+{% else %}
+<div class="section">
+    <h3>Completed</h3>
+    <div class="done-summary">
+        {% if entry.score %}<p><strong>Confidence:</strong> {{ entry.score }}/10</p>{% endif %}
+        {% if entry.minutes %}<p><strong>Time spent:</strong> {{ entry.minutes }} minutes</p>{% endif %}
+        {% if entry.notes %}<p><strong>Notes:</strong> {{ entry.notes }}</p>{% endif %}
+        {% if not entry.score and not entry.minutes and not entry.notes %}
+        <p class="text-muted">No details recorded.</p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<div class="empty-state">
+    <p>Day not found.</p>
+    <a href="/study" class="btn btn-outline">Back to Study Plan</a>
+</div>
+{% endif %}
+{% endblock %}

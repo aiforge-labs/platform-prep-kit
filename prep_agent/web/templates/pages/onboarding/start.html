@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% set active_page = "" %}
+{% block title %}Welcome - Career Prep Agent{% endblock %}
+
+{% block content %}
+<div class="onboarding-container">
+    <div class="onboarding-hero">
+        <h1>Welcome to Career Prep Agent</h1>
+        <p>Your personal career coaching tool. Let's set up your preparation plan in 3 simple steps.</p>
+    </div>
+
+    <form hx-post="/onboarding/step/template" hx-target=".content" hx-swap="innerHTML" class="onboarding-form">
+        <h3>Step 1: About You</h3>
+
+        <div class="form-row">
+            <label>Your Name (optional)</label>
+            <input type="text" name="name" placeholder="e.g., Alex Chen">
+        </div>
+
+        <div class="form-row">
+            <label>Current Role</label>
+            <input type="text" name="current_role" placeholder="e.g., Senior Software Engineer">
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-large">Next: Choose Your Path</button>
+    </form>
+</div>
+{% endblock %}

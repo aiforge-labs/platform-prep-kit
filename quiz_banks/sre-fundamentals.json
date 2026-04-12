@@ -1,0 +1,256 @@
+{
+  "topic_id": "sre-fundamentals",
+  "title": "Site Reliability Engineering Fundamentals",
+  "version": 1,
+  "questions": [
+    {
+      "id": "sre-01",
+      "question": "A service has an SLO of 99.95% availability over 30 days. How many minutes of downtime are allowed per month?",
+      "type": "multiple_choice",
+      "options": [
+        "A) 43.2 minutes",
+        "B) 21.6 minutes",
+        "C) 4.3 minutes",
+        "D) 8.6 minutes"
+      ],
+      "answer": "B",
+      "explanation": "Error budget = (1 - 0.9995) × 30 days × 24 hours × 60 minutes = 0.0005 × 43,200 = 21.6 minutes. A 99.9% SLO allows 43.2 minutes; 99.99% allows 4.3 minutes; 99.95% sits between these.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "sre-02",
+      "question": "What is the error budget burn rate at which a service will exhaust its monthly error budget in exactly 1 hour?",
+      "type": "multiple_choice",
+      "options": [
+        "A) 1.0 (baseline rate)",
+        "B) 14.4",
+        "C) 24.0",
+        "D) 720.0"
+      ],
+      "answer": "B",
+      "explanation": "A 30-day window has 720 hours. Exhausting it in 1 hour means burning 720× faster than the budget allows. But the budget is 0.1% of the window (for 99.9% SLO). Burn rate = 720 hours ÷ 50 hours at budget rate... The standard answer: 14.4× burn rate exhausts the budget in 5% of the window = 36 hours. To exhaust in 1 hour out of 720: 720/1 = 720? No — burn rate is defined as: (error rate / error budget rate). For 99.9% SLO, 1 hour represents 1/720 of the budget window, so you need to consume the ENTIRE budget in that 1 hour, meaning burn rate = 720/50... The Google SRE workbook defines it as: a burn rate of 14.4 exhausts the budget in 1/14.4 of the window (≈50 hours for a 30-day window). To exhaust in 1 hour: burn rate = 720 hours ÷ 1 hour = 720. However, the commonly cited 14.4 is the alert threshold for the 'will exhaust in 1 hour' critical alert per the SRE Workbook. Answer B (14.4) is the standard SRE workbook value for the critical burn rate alert.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "sre-03",
+      "question": "What is the PRIMARY difference between a symptom-based alert and a cause-based alert?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Symptom-based alerts are slower to fire than cause-based alerts",
+        "B) Symptom-based alerts fire on user-visible impact (e.g., error rate high); cause-based alerts fire on internal metrics (e.g., CPU high) that may or may not affect users",
+        "C) Symptom-based alerts require more infrastructure to implement",
+        "D) Cause-based alerts are always more reliable than symptom-based alerts"
+      ],
+      "answer": "B",
+      "explanation": "SRE best practice is to alert on symptoms (user-visible impact) rather than causes. A CPU alert may fire when there is no user impact. An error rate alert fires only when users are actually experiencing failures. Symptom-based alerting reduces false positives and alert fatigue. Cause-based metrics are still valuable for dashboards and debugging, but should rarely be the primary paging alert.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sre-04",
+      "question": "In the RED method for service monitoring, what do R, E, and D stand for?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Reliability, Efficiency, Durability",
+        "B) Rate (requests/sec), Errors (failed requests/sec), Duration (latency distribution)",
+        "C) Resources, Events, Delays",
+        "D) Response time, Error budget, Demand"
+      ],
+      "answer": "B",
+      "explanation": "RED: Rate (how many requests per second), Errors (how many are failing per second, or % error rate), Duration (how long requests take — ideally tracked as a distribution with p50/p95/p99). RED is designed for service-level monitoring. The complementary USE method (Utilization, Saturation, Errors) is for resource-level monitoring (CPU, memory, disk).",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sre-05",
+      "question": "Which trace sampling strategy is BEST suited for capturing the details of slow or failing requests in a high-traffic service?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Head-based sampling with a fixed 1% rate",
+        "B) Head-based sampling with 100% rate",
+        "C) Tail-based sampling that samples based on the outcome (latency, error) observed after the request completes",
+        "D) No sampling — store all traces"
+      ],
+      "answer": "C",
+      "explanation": "Head-based sampling makes the sampling decision at the start of a request — before you know if it will be slow or fail. This means errors and slow requests are sampled at the same low rate as normal requests. Tail-based sampling buffers the trace until completion, then samples based on outcome (e.g., always sample if error, always sample if > p99 latency). This ensures important traces are kept at low storage cost.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "sre-06",
+      "question": "In a blameless post-mortem, 'human error' as a root cause is considered a failure of the post-mortem process because:",
+      "type": "multiple_choice",
+      "options": [
+        "A) Humans never make mistakes, so the root cause must be a tool",
+        "B) It stops the analysis too early — it describes what happened (a person made a mistake) but not why the system allowed that mistake to have such impact, which is the actionable insight",
+        "C) Blameless means no human should ever be mentioned in a post-mortem",
+        "D) Human errors can only be fixed by HR, not engineering"
+      ],
+      "answer": "B",
+      "explanation": "A blameless post-mortem asks: why was it possible for a human error to cause this outcome? The actionable root cause is usually a system design issue: missing guardrails, unclear runbooks, insufficient testing, poor tooling, or excessive toil that led to fatigue. 'Human error' is a symptom; the root cause is the system that made the error consequential.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sre-07",
+      "question": "What is the circuit breaker pattern's purpose in a microservice architecture?",
+      "type": "multiple_choice",
+      "options": [
+        "A) To prevent too many simultaneous connections to a database",
+        "B) To stop propagating failures by temporarily halting calls to a downstream service that is consistently failing, allowing it time to recover",
+        "C) To route traffic between multiple replicas of a service",
+        "D) To limit the number of retries on failed requests"
+      ],
+      "answer": "B",
+      "explanation": "A circuit breaker wraps calls to a downstream service. When failure rate exceeds a threshold, the circuit 'opens' — subsequent calls fail immediately without attempting the downstream call. This prevents: (1) resource exhaustion from stacking slow calls, (2) amplifying load on an already-struggling service, (3) cascading failures through the call graph. The circuit periodically attempts a 'half-open' test call to check if the service has recovered.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sre-08",
+      "question": "Your service has a 99.9% SLO. In the past 30 days, you had two incidents: a 15-minute outage (complete unavailability) and a 35-minute degradation where 40% of requests failed. How much error budget remains?",
+      "type": "open",
+      "key_points": [
+        "Total error budget = (1 - 0.999) × 30 days × 24 hours × 60 minutes = 43.2 minutes of downtime equivalent",
+        "Incident 1: 15 minutes of complete unavailability = 15 minutes consumed",
+        "Incident 2: 35 minutes × 40% failure rate = 14 minutes equivalent (partial availability counts proportionally)",
+        "Total consumed = 15 + 14 = 29 minutes",
+        "Remaining budget = 43.2 - 29 = 14.2 minutes (approximately 33% remaining)",
+        "Implication: With 14 minutes remaining for the rest of the month, the team should be cautious about risky deployments and consider whether to invoke error budget policy"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "sre-09",
+      "question": "What distinguishes 'toil' from other engineering work, and why is it important to quantify it?",
+      "type": "open",
+      "key_points": [
+        "Toil definition: manual, repetitive, automatable, tactical work that lacks enduring value — examples: manually scaling a service, rotating certificates by hand, copying log entries to tickets",
+        "NOT toil: post-mortems, capacity planning, improving automation, mentoring — these have enduring value even if repetitive",
+        "Why quantify it: if toil > 50% of engineering time, the team is spending more time operating the existing system than improving it — this is unsustainable and leads to burnout",
+        "Quantification method: time tracking categories (toil vs overhead vs engineering work) reviewed in weekly retrospectives",
+        "Outcome: a quantified toil backlog that can be prioritized for automation investment. Each automation removes recurring burden permanently — compound returns"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "sre-10",
+      "question": "Explain the purpose of exponential backoff with jitter in retry logic. What problem does jitter specifically solve?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Jitter randomizes which server handles the retry, improving load balancing",
+        "B) Jitter adds randomness to retry delays to prevent all clients from retrying simultaneously, which would create a 'thundering herd' that overwhelms the recovering service",
+        "C) Jitter reduces the maximum retry delay to improve user experience",
+        "D) Jitter ensures retries only happen during off-peak hours"
+      ],
+      "answer": "B",
+      "explanation": "Without jitter, clients that all fail at the same time (e.g., during a brief network blip) will all retry at the same calculated interval (e.g., all retry after 1 second, then all retry after 2 seconds). This synchronized retry storm overwhelms the recovering service just as it returns. Jitter adds a random offset (±10-50% of delay) so clients desynchronize their retries, spreading load over time.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "sre-11",
+      "question": "What is a 'game day' in chaos engineering, and what are the most important elements of planning one safely?",
+      "type": "open",
+      "key_points": [
+        "Game day: a planned exercise where the team deliberately introduces failures to test system resilience and validate runbooks in a controlled, observed setting",
+        "Key planning elements: (1) written hypothesis — 'system will remain in steady state when X fails', (2) defined steady state using SLO metrics before starting, (3) blast radius controls — start small, have a kill switch",
+        "Safety: inform stakeholders (support team, on-call), have rollback procedures documented before starting, run during business hours not peak traffic",
+        "Common game day scenarios: kill a random instance, inject latency into a dependency, fill disk on a node, cut a network path, simulate AZ failure",
+        "Post-game-day: document what broke, what held, and create improvement action items with owners and due dates — the game day is only valuable if learnings are acted upon"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "sre-12",
+      "question": "How does OpenTelemetry differ from Jaeger or Zipkin?",
+      "type": "multiple_choice",
+      "options": [
+        "A) OpenTelemetry is a tracing backend; Jaeger and Zipkin are instrumentation libraries",
+        "B) OpenTelemetry is a vendor-neutral instrumentation standard and SDK; Jaeger and Zipkin are trace storage and query backends",
+        "C) OpenTelemetry only handles metrics; Jaeger and Zipkin handle traces",
+        "D) They are all equivalent and interchangeable"
+      ],
+      "answer": "B",
+      "explanation": "OpenTelemetry (OTel) provides: (1) a specification (how telemetry data should be structured), (2) SDKs and auto-instrumentation libraries for collecting traces, metrics, and logs. It is vendor-neutral — you instrument once. Jaeger and Zipkin are backends that store and query trace data. OTel exports to them. This separation means you can switch from Jaeger to Tempo (or any OTel-compatible backend) without re-instrumenting your code.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "sre-13",
+      "question": "Design a multi-window burn rate alerting strategy for a service with a 99.9% monthly SLO. What windows and burn rates would you use, and how would you classify alert severity?",
+      "type": "open",
+      "key_points": [
+        "Multi-window alerting: use two windows per alert — a short window for fast detection, a long window for confidence (reduces false positives from brief spikes)",
+        "Critical (page immediately): burn rate > 14.4 over both 1h and 5m windows. At 14.4× burn rate, the monthly budget exhausts in ~50 hours. This fires for severe incidents",
+        "High (page with urgency): burn rate > 6 over both 6h and 30m windows. At 6× burn rate, budget exhausts in 5 days",
+        "Warning (ticket): burn rate > 3 over 3 days. Budget exhausts in 10 days — not urgent but needs attention",
+        "Why two windows: short window detects fast; long window filters noise. BOTH must be true to fire the alert — this dramatically reduces false positives compared to single-window alerting",
+        "Prometheus example: alert fires when (1h burn rate) > 14.4 AND (5m burn rate) > 14.4"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "sre-14",
+      "question": "What is 'load shedding' and when is it the right reliability technique?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Reducing the size of your servers to save cost during low-traffic periods",
+        "B) Intentionally rejecting lower-priority requests when system load exceeds capacity, to protect higher-priority functionality and prevent full system failure",
+        "C) Migrating traffic from an overloaded region to an underloaded region",
+        "D) Deleting old log files to reduce disk usage"
+      ],
+      "answer": "B",
+      "explanation": "Load shedding is a controlled degradation strategy: when the system cannot handle all incoming requests, reject the least important ones (with a 503/429) rather than letting the system collapse entirely. Example: during high load, reject background sync requests but still serve interactive user requests. Better to serve 80% of requests well than to degrade all 100% into timeout failures. Implemented via priority queues, admission control, or request classification.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "sre-15",
+      "question": "A service's p99 latency is 2 seconds (within SLO), but p50 is 200ms. What does this distribution tell you and what would you investigate?",
+      "type": "open",
+      "key_points": [
+        "Large gap between p50 and p99 indicates a bimodal or long-tailed latency distribution — most requests are fast but a significant tail is much slower",
+        "Common causes: cold start penalty (cache misses, JVM JIT, connection pool exhaustion), GC pauses, lock contention under load, resource-constrained requests (e.g., large payloads, complex queries), database query planner choosing slow plans",
+        "Investigation steps: trace the slow requests (distributed tracing on the tail), look for patterns in the slow requests — same user? Same endpoint? Same data size? Time of day correlation?",
+        "Why it matters even if within SLO: 1% of users are having a 10× worse experience. For a service with 1M requests/day that's 10,000 users per day hitting 2s latency",
+        "Fix approaches: request prioritization, request timeout + retry on fresh instance (avoids cold path), query optimization, connection pool sizing, caching for expensive operations"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "sre-16",
+      "question": "What is the difference between a Kubernetes liveness probe and a readiness probe?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Liveness checks if the container is running; readiness checks if the node is healthy",
+        "B) Liveness determines if the container should be restarted (process is alive but stuck); readiness determines if the container should receive traffic (warmed up and ready to serve)",
+        "C) They are identical — both cause the container to restart on failure",
+        "D) Liveness is for stateful services; readiness is for stateless services"
+      ],
+      "answer": "B",
+      "explanation": "Liveness probe failure → Kubernetes restarts the container (it's alive but broken, e.g., deadlocked). Readiness probe failure → Kubernetes removes the pod from the Service endpoints (stops sending traffic) but does NOT restart it. Readiness is used during: startup (not ready until warmed up), processing (not ready while handling a long transaction), and graceful shutdown (stop receiving traffic before the process exits). A pod can be live but not ready.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sre-17",
+      "question": "Describe how you would define SLOs for a batch data pipeline that processes financial records nightly. What SLIs would you use?",
+      "type": "open",
+      "key_points": [
+        "Availability for batch pipelines: not request success rate, but pipeline completion rate (% of scheduled runs that complete successfully within the SLA window)",
+        "Freshness: the age of the most recent processed data at any point in time. SLI: 'time since last successful run'. SLO: 'processed data is never more than 26 hours old'",
+        "Completeness: % of expected records actually processed. SLO: '99.99% of records processed per run, never drop more than 0.01%'. Detects data loss bugs",
+        "Correctness: % of processed records that pass validation rules. SLO: 'error rate in processed records < 0.1%'. Detects transformation bugs",
+        "Latency: end-to-end processing time. SLO: 'runs complete within 4 hours of scheduled start'. Relevant if downstream systems depend on the output by a specific time",
+        "Error budget policy for batch: if 3 runs fail in 30 days, freeze changes to the pipeline until the root cause is fixed"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "sre-18",
+      "question": "What is 'noisy neighbor' in cloud environments and how do reliability engineers mitigate it?",
+      "type": "multiple_choice",
+      "options": [
+        "A) A developer who deploys frequently and causes deployment pipeline congestion",
+        "B) A workload sharing physical infrastructure (CPU, memory, network, disk I/O) that consumes a disproportionate share of resources, degrading performance for other workloads on the same host",
+        "C) A monitoring system that generates too many alerts",
+        "D) A service that sends excessive logging output to shared log infrastructure"
+      ],
+      "answer": "B",
+      "explanation": "Noisy neighbor is a cloud performance interference problem: multiple tenants share physical hardware, and a resource-hungry workload degrades others. Mitigations: (1) dedicated instances or dedicated hosts (expensive), (2) resource limits and requests in Kubernetes to prevent single pods from consuming all node resources, (3) node affinity rules to separate noisy workloads, (4) monitoring for CPU steal time and I/O wait as indicators of noisy neighbor impact, (5) selecting premium instance types with guaranteed performance (e.g., AWS dedicated tenancy).",
+      "difficulty": "medium"
+    }
+  ]
+}

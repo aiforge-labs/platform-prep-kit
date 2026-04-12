@@ -1,0 +1,19 @@
+{% if d %}
+<tr class="{% if d.status == 'done' %}row-done{% endif %}" id="day-{{ d.day_num }}">
+    <td>{{ d.day_num }}</td>
+    <td>{{ d.date }}</td>
+    <td>{{ d.track_id }}</td>
+    <td><a href="/study/day/{{ d.day_num }}">{{ d.topic }}</a></td>
+    <td><span class="badge badge-{{ d.status }}">{{ d.status }}</span></td>
+    <td>{{ d.score if d.score else '—' }}</td>
+    <td>
+        {% if d.status == 'pending' %}
+        <button
+            hx-post="/study/day/{{ d.day_num }}/done"
+            hx-target="#day-{{ d.day_num }}"
+            hx-swap="outerHTML"
+            class="btn btn-small btn-success">Done</button>
+        {% endif %}
+    </td>
+</tr>
+{% endif %}

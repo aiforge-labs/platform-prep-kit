@@ -1,0 +1,32 @@
+<h3>Step 3: Job Posting & Resume (Optional)</h3>
+<p class="text-muted">
+    Provide a job posting URL and/or your resume to get a personalized fitment analysis with gap identification.
+    Both are optional — skip this step if you prefer to use the template defaults.
+</p>
+
+<form hx-post="/onboarding/step/timeline"
+      hx-target=".content"
+      hx-swap="innerHTML"
+      hx-encoding="multipart/form-data"
+      class="onboarding-form">
+    <input type="hidden" name="session_id" value="{{ session_id }}">
+
+    <div class="form-row">
+        <label>Job Posting URL</label>
+        <input type="url" name="job_url" placeholder="https://careers.example.com/jobs/12345">
+        <p class="form-help">Paste the full URL of the job posting you're targeting.</p>
+    </div>
+
+    <div class="form-row">
+        <label>Resume</label>
+        <div class="file-upload-area">
+            <input type="file" name="resume" accept=".pdf,.docx,.doc,.txt,.md" id="resume-input">
+            <p class="form-help">Supported: PDF, DOCX, DOC, TXT, MD (max 10MB). File is parsed locally and deleted immediately.</p>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-accent btn-large">Next: Set Timeline</button>
+        <button type="submit" class="btn btn-outline btn-large" formaction="/onboarding/step/timeline">Skip This Step</button>
+    </div>
+</form>

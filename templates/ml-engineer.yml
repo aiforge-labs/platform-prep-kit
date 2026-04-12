@@ -1,0 +1,360 @@
+name: "ML Engineer"
+description: "Preparation plan for a Machine Learning Engineer role — building production ML systems, feature pipelines, model training infrastructure, and MLOps workflows"
+version: 1
+suggested_timeline: "10-12 weeks"
+
+bridge_from:
+  software_engineering:
+    strengths:
+      - "Software design patterns, APIs, and service architecture"
+      - "CI/CD pipelines, testing, and code quality practices"
+      - "Database design and data pipeline fundamentals"
+    gaps:
+      - "ML model lifecycle: training, validation, deployment, monitoring"
+      - "Feature engineering, feature stores, and train-serve skew"
+      - "Experiment tracking and reproducible ML workflows"
+      - "ML-specific failure modes: data drift, concept drift, model degradation"
+    recommended_start: "ml-foundations"
+  data_engineering:
+    strengths:
+      - "Large-scale data pipelines and ETL/ELT patterns"
+      - "Data quality, lineage, and cataloging"
+      - "Streaming and batch processing frameworks"
+    gaps:
+      - "Model training pipelines and experiment management"
+      - "Online feature serving and low-latency prediction"
+      - "Model deployment patterns (canary, shadow, A/B testing)"
+      - "ML evaluation beyond offline metrics"
+    recommended_start: "feature-engineering"
+  data_scientist:
+    strengths:
+      - "Statistical modeling, ML algorithms, and evaluation metrics"
+      - "Exploratory data analysis and feature selection"
+      - "Experiment design and A/B testing methodology"
+    gaps:
+      - "Production deployment and serving infrastructure"
+      - "Code quality, testing, and software engineering practices"
+      - "Monitoring for model performance degradation in production"
+      - "Feature store design for online serving"
+    recommended_start: "model-deployment"
+  backend_engineering:
+    strengths:
+      - "High-performance service design and API development"
+      - "Caching, queueing, and asynchronous processing"
+      - "Database optimization and query performance"
+    gaps:
+      - "ML-specific data preprocessing and feature transformation"
+      - "Model serialization, versioning, and registry management"
+      - "ML pipeline orchestration and workflow management"
+      - "Data and concept drift detection"
+    recommended_start: "ml-foundations"
+
+tracks:
+  - id: ml-foundations
+    name: "ML Foundations for Production"
+    description: "Core ML concepts framed for production system design"
+    topics:
+      - id: ml-project-lifecycle
+        name: "ML Project Lifecycle"
+        estimated_hours: 6
+        priority: high
+        description: "End-to-end ML project stages: problem framing, data collection, feature engineering, model training, evaluation, deployment, monitoring, and retraining. Distinguishing research ML from production ML. ML technical debt: undeclared consumers, pipeline jungles, data dependencies. ML system reliability challenges vs software system challenges"
+        resources:
+          - title: "Google — Rules of Machine Learning"
+            url: "https://developers.google.com/machine-learning/guides/rules-of-ml"
+            type: documentation
+            free: true
+          - title: "Hidden Technical Debt in ML Systems (Paper)"
+            url: "https://proceedings.neurips.cc/paper_files/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf"
+            type: article
+            free: true
+          - title: "Made With ML — MLOps"
+            url: "https://madewithml.com/#mlops"
+            type: course
+            free: true
+
+      - id: ml-algorithms-refresh
+        name: "Key Algorithms & When to Use Them"
+        estimated_hours: 8
+        priority: medium
+        description: "Decision trees, gradient boosting (XGBoost, LightGBM, CatBoost) for tabular data. Neural networks for unstructured data. When to reach for classical ML vs deep learning. Ensemble methods. Hyperparameter sensitivity for each algorithm family. Compute cost vs accuracy trade-offs. Interpretability vs accuracy trade-off"
+        resources:
+          - title: "Scikit-learn Documentation"
+            url: "https://scikit-learn.org/stable/user_guide.html"
+            type: documentation
+            free: true
+          - title: "XGBoost Documentation"
+            url: "https://xgboost.readthedocs.io/en/stable/"
+            type: documentation
+            free: true
+          - title: "FastAI Practical Deep Learning"
+            url: "https://course.fast.ai/"
+            type: course
+            free: true
+
+  - id: feature-engineering
+    name: "Feature Engineering & Feature Stores"
+    description: "Building, managing, and serving features reliably at scale"
+    topics:
+      - id: feature-engineering-fundamentals
+        name: "Feature Engineering Fundamentals"
+        estimated_hours: 6
+        priority: high
+        description: "Encoding categorical features: ordinal, one-hot, target encoding, embedding. Numerical feature transformations: scaling, normalization, log transforms. Temporal features: lag features, rolling statistics, time-since events. Text features: TF-IDF, word2vec, BERT embeddings for tabular data. Feature interactions and polynomial features. Feature importance and selection methods"
+        resources:
+          - title: "Feature Engineering for Machine Learning — Kaggle Course"
+            url: "https://www.kaggle.com/learn/feature-engineering"
+            type: course
+            free: true
+          - title: "Scikit-learn — Feature Engineering"
+            url: "https://scikit-learn.org/stable/modules/preprocessing.html"
+            type: documentation
+            free: true
+
+      - id: feature-stores
+        name: "Feature Stores"
+        estimated_hours: 7
+        priority: high
+        description: "Feature store architecture: offline store (for training), online store (for low-latency serving), feature registry, and feature pipelines. Train-serve skew: causes and prevention. Feature versioning and point-in-time correctness for training data. Feature sharing across teams. Open-source options: Feast, Hopsworks. Managed options: Vertex AI Feature Store, SageMaker Feature Store, Databricks Feature Store. When a feature store is and is not needed"
+        resources:
+          - title: "Feast Documentation"
+            url: "https://docs.feast.dev/"
+            type: documentation
+            free: true
+          - title: "Hopsworks Feature Store Documentation"
+            url: "https://docs.hopsworks.ai/"
+            type: documentation
+            free: true
+          - title: "What is a Feature Store? — Tecton"
+            url: "https://www.tecton.ai/blog/what-is-a-feature-store/"
+            type: article
+            free: true
+
+  - id: experiment-tracking
+    name: "Experiment Tracking & Model Registry"
+    description: "Reproducible ML experiments and organized model lifecycle management"
+    topics:
+      - id: experiment-tracking-tools
+        name: "Experiment Tracking"
+        estimated_hours: 6
+        priority: high
+        description: "What to track: hyperparameters, metrics (train/val/test), artifacts (model files, plots), environment (dependencies, hardware). MLflow Tracking: runs, experiments, autologging. Weights & Biases: sweeps for hyperparameter search, artifact versioning, team collaboration. Comparing runs across experiments. Integrating tracking into training scripts without coupling"
+        resources:
+          - title: "MLflow Documentation"
+            url: "https://mlflow.org/docs/latest/index.html"
+            type: documentation
+            free: true
+          - title: "Weights & Biases Documentation"
+            url: "https://docs.wandb.ai/"
+            type: documentation
+            free: true
+
+      - id: model-registry
+        name: "Model Registry & Versioning"
+        estimated_hours: 5
+        priority: high
+        description: "Model registry concepts: registering models, stage transitions (staging → production → archived), model metadata and lineage. MLflow Model Registry. Reproducibility: pinning data version, code version, and hyperparameters per registered model. Model packaging formats: MLflow flavor, ONNX for cross-framework portability, BentoML service definitions. Model lineage: connecting model version to training run, dataset version, and feature pipeline version"
+        resources:
+          - title: "MLflow Model Registry Documentation"
+            url: "https://mlflow.org/docs/latest/model-registry.html"
+            type: documentation
+            free: true
+          - title: "ONNX Documentation"
+            url: "https://onnx.ai/get-started.html"
+            type: documentation
+            free: true
+
+      - id: data-versioning
+        name: "Data Versioning with DVC"
+        estimated_hours: 4
+        priority: medium
+        description: "DVC (Data Version Control): versioning large datasets and model files outside of Git. DVC pipelines for reproducible data preprocessing. Remote storage backends (S3, GCS, Azure Blob). Data provenance and audit trail. Combining DVC with MLflow for full reproducibility. When DVC is overkill vs necessary"
+        resources:
+          - title: "DVC Documentation"
+            url: "https://dvc.org/doc"
+            type: documentation
+            free: true
+
+  - id: model-deployment
+    name: "Model Deployment & Serving"
+    description: "Moving trained models into production reliably and efficiently"
+    topics:
+      - id: serving-patterns
+        name: "Model Serving Patterns"
+        estimated_hours: 7
+        priority: high
+        description: "Synchronous REST/gRPC prediction APIs. Asynchronous batch prediction for high-volume, latency-tolerant use cases. Streaming predictions on event streams (Kafka + Flink). Embedded model serving (model packaged with the application). Multi-model serving: sharing infrastructure across models. Blue-green deployments for model updates. Shadow mode: run new model in parallel, compare outputs before promoting. Canary: route small traffic fraction to new model version"
+        resources:
+          - title: "BentoML Documentation"
+            url: "https://docs.bentoml.com/en/latest/"
+            type: documentation
+            free: true
+          - title: "KServe Documentation"
+            url: "https://kserve.github.io/website/latest/"
+            type: documentation
+            free: true
+          - title: "Seldon Core Documentation"
+            url: "https://docs.seldon.io/projects/seldon-core/en/latest/"
+            type: documentation
+            free: true
+
+      - id: model-optimization
+        name: "Model Optimization for Deployment"
+        estimated_hours: 5
+        priority: medium
+        description: "Quantization (INT8, FP16) for inference acceleration. Pruning: removing low-weight connections to reduce model size. Knowledge distillation: training a smaller model to mimic a larger one. ONNX export and runtime for cross-platform serving. TensorRT for NVIDIA GPU optimization. Profiling inference latency and identifying bottlenecks. Latency vs accuracy trade-off evaluation"
+        resources:
+          - title: "ONNX Runtime Documentation"
+            url: "https://onnxruntime.ai/docs/"
+            type: documentation
+            free: true
+          - title: "PyTorch — Model Optimization"
+            url: "https://pytorch.org/tutorials/recipes/recipes/tuning_guide.html"
+            type: documentation
+            free: true
+
+  - id: mlops-pipelines
+    name: "MLOps Pipelines"
+    description: "Automating the ML lifecycle from data to deployment"
+    topics:
+      - id: pipeline-orchestration
+        name: "ML Pipeline Orchestration"
+        estimated_hours: 8
+        priority: high
+        description: "ML pipeline stages: data ingestion, validation, preprocessing, training, evaluation, deployment. Kubeflow Pipelines: components, pipelines, runs, experiments. AWS SageMaker Pipelines: step types (processing, training, evaluation, condition, register). Vertex AI Pipelines: Kubeflow Pipelines on GCP. Apache Airflow for ML pipelines: when it works and where it falls short. Metaflow: the data science workflow manager. Pipeline testing: unit testing components, integration testing end-to-end"
+        resources:
+          - title: "Kubeflow Pipelines Documentation"
+            url: "https://www.kubeflow.org/docs/components/pipelines/"
+            type: documentation
+            free: true
+          - title: "AWS SageMaker Pipelines Documentation"
+            url: "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html"
+            type: documentation
+            free: true
+          - title: "Metaflow Documentation"
+            url: "https://docs.metaflow.org/"
+            type: documentation
+            free: true
+
+      - id: continuous-training
+        name: "Continuous Training & Retraining Triggers"
+        estimated_hours: 5
+        priority: medium
+        description: "When to retrain: schedule-based vs data-drift-triggered vs performance-degradation-triggered. Automating retraining pipelines. Retraining cost vs staleness trade-off. Champion-challenger pattern for safe model replacement. Warm starting: initializing new model from previous weights. Data freshness windows and point-in-time correctness in retraining"
+        resources:
+          - title: "Google MLOps — Continuous Training"
+            url: "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning"
+            type: documentation
+            free: true
+
+  - id: ml-monitoring
+    name: "ML Monitoring & Observability"
+    description: "Detecting and responding to model degradation in production"
+    topics:
+      - id: drift-detection
+        name: "Data Drift & Concept Drift Detection"
+        estimated_hours: 6
+        priority: high
+        description: "Data drift: distribution shift in input features (covariate shift). Concept drift: the relationship between features and target changes. Label drift: target distribution changes. Statistical tests for drift detection: KS test, PSI (Population Stability Index), Jensen-Shannon divergence. Drift monitoring tools: Evidently AI, WhyLogs/whylabs. Reference dataset selection. Drift alerting thresholds and alert fatigue"
+        resources:
+          - title: "Evidently AI Documentation"
+            url: "https://docs.evidentlyai.com/"
+            type: documentation
+            free: true
+          - title: "WhyLogs Documentation"
+            url: "https://docs.whylabs.ai/docs/"
+            type: documentation
+            free: true
+
+      - id: model-performance-monitoring
+        name: "Model Performance Monitoring"
+        estimated_hours: 5
+        priority: high
+        description: "Online evaluation: measuring model performance when labels are available. Delayed label scenarios: predictions made now, labels arrive later. Proxy metrics: leading indicators of performance degradation when ground truth labels are delayed. Business metric monitoring: revenue, conversion rate, fraud rate tied to model performance. Building feedback loops from production to retraining"
+        resources:
+          - title: "Arize AI — ML Observability"
+            url: "https://arize.com/blog-course/"
+            type: documentation
+            free: true
+
+  - id: interview-preparation
+    name: "Interview Preparation"
+    description: "Targeted preparation for ML Engineer interviews"
+    topics:
+      - id: ml-system-design
+        name: "ML System Design Practice"
+        estimated_hours: 10
+        priority: high
+        description: "Practice designing complete ML systems: recommendation system, fraud detection, demand forecasting, churn prediction. Cover: problem framing, data collection, feature engineering, model selection, training pipeline, serving architecture, monitoring. Common interview formats: 45-60 min system design discussion"
+        quiz_bank: "ml-engineering"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: ml-coding-practice
+        name: "ML Coding & Algorithm Practice"
+        estimated_hours: 8
+        priority: high
+        description: "Implement from scratch: linear regression, logistic regression, decision tree, k-means, backpropagation. Practice implementing evaluation metrics: precision/recall/F1, AUC-ROC, NDCG. Pandas and NumPy proficiency. Common ML interview coding patterns: custom loss functions, feature preprocessing, cross-validation"
+
+certifications_suggested:
+  - name: "AWS Certified Machine Learning – Specialty"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-machine-learning-specialty/"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "Google Professional Machine Learning Engineer"
+    provider: "Google Cloud"
+    url: "https://cloud.google.com/learn/certification/machine-learning-engineer"
+    priority: high
+    estimated_prep_hours: 50
+  - name: "Databricks Certified Machine Learning Professional"
+    provider: "Databricks"
+    url: "https://www.databricks.com/learn/certification/machine-learning-professional"
+    priority: medium
+    estimated_prep_hours: 40
+  - name: "TensorFlow Developer Certificate"
+    provider: "Google / TensorFlow"
+    url: "https://www.tensorflow.org/certificate"
+    priority: low
+    estimated_prep_hours: 30
+  - name: "DeepLearning.AI Machine Learning Specialization"
+    provider: "DeepLearning.AI / Coursera"
+    url: "https://www.coursera.org/specializations/machine-learning-introduction"
+    priority: medium
+    estimated_prep_hours: 40
+
+interview_questions:
+  technical:
+    - "Design a machine learning system to detect fraudulent transactions in real time. Walk me through every component from data ingestion to model serving to monitoring."
+    - "What is train-serve skew? How would you detect it in production and how would you design your feature pipeline to prevent it?"
+    - "Explain the difference between data drift, concept drift, and label drift. How would you monitor for each in production?"
+    - "A model that has been performing well for 6 months suddenly shows a 15% drop in precision. Walk me through your debugging process."
+    - "What is the champion-challenger pattern? When and how would you use it to safely roll out a new model version?"
+    - "Explain point-in-time correctness in the context of feature stores. Why does it matter for training and what goes wrong without it?"
+    - "Compare batch serving and online serving for a recommendation system. When would you choose each?"
+    - "How would you design a feature store for an organization with 20 ML teams working on different products?"
+    - "Walk me through how you would implement a retraining pipeline that triggers automatically when data drift is detected."
+    - "What is knowledge distillation and when would you use it? What are the trade-offs vs quantization?"
+  leadership:
+    - "How do you decide when a business problem needs ML vs a simpler rule-based solution?"
+    - "A data scientist built a model that works great in notebooks but fails in production. How do you approach fixing this systematically?"
+    - "How do you communicate model performance to non-technical stakeholders who care about business outcomes, not AUC-ROC?"
+    - "How would you build a culture of ML engineering best practices in a team of data scientists who aren't trained as software engineers?"
+    - "Describe how you would measure and improve the reliability of ML pipelines in production."
+
+content_suggestions:
+  - type: blog_post
+    title: "Train-Serve Skew: The Silent ML Production Killer"
+    description: "Deep dive into train-serve skew — the class of bugs where the feature values the model sees at training time differ from those it sees at inference. Cover the three root causes, how feature stores prevent it, and a practical checklist for auditing your own ML system."
+    audience: "ML engineers and data scientists deploying their first production models"
+  - type: blog_post
+    title: "Choosing Between Kubeflow, SageMaker Pipelines, and Metaflow"
+    description: "Structured comparison of three leading ML pipeline orchestrators. Evaluate each on: learning curve, portability, local development experience, deployment complexity, cost, and ecosystem maturity. Include a decision framework and honest assessment of where each falls short."
+    audience: "ML engineers selecting pipeline orchestration tooling"
+  - type: project
+    title: "End-to-End ML Project Template with Full MLOps Stack"
+    description: "Build and publish a template repository that demonstrates: DVC for data versioning, MLflow for experiment tracking and model registry, Evidently for drift detection, and BentoML for serving. Include a GitHub Actions pipeline that trains, evaluates, and registers the model. Demonstrate best practices, not just tool usage."
+    audience: "ML engineers and data scientists learning production ML practices"

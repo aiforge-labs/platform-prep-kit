@@ -1,0 +1,88 @@
+# Example: Cloud Security Lead prep configuration
+# All names and companies are fictional examples
+
+version: 1
+
+profile:
+  name: "Jane Doe"
+  current_role: "Senior Security Engineer"
+
+target:
+  role: "Cloud Security Lead"
+  company: "Acme Corp"
+  job_url: "https://careers.acme-example.com/jobs/12345"
+  location: "New York, NY"
+
+timeline:
+  start_date: "2026-04-01"
+  end_date: "2026-05-27"
+  weeks: 8
+  hours_per_week: 15
+  study_days: [mon, tue, wed, thu, sat, sun]
+
+reminders:
+  enabled: true
+  morning_time: "07:00"
+  evening_time: "19:00"
+  method: "desktop"
+
+strengths:
+  - "Cloud security (10 years)"
+  - "AWS and Azure platforms"
+  - "Security architecture"
+  - "Team leadership (5 engineers)"
+  - "Python and JavaScript"
+
+gaps:
+  - id: "owasp-llm"
+    topic: "OWASP LLM Top 10"
+    priority: critical
+    estimated_hours: 6
+  - id: "nist-ai-rmf"
+    topic: "NIST AI Risk Management Framework"
+    priority: critical
+    estimated_hours: 6
+  - id: "mitre-atlas"
+    topic: "MITRE ATLAS Framework"
+    priority: high
+    estimated_hours: 4
+  - id: "ai-threat-modeling"
+    topic: "AI Threat Modeling"
+    priority: high
+    estimated_hours: 6
+  - id: "cloud-ai-services"
+    topic: "Cloud AI/ML Service Security"
+    priority: high
+    estimated_hours: 8
+  - id: "ai-regulations"
+    topic: "AI Regulations (EU AI Act, NIST)"
+    priority: moderate
+    estimated_hours: 4
+
+certifications:
+  - name: "AWS Certified Machine Learning - Specialty"
+    target_date: "2026-05-15"
+    study_hours: 40
+    status: "not_started"
+
+content_plan:
+  - type: "blog"
+    title: "From Cloud Governance to AI Governance"
+    target_week: 5
+  - type: "blog"
+    title: "Securing the AI Supply Chain"
+    target_week: 6
+  - type: "portfolio"
+    title: "Threat Model: Financial AI System"
+    target_week: 4
+  - type: "linkedin"
+    title: "Profile update"
+    target_week: 1
+
+interview_prep:
+  star_stories: 8
+  mock_interviews: 2
+  target_week: 7
+
+ai_integration:
+  provider: "claude-code"

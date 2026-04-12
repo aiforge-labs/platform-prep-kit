@@ -1,0 +1,20 @@
+<h3>Step 2: Choose a Role Template</h3>
+<p class="text-muted">Select a career path to generate your personalized study plan.</p>
+
+<form hx-post="/onboarding/step/job-resume" hx-target=".content" hx-swap="innerHTML">
+    <input type="hidden" name="session_id" value="{{ session_id }}">
+
+    <div class="template-grid">
+        {% for t in templates %}
+        <label class="template-card">
+            <input type="radio" name="template_id" value="{{ t.id }}" required>
+            <div class="template-content">
+                <h4>{{ t.name }}</h4>
+                <p class="text-muted">{{ t.description[:100] }}{% if t.description|length > 100 %}...{% endif %}</p>
+            </div>
+        </label>
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-accent btn-large">Next: Set Timeline</button>
+</form>

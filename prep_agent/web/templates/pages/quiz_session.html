@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% set active_page = "quiz" %}
+{% block title %}Quiz: {{ topic }} - Career Prep Agent{% endblock %}
+
+{% block content %}
+<div class="quiz-progress">
+    <span>Question {{ question_num }}/{{ total_questions }}</span>
+    <span class="text-muted">Score: {{ score_so_far }}</span>
+    <div class="progress-bar-container progress-small">
+        <div class="progress-bar-fill" style="width: {{ (question_num - 1) / total_questions * 100 }}%"></div>
+    </div>
+</div>
+
+<div class="quiz-question" id="quiz-area">
+    <h3>{{ question.question }}</h3>
+
+    {% if question.type == 'multiple_choice' %}
+    <form hx-post="/quiz/session/{{ session_id }}/answer" hx-target="#quiz-area" hx-swap="innerHTML">
+        <div class="mc-options">
+            {% for opt in question.options %}
+            <label class="mc-option">
+                <input type="radio" name="answer" value="{{ opt[0] }}" required>
+                <span>{{ opt }}</span>
+            </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-accent">Submit Answer</button>
+    </form>
+
+    {% elif question.type == 'open' %}
+    <form hx-post="/quiz/session/{{ session_id }}/answer" hx-target="#quiz-area" hx-swap="innerHTML">
+        <div class="form-row">
+            <textarea name="answer" rows="4" placeholder="Type your answer..." required></textarea>
+        </div>
+
+        {% if question.key_points %}
+        <details class="key-points">
+            <summary>Show key points to check against</summary>
+            <ul>
+                {% for kp in question.key_points %}
+                <li>{{ kp }}</li>
+                {% endfor %}
+            </ul>
+        </details>
+        {% endif %}
+
+        <div class="self-rating">
+            <p>Rate your answer (1-5):</p>
+            <div class="rating-buttons">
+                {% for i in range(1, 6) %}
+                <label class="rating-btn">
+                    <input type="radio" name="self_score" value="{{ i }}" required>
+                    <span>{{ i }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-accent">Submit</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

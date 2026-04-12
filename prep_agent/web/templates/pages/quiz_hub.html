@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% set active_page = "quiz" %}
+{% block title %}Quizzes - Career Prep Agent{% endblock %}
+
+{% block flash %}
+{% if flash %}<div class="flash flash-{{ flash_type|default('info') }}" data-auto-dismiss>{{ flash }}</div>{% endif %}
+{% endblock %}
+
+{% block content %}
+<h2>Quizzes</h2>
+
+{% if banks %}
+<div class="section">
+    <h3>Available Quiz Banks</h3>
+    <div class="card-grid">
+        {% for bank in banks %}
+        <div class="quiz-bank-card">
+            <h4>{{ bank.title|default(bank.topic_id|default('Unknown')) }}</h4>
+            <p class="text-muted">{{ bank.total|default(0) }} questions</p>
+            <div class="quiz-actions">
+                <a href="/quiz/start?topic={{ bank.topic_id }}&num=5" class="btn btn-small">Quick (5)</a>
+                <a href="/quiz/start?topic={{ bank.topic_id }}&num=10" class="btn btn-small">Full (10)</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No quiz banks found. Quiz banks are loaded from the quiz_banks/ directory.</p>
+</div>
+{% endif %}
+
+{% if history %}
+<div class="section">
+    <h3>Recent Results</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Topic</th>
+                <th>Score</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for h in history %}
+            <tr>
+                <td>{{ h.timestamp[:10] if h.timestamp else '—' }}</td>
+                <td>{{ h.topic }}</td>
+                <td>{{ h.score }}/{{ h.total }}</td>
+                <td>{{ "%.0f"|format(h.percentage) }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/quiz/history" class="btn btn-outline">View All History</a>
+</div>
+{% endif %}
+{% endblock %}

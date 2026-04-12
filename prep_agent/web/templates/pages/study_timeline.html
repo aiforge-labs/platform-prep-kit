@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% set active_page = "study" %}
+{% block title %}Study Plan - Career Prep Agent{% endblock %}
+
+{% block content %}
+<h2>Study Plan</h2>
+
+<div class="study-header">
+    <p class="text-muted">{{ done_days }}/{{ total_days }} days completed</p>
+
+    <!-- Track filter -->
+    <div class="filter-row">
+        <a href="/study" class="btn btn-small {% if not selected_track %}btn-active{% endif %}">All</a>
+        {% for t in tracks %}
+        <a href="/study?track={{ t.id }}" class="btn btn-small {% if selected_track == t.id %}btn-active{% endif %}">{{ t.name }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+{% for week_num, days in weeks|items %}
+<div class="week-section">
+    <h3>Week {{ week_num }}</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Date</th>
+                <th>Track</th>
+                <th>Topic</th>
+                <th>Status</th>
+                <th>Score</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in days %}
+            <tr class="{% if d.status == 'done' %}row-done{% endif %}" id="day-{{ d.day_num }}">
+                <td>{{ d.day_num }}</td>
+                <td>{{ d.date }}</td>
+                <td>{{ d.track_id }}</td>
+                <td>
+                    <a href="/study/day/{{ d.day_num }}">{{ d.topic }}</a>
+                    {% if d.topic_total is defined and d.topic_total > 1 %}
+                    <span class="topic-day-badge">{{ d.topic_day }}/{{ d.topic_total }}</span>
+                    {% endif %}
+                    {% if d.focus_hint is defined %}
+                    <span class="focus-hint">{{ d.focus_hint }}</span>
+                    {% endif %}
+                </td>
+                <td><span class="badge badge-{{ d.status }}">{{ d.status }}</span></td>
+                <td>{{ d.score if d.score else '—' }}</td>
+                <td>
+                    {% if d.status == 'pending' %}
+                    <button
+                        hx-post="/study/day/{{ d.day_num }}/done"
+                        hx-target="#day-{{ d.day_num }}"
+                        hx-swap="outerHTML"
+                        class="btn btn-small btn-success">Done</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endfor %}
+{% endblock %}

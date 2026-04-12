@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "career-prep-agent"
+version = "0.1.0"
+description = "Your personal career coaching CLI — systematically prepare for any role with study plans, reminders, and optional AI integration."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Career Prep Agent Contributors"},
+]
+keywords = ["career", "interview", "preparation", "study", "cli", "ai"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education",
+    "Topic :: Office/Business",
+]
+dependencies = [
+    "click>=8.0",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+pdf = ["pdfplumber>=0.9"]
+docx = ["python-docx>=0.8"]
+web = ["httpx>=0.24", "beautifulsoup4>=4.12"]
+clipboard = ["pyperclip>=1.8"]
+mcp = ["mcp>=1.0"]
+dashboard = ["streamlit>=1.30"]
+ui = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "python-multipart>=0.0.9",
+    "itsdangerous>=2.1",
+    "markdown>=3.5",
+]
+all = [
+    "pdfplumber>=0.9",
+    "python-docx>=0.8",
+    "httpx>=0.24",
+    "beautifulsoup4>=4.12",
+    "pyperclip>=1.8",
+    "mcp>=1.0",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "python-multipart>=0.0.9",
+    "itsdangerous>=2.1",
+    "markdown>=3.5",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "httpx>=0.24",
+]
+
+[project.scripts]
+prep = "prep_agent.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/aiforge-labs/career-prep-agent"
+Repository = "https://github.com/aiforge-labs/career-prep-agent"
+Issues = "https://github.com/aiforge-labs/career-prep-agent/issues"
+
+[tool.setuptools.packages.find]
+include = ["prep_agent*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

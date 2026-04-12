@@ -1,0 +1,6 @@
+{% macro stat_card(value, label, color="accent") %}
+<div class="stat-card">
+    <div class="stat-value {% if color != 'accent' %}stat-{{ color }}{% endif %}">{{ value }}</div>
+    <div class="stat-label">{{ label }}</div>
+</div>
+{% endmacro %}

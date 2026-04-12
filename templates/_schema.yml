@@ -1,0 +1,83 @@
+# Template Schema Reference
+# ========================
+# All career-prep-agent role templates must follow this structure.
+# Use this file as a validation reference when authoring custom templates.
+
+required_fields:
+  - name          # Human-readable role name (string)
+  - description   # One-sentence role description (string)
+  - version       # Schema version, currently 1 (integer)
+  - tracks        # List of learning tracks (array of track objects)
+
+track_schema:
+  required_fields:
+    - id            # Slug identifier, e.g. "ai-security-foundations" (string)
+    - name          # Display name (string)
+    - topics        # List of topic objects (array)
+  optional_fields:
+    - description   # Track-level description (string)
+    - estimated_hours_total  # Sum of topic hours (number)
+
+topic_schema:
+  required_fields:
+    - id              # Slug identifier unique within the track (string)
+    - name            # Display name (string)
+    - estimated_hours # Rough study hours (number)
+    - priority        # "high", "medium", or "low" (string)
+  optional_fields:
+    - description     # What this topic covers (string)
+    - resources       # List of resource objects (array)
+    - prerequisites   # List of topic ids that should be completed first (array of strings)
+    - quiz_bank       # Quiz bank id to link (string, matches filename without .json)
+
+resource_schema:
+  required_fields:
+    - title           # Resource name (string)
+    - url             # Full URL (string)
+  optional_fields:
+    - type            # "course", "article", "video", "book", "documentation" (string)
+    - free            # Whether the resource is free (boolean, default true)
+
+optional_fields:
+  - suggested_timeline     # ISO-8601 duration or human-readable timeframe (string)
+  - content_suggestions    # List of content pieces to create for portfolio (array)
+  - certifications_suggested  # List of recommended certifications (array)
+  - interview_questions    # Object with "technical" and "leadership" keys (object)
+  - bridge_from            # Hints for people transitioning from other backgrounds (object)
+
+content_suggestion_schema:
+  required_fields:
+    - type            # "blog_post", "threat_model", "open_source", "presentation", "project" (string)
+    - title           # Suggested title (string)
+    - description     # What to cover (string)
+  optional_fields:
+    - audience        # Intended audience (string)
+
+interview_question_schema:
+  # interview_questions is an object with two keys:
+  #   technical:  list of question strings
+  #   leadership: list of question strings
+
+bridge_from_schema:
+  # Keys are background names, values are objects with:
+  #   strengths:   list of transferable skills (array of strings)
+  #   gaps:        list of areas to focus on (array of strings)
+  #   recommended_start: topic id to begin with (string)
+
+# Example minimal template:
+# ---
+# name: "My Custom Role"
+# description: "Preparing for a My Custom Role position"
+# version: 1
+# tracks:
+#   - id: fundamentals
+#     name: "Fundamentals"
+#     topics:
+#       - id: basics
+#         name: "The Basics"
+#         estimated_hours: 4
+#         priority: high
+#         resources:
+#           - title: "Getting Started Guide"
+#             url: "https://example.com/guide"
+#             type: documentation

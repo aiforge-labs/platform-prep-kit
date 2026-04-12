@@ -1,0 +1,37 @@
+<div class="quiz-feedback {% if correct %}feedback-correct{% else %}feedback-incorrect{% endif %}">
+    <div class="feedback-header">
+        <span class="feedback-icon">{% if correct %}Correct{% else %}Incorrect{% endif %}</span>
+        <span class="text-muted">{{ question_num }}/{{ total_questions }}</span>
+    </div>
+
+    {% if question.type == 'multiple_choice' %}
+        {% if not correct %}
+        <p>Your answer: <strong>{{ user_answer }}</strong></p>
+        <p>Correct answer: <strong>{{ question.answer }}</strong></p>
+        {% endif %}
+        {% if question.explanation %}
+        <div class="explanation">
+            <strong>Explanation:</strong> {{ question.explanation }}
+        </div>
+        {% endif %}
+    {% elif question.type == 'open' %}
+        {% if question.key_points %}
+        <div class="explanation">
+            <strong>Key points:</strong>
+            <ul>
+                {% for kp in question.key_points %}
+                <li>{{ kp }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endif %}
+
+    <p class="score-update">Running score: {{ score_so_far }}/{{ question_num }}</p>
+
+    {% if has_more %}
+    <a href="/quiz/session/{{ session_id }}" class="btn btn-accent">Next Question</a>
+    {% else %}
+    <a href="/quiz/session/{{ session_id }}/results" class="btn btn-success">See Results</a>
+    {% endif %}
+</div>

@@ -1,0 +1,215 @@
+{
+  "topic_id": "platform-engineer",
+  "title": "Platform Engineering",
+  "version": 1,
+  "questions": [
+    {
+      "id": "pe-01",
+      "question": "What is the fundamental difference between the push model and pull model in GitOps?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Push deploys faster; pull is more secure but slower",
+        "B) In the push model, CI/CD pipelines push changes directly to the cluster using stored credentials. In the pull model, an operator inside the cluster continuously syncs from Git, so cluster credentials never leave the cluster",
+        "C) Push is for applications; pull is for infrastructure",
+        "D) Push uses Helm; pull uses Kustomize"
+      ],
+      "answer": "B",
+      "explanation": "The security difference is the key insight. Push model: CI system needs credentials to talk to the cluster — these credentials must be stored in the CI system and are a security risk. Pull model: the GitOps operator runs inside the cluster and pulls config from Git — the cluster only needs Git read credentials, and cluster access credentials stay inside the cluster. Pull also provides automatic drift correction: the operator continuously reconciles desired vs actual state.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "pe-02",
+      "question": "An ArgoCD Application is deployed with syncPolicy.automated.selfHeal: true. A developer manually scales a Deployment to 10 replicas using kubectl. What happens?",
+      "type": "multiple_choice",
+      "options": [
+        "A) The change is preserved — ArgoCD only manages new deployments, not existing ones",
+        "B) ArgoCD detects the drift and reverts the Deployment back to the replica count defined in Git within the next reconciliation cycle",
+        "C) ArgoCD alerts but does not revert",
+        "D) The Git repository is updated to reflect the manual change"
+      ],
+      "answer": "B",
+      "explanation": "selfHeal: true means ArgoCD continuously monitors the cluster state against the Git state, and automatically reverts any out-of-Git changes. This enforces Git as the single source of truth. If you need to scale manually in an emergency, you must update the Git repository — then ArgoCD applies it. This is a feature, not a bug: it prevents configuration drift and ensures the cluster state is always auditable.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "pe-03",
+      "question": "What is the primary advantage of Crossplane over Terraform for building a self-service developer platform?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Crossplane has a larger ecosystem of providers",
+        "B) Crossplane is Kubernetes-native — developers can provision infrastructure by applying a YAML claim to Kubernetes, using the same tools (kubectl, GitOps) they use for application deployment, without needing Terraform CLI access",
+        "C) Crossplane is cheaper to operate",
+        "D) Crossplane automatically generates documentation for all resources"
+      ],
+      "answer": "B",
+      "explanation": "The key platform advantage: Crossplane exposes infrastructure as Kubernetes CRDs. Developers can kubectl apply a small 'PostgresClaim' YAML without knowing anything about Terraform, AWS RDS configuration, or cloud credentials. The platform team designs the Composition (the abstraction) and the developer consumes it as a simple Kubernetes resource. This is the self-service model: platform engineers encode best practices into Compositions; developers consume them.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "pe-04",
+      "question": "In Backstage, what is the relationship between a 'Component', 'System', and 'Domain' entity kind?",
+      "type": "multiple_choice",
+      "options": [
+        "A) They are synonyms for the same concept at different scale",
+        "B) Domain > System > Component — a Domain contains Systems (logical groupings of related services), and Systems contain Components (individual services, libraries, or tools)",
+        "C) Component > System > Domain — Components are the largest units in Backstage",
+        "D) They are independent and do not relate to each other"
+      ],
+      "answer": "B",
+      "explanation": "The Backstage hierarchy: Domain (e.g., 'payments') contains Systems (e.g., 'checkout', 'billing'). Each System contains Components (e.g., 'payment-service', 'fraud-detection-service'). This hierarchy enables filtering, ownership tracking, and visualization of the entire sociotechnical system. A Component can depend on other Components and provide/consume APIs, all visualized in the catalog.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "pe-05",
+      "question": "What is the difference between a validating admission webhook and a mutating admission webhook in Kubernetes?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Validating webhooks are faster; mutating webhooks add latency",
+        "B) Mutating webhooks can modify the resource before it is stored (e.g., inject a sidecar, add labels). Validating webhooks can only allow or deny the resource — they cannot change it",
+        "C) Validating webhooks run in production; mutating webhooks only run in staging",
+        "D) They serve the same purpose but use different protocols"
+      ],
+      "answer": "B",
+      "explanation": "Order of operations: mutating webhooks run first (they can change the object), then validating webhooks run on the potentially-modified object. Mutating use cases: inject sidecar containers, add default labels/annotations, set resource defaults. Validating use cases: block creation if required labels are missing, deny images from untrusted registries, enforce resource limits. OPA Gatekeeper uses validating webhooks. Istio uses mutating webhooks to inject the Envoy sidecar.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "pe-06",
+      "question": "Why is a Kubernetes Secret with base64-encoded data NOT considered encrypted?",
+      "type": "multiple_choice",
+      "options": [
+        "A) base64 is an old algorithm that modern computers can decode quickly",
+        "B) base64 is an encoding scheme, not encryption — anyone with read access to the Secret resource or the etcd database can decode it trivially with a single command",
+        "C) Kubernetes Secrets are encrypted, but only for administrators",
+        "D) The data is encrypted in transit but not at rest"
+      ],
+      "answer": "B",
+      "explanation": "base64 decode: echo 'dXNlcm5hbWU=' | base64 -d → 'username'. There is zero security benefit to base64 encoding. The data is accessible to anyone who can kubectl get secret or read etcd directly. For real secret security: (1) enable etcd encryption at rest, (2) use External Secrets Operator to store secrets in a proper secrets manager (AWS Secrets Manager, GCP Secret Manager, HashiCorp Vault), (3) implement RBAC to restrict Secret access, (4) audit all Secret reads.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "pe-07",
+      "question": "What is an ArgoCD ApplicationSet and what problem does it solve compared to individual ArgoCD Applications?",
+      "type": "open",
+      "key_points": [
+        "ApplicationSet is a controller that generates multiple ArgoCD Applications from a template + generator",
+        "Problem it solves: without ApplicationSets, deploying the same application to 20 clusters requires creating 20 individual Application resources manually — tedious and hard to keep in sync",
+        "Generators: cluster generator (one App per registered cluster), git generator (one App per directory in a Git repo), list generator (one App per static list entry), matrix generator (cartesian product of two generators)",
+        "Example: a cluster generator + template creates one Application per cluster with cluster-specific values (cluster name, URL) templated in — add a new cluster to ArgoCD and it gets the application automatically",
+        "When to use: multi-cluster deployments, app-of-apps at scale, templated application sets across environments"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "pe-08",
+      "question": "How does the External Secrets Operator (ESO) work and how does it differ from Sealed Secrets?",
+      "type": "open",
+      "key_points": [
+        "External Secrets Operator: defines an ExternalSecret CRD that references a secret in an external store (AWS Secrets Manager, GCP Secret Manager, Vault). The ESO controller syncs the external secret into a native Kubernetes Secret on a configured schedule",
+        "Sealed Secrets: takes a plain Kubernetes Secret, encrypts it with the cluster's public key, producing a SealedSecret YAML that can be committed to Git. The in-cluster controller decrypts it with the private key. Safe to commit to Git; decryptable only by that cluster",
+        "Key difference: ESO pulls from an external secrets service (secrets live in that service, not in Git). Sealed Secrets stores encrypted secrets IN Git (no external service required)",
+        "When to use ESO: organization already has secrets management infrastructure (Vault, AWS Secrets Manager). Centralized rotation, audit, and access control. Preferred for regulated environments",
+        "When to use Sealed Secrets: simpler setup, no external service dependency, team already uses GitOps and wants secrets in Git with encryption"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "pe-09",
+      "question": "What are DORA metrics and why are they used to measure platform engineering effectiveness?",
+      "type": "multiple_choice",
+      "options": [
+        "A) DORA metrics measure cloud cost efficiency: Datacenter Optimization, Resource Allocation",
+        "B) DORA metrics measure software delivery performance: Deployment Frequency, Lead Time for Changes, Mean Time to Restore, and Change Failure Rate — used as platform health indicators because the platform's job is to improve developer delivery speed and reliability",
+        "C) DORA metrics measure developer satisfaction: Documentation, Onboarding, Reliability, Adoption",
+        "D) DORA metrics are security-specific: Detection, Observation, Response, and Analysis"
+      ],
+      "answer": "B",
+      "explanation": "DORA (DevOps Research and Assessment) metrics: Deployment Frequency (how often do you deploy?), Lead Time for Changes (how long from code committed to running in production?), Mean Time to Restore (how long to recover from an incident?), Change Failure Rate (what % of deployments cause incidents?). Platform engineering teams use these as north-star metrics because improving the platform should directly improve these numbers — a better golden path → higher deployment frequency and lower lead time.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "pe-10",
+      "question": "You need to write a Kyverno policy that automatically adds a default 'team' label to any Pod that doesn't have one. Should this be a validate or mutate policy, and why?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Validate — reject any Pod without the team label and force developers to add it",
+        "B) Mutate — automatically add a default 'team: unknown' label if the label is missing, so workloads always have the label without blocking deployments",
+        "C) Generate — create a new resource with the label",
+        "D) Either — they have the same effect"
+      ],
+      "answer": "B",
+      "explanation": "A mutating policy adds a default value without blocking the workload. A validating policy would reject the Pod and break deployments. The right choice depends on the use case: if the team label is REQUIRED for billing/chargeback, validate (block without it). If you just want all pods to have the label for observability but don't want to break existing workflows, mutate with a default. Mutation runs before validation, so you can mutate-to-add-default then validate-that-it-exists.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "pe-11",
+      "question": "A developer on your platform complains that the golden path template takes 30 minutes to provision a new service environment, while doing it manually takes 10 minutes. How do you respond and what would you investigate?",
+      "type": "open",
+      "key_points": [
+        "Acknowledge the complaint is valid — if the golden path is slower than the alternative, engineers will bypass it, defeating its purpose",
+        "Investigate the 30-minute breakdown: is it waiting on CI/CD pipeline? Crossplane/Terraform provisioning cloud resources? Backstage scaffolding? DNS propagation? Each step should be timed",
+        "Common fixes: parallelize independent provisioning steps, pre-provision base resources and only provision differentiators, cache expensive operations, use async notification rather than polling",
+        "Consider what the developer is comparing: 10 minutes manual might miss security scanning, runbook creation, alert setup — make the comparison fair by showing total time including setup that the golden path automates",
+        "If the golden path genuinely has unnecessary steps, remove them. Platform-as-a-product means the platform must earn adoption — don't add compliance theater that adds time without value",
+        "Track golden path adoption rate and developer NPS as leading indicators that the experience is improving"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "pe-12",
+      "question": "What is the 'app-of-apps' pattern in ArgoCD?",
+      "type": "multiple_choice",
+      "options": [
+        "A) A pattern where applications call other applications via API",
+        "B) A root ArgoCD Application that manages other ArgoCD Applications as Kubernetes resources in Git — enables bootstrapping an entire cluster's ArgoCD configuration from a single Application",
+        "C) A multi-tier application architecture (frontend app → backend app → database app)",
+        "D) Running multiple independent ArgoCD instances on the same cluster"
+      ],
+      "answer": "B",
+      "explanation": "App-of-apps: a root Application points to a Git directory containing Application manifests (or Helm/Kustomize rendering them). When ArgoCD syncs the root, it creates all child Applications, each of which then syncs its own workload. Bootstrapping a new cluster: point ArgoCD at the root app → all cluster Applications are created automatically. Alternative: ApplicationSets (more flexible, designed specifically for this pattern). App-of-apps is older but still common in the wild.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "pe-13",
+      "question": "How would you design a Crossplane Composition that creates a 'managed database' abstraction that provisions RDS in AWS with standardized sizing, backup, and security settings, and allows developers to only choose the database name and environment?",
+      "type": "open",
+      "key_points": [
+        "Define a CompositeResourceDefinition (XRD) with a minimal API: spec.parameters.dbName and spec.parameters.environment (dev/prod) — this is all developers see",
+        "Create a Composition that takes those inputs and expands them to the full set of AWS resources: aws_rds_instance (with standardized defaults: instance class based on environment, encrypted: true, backup_retention: 7 days), aws_db_subnet_group (from approved subnets), aws_security_group (least-privilege access)",
+        "Developers create a Claim (namespace-scoped): apiVersion: example.org/v1alpha1 / kind: PostgresClaim / spec.parameters.dbName: my-service-db / spec.parameters.environment: prod",
+        "The Composition handles all the complexity: prod gets db.t3.medium, dev gets db.t3.micro; security group limits access to the application subnet only; all mandatory tags applied",
+        "Outputs: connection secret is written to a named Kubernetes Secret in the developer's namespace, ready to mount as env vars",
+        "Key benefit: developers can't accidentally create an unencrypted, publicly-accessible database — the Composition makes the secure path the only path"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "pe-14",
+      "question": "What is Flux's 'source controller' responsible for and why is it architecturally separated from the 'kustomize controller'?",
+      "type": "multiple_choice",
+      "options": [
+        "A) The source controller runs in a separate cluster; the kustomize controller runs locally",
+        "B) The source controller fetches and caches artifacts from external sources (Git repos, Helm charts, S3 buckets). The kustomize controller consumes those cached artifacts to reconcile Kubernetes resources. Separation means: fetching logic is isolated from apply logic, each controller can fail independently, and the same source artifact can be used by multiple consumers",
+        "C) Source controller is for applications; kustomize controller is for infrastructure",
+        "D) They are separate for historical reasons with no architectural benefit"
+      ],
+      "answer": "B",
+      "explanation": "Flux's composable controller architecture: source controller → fetches (GitRepository, HelmRepository, Bucket, OCIRepository). Kustomize controller and Helm controller → consume source artifacts to apply changes. Notification controller → sends alerts on events. Image automation → updates Git when new images are available. Separation of concerns means: source credentials and fetching logic are isolated, you can have multiple applications consuming the same source, and controller failures don't cascade. This is a design philosophy difference from ArgoCD's more monolithic approach.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "pe-15",
+      "question": "How do you measure whether an internal developer platform is succeeding? List the most important metrics and explain why each matters.",
+      "type": "open",
+      "key_points": [
+        "Golden path adoption rate: % of new services using the standard template vs going off-paved-road. Low adoption means the platform isn't compelling enough or has too much friction",
+        "DORA metrics trend: deployment frequency, lead time, MTTR, change failure rate should improve as the platform matures. The platform's value proposition is improving these numbers",
+        "Time to first deployment for new services: measures onboarding speed. If it takes 2 weeks to get a new service to production, the platform isn't delivering on self-service",
+        "Developer NPS (satisfaction score): periodic survey. The platform serves internal customers; their satisfaction matters. Low NPS = adoption risk",
+        "Self-service success rate: % of infrastructure requests (new database, new queue, etc.) fulfilled without platform team involvement. High % = true self-service achieved",
+        "Platform availability and SLO compliance: if CI/CD pipelines or the developer portal are down, no one can ship. The platform must be reliable as a product"
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}

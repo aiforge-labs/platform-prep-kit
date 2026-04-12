@@ -1,0 +1,97 @@
+# Custom Career Prep Template
+# ===========================
+# Fill in your own tracks and topics to create a personalized study plan.
+# See _schema.yml for the full field reference.
+#
+# Usage:
+#   prep plan create --template custom
+#   prep plan create --template /path/to/my-template.yml
+#
+# Tips:
+#   - Keep topic ids unique within each track (slug format: lowercase-with-dashes)
+#   - Set priority to "high" for must-know topics, "medium" for nice-to-have,
+#     "low" for stretch goals
+#   - estimated_hours should reflect YOUR pace, not a course's stated duration
+#   - Link quiz_bank ids to JSON files in quiz_banks/ for self-testing
+
+name: "Custom Role"
+description: "Customize this template for your target role"
+version: 1
+
+# Optional: how long you plan to prepare
+suggested_timeline: "8 weeks"
+
+# Optional: backgrounds you are coming from
+# bridge_from:
+#   software_engineering:
+#     strengths:
+#       - "Strong coding fundamentals"
+#       - "Familiarity with CI/CD"
+#     gaps:
+#       - "Domain-specific knowledge for the target role"
+#     recommended_start: "track1-topic1"
+
+tracks:
+  - id: track-1
+    name: "Track 1 - Rename Me"
+    description: "Core knowledge area"
+    topics:
+      - id: topic-1a
+        name: "Topic 1A - Rename Me"
+        estimated_hours: 4
+        priority: high
+        description: "Describe what this topic covers"
+        resources:
+          - title: "Resource Name"
+            url: "https://example.com"
+            type: course
+            free: true
+        # quiz_bank: "my-quiz-bank"  # matches quiz_banks/my-quiz-bank.json
+
+      - id: topic-1b
+        name: "Topic 1B - Rename Me"
+        estimated_hours: 3
+        priority: medium
+        description: "Another topic in this track"
+        resources: []
+
+  - id: track-2
+    name: "Track 2 - Rename Me"
+    description: "Another knowledge area"
+    topics:
+      - id: topic-2a
+        name: "Topic 2A - Rename Me"
+        estimated_hours: 5
+        priority: high
+        resources: []
+
+  # Add more tracks as needed:
+  # - id: track-3
+  #   name: "Track 3"
+  #   topics: [...]
+
+# Optional: content to create for your portfolio
+# content_suggestions:
+#   - type: blog_post
+#     title: "My Take on [Topic]"
+#     description: "Write about a key insight from your studies"
+#   - type: open_source
+#     title: "Contribute to [Project]"
+#     description: "Submit a PR demonstrating your skills"
+
+# Optional: certifications to pursue
+# certifications_suggested:
+#   - name: "Relevant Certification"
+#     provider: "Certification Body"
+#     url: "https://example.com/cert"
+#     priority: medium
+#     estimated_prep_hours: 40
+
+# Optional: interview questions to practice
+# interview_questions:
+#   technical:
+#     - "Explain [core concept] and when you would use it."
+#     - "Walk me through how you would design [system]."
+#   leadership:
+#     - "Tell me about a time you led a team through a difficult technical decision."
+#     - "How do you handle disagreements with stakeholders?"

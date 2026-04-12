@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% set active_page = "settings" %}
+{% block title %}Settings - Career Prep Agent{% endblock %}
+
+{% block flash %}
+{% if flash %}<div class="flash flash-{{ flash_type|default('info') }}" data-auto-dismiss>{{ flash }}</div>{% endif %}
+{% endblock %}
+
+{% block content %}
+<h2>Settings</h2>
+
+<div class="section">
+    <h3>Current Configuration</h3>
+    <div class="settings-info">
+        <p><strong>Target Role:</strong> {{ target_role }}</p>
+        <p><strong>Template:</strong> {{ template or 'Custom' }}</p>
+        <p><strong>Duration:</strong> {{ weeks }} weeks</p>
+        <p><strong>Hours/Day:</strong> {{ hours_per_day }}</p>
+    </div>
+</div>
+
+<div class="section">
+    <h3>Preferences</h3>
+    <form hx-post="/settings/config" hx-target="body" class="settings-form">
+        <div class="form-row">
+            <label>AI Provider</label>
+            <select name="ai_provider">
+                <option value="none" {% if ai_provider == 'none' %}selected{% endif %}>None (standalone)</option>
+                <option value="claude-code" {% if ai_provider == 'claude-code' %}selected{% endif %}>Claude Code</option>
+                <option value="ollama" {% if ai_provider == 'ollama' %}selected{% endif %}>Ollama (local)</option>
+                <option value="chatgpt-paste" {% if ai_provider == 'chatgpt-paste' %}selected{% endif %}>ChatGPT (paste)</option>
+                <option value="openai-api" {% if ai_provider == 'openai-api' %}selected{% endif %}>OpenAI API</option>
+            </select>
+        </div>
+
+        <div class="form-row-inline">
+            <div class="form-row">
+                <label>Morning Reminder</label>
+                <input type="time" name="morning_time" value="{{ config.get('reminders', {}).get('morning_time', '08:00') }}">
+            </div>
+            <div class="form-row">
+                <label>Evening Reminder</label>
+                <input type="time" name="evening_time" value="{{ config.get('reminders', {}).get('evening_time', '20:00') }}">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-accent">Save Settings</button>
+    </form>
+</div>
+
+<div class="section">
+    <h3>Workspace</h3>
+    <p class="text-muted">Data stored at: ~/.prep/</p>
+    <p class="text-muted">Database: ~/.prep/prep.db</p>
+</div>
+{% endblock %}

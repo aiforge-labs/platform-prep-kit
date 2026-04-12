@@ -1,0 +1,389 @@
+name: "Site Reliability Engineer"
+description: "Preparation plan for a Site Reliability Engineer role — designing for reliability, building observability, managing incidents, and eliminating toil through automation"
+version: 1
+suggested_timeline: "8-10 weeks"
+
+bridge_from:
+  software_engineering:
+    strengths:
+      - "Application design, debugging, and code quality practices"
+      - "CI/CD pipelines and deployment automation"
+      - "API design and service-to-service communication"
+    gaps:
+      - "Production operations mindset and on-call engineering"
+      - "SLO/SLI/SLA design and error budget management"
+      - "Distributed systems failure modes and reliability patterns"
+      - "Chaos engineering and game day planning"
+    recommended_start: "sre-principles-slos"
+  system_administration:
+    strengths:
+      - "OS-level configuration, networking, and storage"
+      - "Monitoring and alerting setup"
+      - "Incident response and troubleshooting"
+    gaps:
+      - "Distributed systems reliability at scale"
+      - "SLI/SLO/SLA framework and error budget policy"
+      - "Distributed tracing and modern observability stacks"
+      - "Toil quantification and automation strategy"
+    recommended_start: "sre-principles-slos"
+  cloud_engineering:
+    strengths:
+      - "Cloud infrastructure provisioning and managed services"
+      - "Auto-scaling, load balancing, and availability zones"
+      - "Cost management and resource optimization"
+    gaps:
+      - "Application-layer reliability patterns (circuit breakers, bulkheads)"
+      - "Custom SLO definition and error budget burn rate alerting"
+      - "Chaos engineering at the application and infrastructure layer"
+      - "Blameless post-mortem culture and incident command systems"
+    recommended_start: "observability"
+  network_engineering:
+    strengths:
+      - "Network protocols, load balancing, and DNS"
+      - "Traffic analysis and capacity planning"
+      - "Firewall and routing configuration"
+    gaps:
+      - "Application performance monitoring and distributed tracing"
+      - "Microservice reliability patterns"
+      - "Toil identification and automation frameworks"
+      - "SLO-driven alerting design"
+    recommended_start: "observability"
+
+tracks:
+  - id: sre-principles-slos
+    name: "SRE Principles & Service Level Objectives"
+    description: "The foundational SRE framework — measuring and managing reliability as an engineering discipline"
+    topics:
+      - id: sli-slo-sla
+        name: "SLIs, SLOs, and SLAs"
+        estimated_hours: 8
+        priority: high
+        description: "SLI (what you measure), SLO (the target), SLA (the contract). Defining good SLIs for latency, availability, throughput, error rate, and quality. Setting realistic SLO targets using historical data. SLA vs SLO gap (safety margin). Choosing the right measurement window (rolling vs calendar). The four golden signals: latency, traffic, errors, saturation"
+        resources:
+          - title: "Google SRE Book — Chapter 4: Service Level Objectives"
+            url: "https://sre.google/sre-book/service-level-objectives/"
+            type: documentation
+            free: true
+          - title: "Google SRE Workbook — Implementing SLOs"
+            url: "https://sre.google/workbook/implementing-slos/"
+            type: documentation
+            free: true
+          - title: "Atlassian — SLI vs SLO vs SLA"
+            url: "https://www.atlassian.com/incident-management/kpis/sla-vs-slo-vs-sli"
+            type: article
+            free: true
+
+      - id: error-budgets
+        name: "Error Budgets & Budget Policy"
+        estimated_hours: 6
+        priority: high
+        description: "Error budget = 1 - SLO. What it means to have budget remaining vs exhausted. Error budget burn rate alerting (multiwindow, multi-burn-rate). Budget policy: what happens when budget is exhausted (freeze features, invest in reliability). Using error budgets to align engineering and product priorities. Calculating burn rate from SLO targets"
+        resources:
+          - title: "Google SRE Workbook — Alerting on SLOs"
+            url: "https://sre.google/workbook/alerting-on-slos/"
+            type: documentation
+            free: true
+          - title: "Google SRE Book — Chapter 6: Monitoring Distributed Systems"
+            url: "https://sre.google/sre-book/monitoring-distributed-systems/"
+            type: documentation
+            free: true
+
+      - id: toil
+        name: "Toil Identification & Elimination"
+        estimated_hours: 5
+        priority: high
+        description: "Defining toil: manual, repetitive, automatable, tactical, lacking enduring value. Measuring toil as a percentage of engineering time (target: <50%). Toil vs overhead vs engineering work. Strategies for eliminating toil: automation, self-healing systems, better tooling. Communicating toil burden to management"
+        resources:
+          - title: "Google SRE Book — Chapter 5: Eliminating Toil"
+            url: "https://sre.google/sre-book/eliminating-toil/"
+            type: documentation
+            free: true
+
+  - id: observability
+    name: "Observability"
+    description: "Building the visibility needed to understand and debug distributed systems"
+    topics:
+      - id: metrics-and-alerting
+        name: "Metrics & Alerting"
+        estimated_hours: 8
+        priority: high
+        description: "Prometheus data model (counters, gauges, histograms, summaries). PromQL query language. Recording rules and alerting rules. Grafana dashboards — USE method (Utilization, Saturation, Errors) and RED method (Rate, Errors, Duration) for service dashboards. Alert fatigue and how to fight it. Symptom-based vs cause-based alerting"
+        resources:
+          - title: "Prometheus Documentation"
+            url: "https://prometheus.io/docs/introduction/overview/"
+            type: documentation
+            free: true
+          - title: "Grafana Documentation"
+            url: "https://grafana.com/docs/grafana/latest/"
+            type: documentation
+            free: true
+          - title: "Google SRE Book — Practical Alerting"
+            url: "https://sre.google/sre-book/practical-alerting/"
+            type: documentation
+            free: true
+
+      - id: structured-logging
+        name: "Structured Logging"
+        estimated_hours: 5
+        priority: high
+        description: "Structured (JSON) vs unstructured logs. Log levels and when to use each. Correlation IDs for request tracing across services. Log sampling for high-volume services. Log aggregation and search: Loki, ELK stack (Elasticsearch, Logstash, Kibana), OpenSearch. Log-based alerting and anomaly detection"
+        resources:
+          - title: "Grafana Loki Documentation"
+            url: "https://grafana.com/docs/loki/latest/"
+            type: documentation
+            free: true
+          - title: "OpenTelemetry Logging Specification"
+            url: "https://opentelemetry.io/docs/concepts/signals/logs/"
+            type: documentation
+            free: true
+
+      - id: distributed-tracing
+        name: "Distributed Tracing"
+        estimated_hours: 6
+        priority: high
+        description: "Trace, span, and context propagation concepts. W3C TraceContext standard. OpenTelemetry instrumentation (auto vs manual). Sampling strategies: head-based vs tail-based. Trace storage and analysis: Jaeger, Tempo, Zipkin. Using traces to identify latency bottlenecks in microservice chains. Connecting traces to logs and metrics (the three pillars)"
+        resources:
+          - title: "OpenTelemetry Documentation"
+            url: "https://opentelemetry.io/docs/"
+            type: documentation
+            free: true
+          - title: "Grafana Tempo Documentation"
+            url: "https://grafana.com/docs/tempo/latest/"
+            type: documentation
+            free: true
+          - title: "Jaeger Documentation"
+            url: "https://www.jaegertracing.io/docs/latest/"
+            type: documentation
+            free: true
+
+  - id: incident-management
+    name: "Incident Management"
+    description: "Detecting, responding to, and learning from production incidents"
+    topics:
+      - id: incident-response-process
+        name: "Incident Response Process"
+        estimated_hours: 6
+        priority: high
+        description: "Incident severity classification (P0-P4). Incident command system: commander, comms lead, scribe roles. Escalation paths and on-call rotation design. Communication during incidents: status pages, stakeholder updates, customer communications. Incident lifecycle: detect, triage, mitigate, resolve, review"
+        resources:
+          - title: "PagerDuty Incident Response Guide"
+            url: "https://response.pagerduty.com/"
+            type: documentation
+            free: true
+          - title: "Google SRE Book — Chapter 14: Managing Incidents"
+            url: "https://sre.google/sre-book/managing-incidents/"
+            type: documentation
+            free: true
+
+      - id: postmortems
+        name: "Blameless Post-Mortems"
+        estimated_hours: 5
+        priority: high
+        description: "Blameless culture: systems thinking over individual blame. Post-mortem structure: summary, timeline, root cause analysis, action items. Five Whys and its limitations. Contributing factors vs root cause. Action item prioritization and follow-through. Post-mortem sharing and organizational learning. Common anti-patterns: vague action items, blame-focused narratives"
+        resources:
+          - title: "Google SRE Book — Chapter 15: Postmortem Culture"
+            url: "https://sre.google/sre-book/postmortem-culture/"
+            type: documentation
+            free: true
+          - title: "Etsy Debriefing Facilitation Guide"
+            url: "https://github.com/etsy/DebriefingFacilitationGuide"
+            type: documentation
+            free: true
+
+      - id: runbooks-oncall
+        name: "Runbooks & On-Call Readiness"
+        estimated_hours: 4
+        priority: medium
+        description: "Anatomy of an effective runbook: trigger condition, diagnosis steps, remediation steps, escalation path. Runbook automation (runbook-as-code). On-call hygiene: alert quality, rotation scheduling, on-call health metrics. Reducing on-call burden over time. Shadowing and onboarding new on-call engineers"
+        resources:
+          - title: "Google SRE Workbook — On-Call"
+            url: "https://sre.google/workbook/on-call/"
+            type: documentation
+            free: true
+
+  - id: reliability-patterns
+    name: "Reliability Patterns"
+    description: "Architectural patterns for building systems that degrade gracefully and recover automatically"
+    topics:
+      - id: circuit-breakers-and-bulkheads
+        name: "Circuit Breakers, Bulkheads & Timeouts"
+        estimated_hours: 6
+        priority: high
+        description: "Circuit breaker pattern: closed/open/half-open states. Bulkhead pattern: isolating failure domains. Timeout hierarchy (socket, connect, read, request). Retry with exponential backoff and jitter. Fallback strategies: cached responses, degraded mode, graceful degradation. Implementing with Resilience4j, Polly, or service mesh"
+        resources:
+          - title: "Martin Fowler — Circuit Breaker"
+            url: "https://martinfowler.com/bliki/CircuitBreaker.html"
+            type: article
+            free: true
+          - title: "AWS Builder's Library — Timeouts, Retries, Backoff with Jitter"
+            url: "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/"
+            type: article
+            free: true
+
+      - id: load-shedding-and-backpressure
+        name: "Load Shedding & Backpressure"
+        estimated_hours: 4
+        priority: medium
+        description: "When and how to reject requests intentionally to protect system stability. Priority queues for load shedding. Backpressure in streaming and async systems. Rate limiting patterns: token bucket, leaky bucket, fixed window, sliding window. Using queues to absorb traffic spikes. Adaptive concurrency limits (AIMD, gradient2)"
+        resources:
+          - title: "AWS Builder's Library — Avoiding Overload in Distributed Systems"
+            url: "https://aws.amazon.com/builders-library/using-load-shedding-to-avoid-overload/"
+            type: article
+            free: true
+
+      - id: capacity-planning
+        name: "Capacity Planning & Scaling"
+        estimated_hours: 5
+        priority: medium
+        description: "Demand forecasting: trend analysis, seasonality, event-driven spikes. Resource modeling: CPU, memory, network, storage projections. Horizontal vs vertical scaling trade-offs. Pre-scaling vs auto-scaling. Load testing methodologies (constant, ramp-up, spike, soak tests). Performance regression detection in CI"
+        resources:
+          - title: "Google SRE Book — Chapter 18: Software Engineering in SRE"
+            url: "https://sre.google/sre-book/software-engineering-in-sre/"
+            type: documentation
+            free: true
+          - title: "k6 Load Testing Documentation"
+            url: "https://grafana.com/docs/k6/latest/"
+            type: documentation
+            free: true
+
+  - id: chaos-engineering
+    name: "Chaos Engineering"
+    description: "Proactively testing reliability hypotheses by introducing controlled failures"
+    topics:
+      - id: chaos-principles
+        name: "Chaos Engineering Principles"
+        estimated_hours: 4
+        priority: medium
+        description: "Chaos Engineering defined: deliberately inject failures to discover weaknesses before they cause incidents. Key principles: define steady state, hypothesize about steady state, introduce variables (failures), observe and measure, minimize blast radius. Chaos maturity model: from manual experiments to continuous chaos"
+        resources:
+          - title: "Principles of Chaos Engineering"
+            url: "https://principlesofchaos.org/"
+            type: documentation
+            free: true
+          - title: "AWS — Chaos Engineering"
+            url: "https://aws.amazon.com/architecture/chaos-engineering/"
+            type: article
+            free: true
+
+      - id: chaos-tooling-and-game-days
+        name: "Chaos Tooling & Game Days"
+        estimated_hours: 5
+        priority: medium
+        description: "Chaos Monkey (random instance termination), AWS Fault Injection Service (FIS), Chaos Toolkit, LitmusChaos (Kubernetes). Game day planning: objectives, failure scenarios, hypothesis, rollback plan, safety controls. Running game days safely: blast radius controls, rollback procedures, stakeholder communication. Learning from game days: documenting findings and tracking improvements"
+        resources:
+          - title: "AWS Fault Injection Service Documentation"
+            url: "https://docs.aws.amazon.com/fis/latest/userguide/what-is.html"
+            type: documentation
+            free: true
+          - title: "LitmusChaos Documentation"
+            url: "https://docs.litmuschaos.io/"
+            type: documentation
+            free: true
+
+  - id: automation-and-toil
+    name: "Automation & Toil Reduction"
+    description: "Engineering away repetitive operational work"
+    topics:
+      - id: self-healing-systems
+        name: "Self-Healing Systems"
+        estimated_hours: 5
+        priority: medium
+        description: "Designing systems that detect and recover from failures automatically. Kubernetes liveness and readiness probes. Auto-restart and rollback on failed deployments. Automated remediation triggered by alerts. Health check patterns: shallow vs deep health checks. Circuit-based automatic traffic rerouting"
+        resources:
+          - title: "Kubernetes — Configure Liveness, Readiness and Startup Probes"
+            url: "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/"
+            type: documentation
+            free: true
+
+      - id: operational-automation
+        name: "Operational Automation & Runbook Engineering"
+        estimated_hours: 6
+        priority: medium
+        description: "Automating common operational tasks: certificate rotation, scaling events, log rotation, backup verification. Using AWS SSM Automation, Azure Automation, or custom operators for Kubernetes. Event-driven automation patterns (alerts trigger Lambda/Cloud Functions). Building internal tooling for operational efficiency. Measuring automation ROI: time saved vs toil baseline"
+        resources:
+          - title: "AWS Systems Manager Automation"
+            url: "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation.html"
+            type: documentation
+            free: true
+
+  - id: interview-preparation
+    name: "Interview Preparation"
+    description: "Targeted preparation for SRE interviews"
+    topics:
+      - id: sre-technical-prep
+        name: "Technical Interview Practice"
+        estimated_hours: 10
+        priority: high
+        description: "Practice SLO definition exercises, error budget calculations, incident timeline reconstruction, and system design for reliability. Common interview formats: design a monitoring system, define SLOs for a given service, walk through a past incident"
+        quiz_bank: "sre-fundamentals"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: sre-scenario-prep
+        name: "Scenario-Based Practice"
+        estimated_hours: 6
+        priority: high
+        description: "Practice responding to: production outage scenarios, SLO violation discussions, on-call improvement proposals, and post-mortem facilitation. Practice calculating error budget burn rate from given SLO and incident data"
+
+certifications_suggested:
+  - name: "Google Professional Cloud DevOps Engineer"
+    provider: "Google Cloud"
+    url: "https://cloud.google.com/learn/certification/cloud-devops-engineer"
+    priority: high
+    estimated_prep_hours: 40
+  - name: "AWS Certified DevOps Engineer – Professional"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-devops-engineer-professional/"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "Certified Kubernetes Administrator (CKA)"
+    provider: "CNCF / Linux Foundation"
+    url: "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/"
+    priority: medium
+    estimated_prep_hours: 50
+  - name: "Prometheus Certified Associate (PCA)"
+    provider: "CNCF / Linux Foundation"
+    url: "https://training.linuxfoundation.org/certification/prometheus-certified-associate/"
+    priority: medium
+    estimated_prep_hours: 30
+  - name: "OpenTelemetry Certified Associate (OTCA)"
+    provider: "CNCF / Linux Foundation"
+    url: "https://training.linuxfoundation.org/certification/opentelemetry-certified-associate/"
+    priority: low
+    estimated_prep_hours: 25
+
+interview_questions:
+  technical:
+    - "Define SLIs and SLOs for a payment processing API. What would you measure, what targets would you set, and how would you handle the error budget policy?"
+    - "Walk me through the multiwindow, multi-burn-rate alerting approach for SLOs. Why is it better than simple threshold alerting on availability?"
+    - "A service has an SLO of 99.9% availability over 30 days. It has been down for 35 minutes this month. How much error budget remains and what does that mean for the team?"
+    - "Explain the difference between the USE method and the RED method. When would you apply each?"
+    - "How would you design distributed tracing for a system with 15 microservices? What sampling strategy would you choose and why?"
+    - "Walk me through how you would respond to a P0 incident where a payment service is returning 500 errors for 20% of requests."
+    - "How do you distinguish between a symptom and a root cause in a post-mortem? Give an example."
+    - "Design a chaos experiment to test the resilience of a service that depends on a third-party API that occasionally has high latency."
+    - "How would you identify and quantify toil in your team's operations? What would your strategy be to reduce it over one quarter?"
+    - "Explain head-based vs tail-based trace sampling. When would you use each and what are the trade-offs?"
+  leadership:
+    - "How do you convince a product team that investing in reliability work is worth delaying feature development?"
+    - "Tell me about a post-mortem you led. How did you maintain a blameless culture while still identifying actionable improvements?"
+    - "How do you design an on-call rotation that is sustainable and doesn't lead to engineer burnout?"
+    - "Describe how you would introduce SLOs to an organization that currently does not have them. Where would you start?"
+    - "How do you balance investing in automation (reducing toil) vs responding to immediate operational needs?"
+
+content_suggestions:
+  - type: blog_post
+    title: "Error Budget Burn Rate Alerting: A Practical Walkthrough"
+    description: "Walk through the mathematics of error budget burn rate, explain multiwindow alerting (short window for fast detection, long window to reduce noise), and provide complete Prometheus alerting rules with explanation. Include worked examples with real SLO numbers."
+    audience: "Engineers setting up SLO-based alerting for the first time"
+  - type: blog_post
+    title: "The Blameless Post-Mortem: A Facilitation Guide"
+    description: "Practical guide to facilitating post-mortems that produce real learning and action items, not just documentation. Cover timeline reconstruction techniques, how to identify contributing factors vs root causes, writing actionable (not vague) action items, and common facilitation anti-patterns."
+    audience: "SREs and engineering managers who run incident reviews"
+  - type: project
+    title: "SLO Dashboard Template for Grafana"
+    description: "Build and publish a reusable Grafana dashboard template that visualizes error budget burn rate, remaining budget, and SLO compliance over rolling and calendar windows. Include Prometheus alerting rules. This is a practical resource the community can use directly."
+    audience: "SRE teams instrumenting their first SLOs"

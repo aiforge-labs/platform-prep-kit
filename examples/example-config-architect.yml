@@ -1,0 +1,73 @@
+# Example: Solutions Architect prep configuration
+# All names and companies are fictional examples
+
+version: 1
+
+profile:
+  name: "John Smith"
+  current_role: "Senior Software Engineer"
+
+target:
+  role: "Cloud Solutions Architect"
+  company: "TechCo Global"
+  job_url: ""
+  location: "Remote"
+
+timeline:
+  start_date: "2026-04-01"
+  end_date: "2026-05-27"
+  weeks: 8
+  hours_per_week: 12
+  study_days: [mon, tue, wed, thu, sat]
+
+reminders:
+  enabled: true
+  morning_time: "06:30"
+  evening_time: "20:00"
+  method: "desktop"
+
+strengths:
+  - "Software development (8 years)"
+  - "AWS (3 years hands-on)"
+  - "Python and Go"
+  - "Microservices architecture"
+  - "CI/CD pipelines"
+
+gaps:
+  - id: "well-architected"
+    topic: "AWS Well-Architected Framework"
+    priority: critical
+    estimated_hours: 8
+  - id: "multi-cloud"
+    topic: "Multi-Cloud Architecture (Azure + GCP)"
+    priority: high
+    estimated_hours: 10
+  - id: "cost-optimization"
+    topic: "Cost Optimization Strategies"
+    priority: high
+    estimated_hours: 4
+  - id: "networking"
+    topic: "Advanced Cloud Networking"
+    priority: high
+    estimated_hours: 6
+  - id: "migration"
+    topic: "Migration & Modernization Patterns"
+    priority: moderate
+    estimated_hours: 6
+
+certifications:
+  - name: "AWS Solutions Architect - Professional"
+    target_date: "2026-05-20"
+    study_hours: 50
+    status: "not_started"
+
+content_plan:
+  - type: "blog"
+    title: "From Developer to Architect: Lessons Learned"
+    target_week: 5
+  - type: "portfolio"
+    title: "Architecture Decision Record: Microservices Migration"
+    target_week: 4
+
+ai_integration:
+  provider: "none"

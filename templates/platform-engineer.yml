@@ -1,0 +1,356 @@
+name: "Platform Engineer"
+description: "Preparation plan for a Platform Engineer role — building internal developer platforms, golden-path tooling, GitOps pipelines, and self-service infrastructure abstractions"
+version: 1
+suggested_timeline: "8-10 weeks"
+
+bridge_from:
+  software_engineering:
+    strengths:
+      - "Application architecture and API design"
+      - "CI/CD pipeline experience and developer workflows"
+      - "Code quality, testing, and version control practices"
+    gaps:
+      - "Platform-as-a-product mindset and IDP design"
+      - "Kubernetes internals and cluster-level operations"
+      - "Infrastructure abstraction frameworks (Crossplane, Backstage)"
+      - "GitOps pull-model delivery and multi-cluster management"
+    recommended_start: "idp-concepts"
+  cloud_engineering:
+    strengths:
+      - "Cloud resource provisioning and managed services"
+      - "IAM, networking, and cost management"
+      - "Monitoring and infrastructure operations"
+    gaps:
+      - "Developer experience design and golden path templates"
+      - "Internal developer portal and service catalog tooling"
+      - "Self-service abstractions and composite resource design"
+      - "Platform SLOs and developer productivity metrics"
+    recommended_start: "gitops"
+  devops_sre:
+    strengths:
+      - "CI/CD automation and pipeline design"
+      - "Infrastructure as Code and configuration management"
+      - "Monitoring, alerting, and incident response"
+    gaps:
+      - "Platform-as-a-product organizational model"
+      - "Backstage catalog, scaffolding, and plugin development"
+      - "Crossplane composite resource design"
+      - "Developer portal UX and onboarding experience"
+    recommended_start: "idp-concepts"
+  infrastructure_engineering:
+    strengths:
+      - "Server provisioning, networking, and storage management"
+      - "Configuration management (Ansible, Chef, Puppet)"
+      - "Data center and cloud hybrid operations"
+    gaps:
+      - "Container orchestration and Kubernetes ecosystem"
+      - "GitOps workflows and declarative infrastructure"
+      - "Modern developer portal tooling"
+      - "Self-service platform design for software engineers"
+    recommended_start: "gitops"
+
+tracks:
+  - id: idp-concepts
+    name: "IDP Concepts & Backstage"
+    description: "Understanding internal developer platforms and building service catalogs"
+    topics:
+      - id: platform-as-product
+        name: "Platform-as-a-Product Mindset"
+        estimated_hours: 5
+        priority: high
+        description: "Platform engineering vs DevOps vs SRE: distinct but complementary. IDP maturity model (CNCF). Treating the platform as an internal product with an internal customer (developers). Product thinking: roadmap, feedback loops, adoption metrics, developer NPS. The 'paved road' concept — golden paths that are the easiest paths. Platform team topologies (stream-aligned vs enabling vs platform teams)"
+        resources:
+          - title: "CNCF Platform Engineering Maturity Model"
+            url: "https://tag-app-delivery.cncf.io/whitepapers/platform-eng-maturity-model/"
+            type: documentation
+            free: true
+          - title: "Team Topologies — Platform Teams"
+            url: "https://teamtopologies.com/key-concepts"
+            type: article
+            free: true
+          - title: "Gartner — What Is Platform Engineering?"
+            url: "https://www.gartner.com/en/articles/what-is-platform-engineering"
+            type: article
+            free: true
+
+      - id: backstage
+        name: "Backstage Service Catalog & Scaffolding"
+        estimated_hours: 10
+        priority: high
+        description: "Backstage architecture: catalog, scaffolding, TechDocs, search, and plugins. catalog-info.yaml anatomy: component, API, resource, system, domain entities. Software templates for golden-path scaffolding. TechDocs for documentation-as-code. Writing custom plugins (frontend React + backend Express). Deploying Backstage in production: database, auth, plugin management. Adoption strategy: seeding the catalog, promoting self-registration"
+        resources:
+          - title: "Backstage Documentation"
+            url: "https://backstage.io/docs/"
+            type: documentation
+            free: true
+          - title: "Backstage Software Templates"
+            url: "https://backstage.io/docs/features/software-templates/"
+            type: documentation
+            free: true
+          - title: "Backstage — Creating a Plugin"
+            url: "https://backstage.io/docs/plugins/create-a-plugin"
+            type: documentation
+            free: true
+
+      - id: developer-experience
+        name: "Developer Experience & Golden Paths"
+        estimated_hours: 6
+        priority: high
+        description: "Measuring developer experience: DORA metrics (deployment frequency, lead time, MTTR, change failure rate), SPACE framework. Golden path templates: what makes a good template (sensible defaults, embedded security, observability wired in). Self-service provisioning: letting developers create resources without platform team involvement. Feedback loops: usage analytics, developer surveys, office hours"
+        resources:
+          - title: "DORA — State of DevOps Report"
+            url: "https://dora.dev/research/"
+            type: documentation
+            free: true
+          - title: "Google — SPACE Framework"
+            url: "https://queue.acm.org/detail.cfm?id=3454124"
+            type: article
+            free: true
+
+  - id: gitops
+    name: "GitOps & Continuous Delivery"
+    description: "Declarative, Git-driven delivery pipelines for applications and infrastructure"
+    topics:
+      - id: gitops-fundamentals
+        name: "GitOps Principles & Patterns"
+        estimated_hours: 6
+        priority: high
+        description: "GitOps defined: Git as the single source of truth, declarative desired state, automated reconciliation. Push vs pull model comparison. Reconciliation loop: observe → diff → act. Drift detection and automated correction. GitOps for applications vs infrastructure. Multi-tenancy patterns in GitOps. GitOps security model: who can push to which repo"
+        resources:
+          - title: "OpenGitOps Principles"
+            url: "https://opengitops.dev/"
+            type: documentation
+            free: true
+          - title: "Weaveworks — Guide to GitOps"
+            url: "https://www.weave.works/technologies/gitops/"
+            type: article
+            free: true
+
+      - id: argocd
+        name: "ArgoCD"
+        estimated_hours: 8
+        priority: high
+        description: "ArgoCD architecture: API server, repo server, application controller, application set controller. Application and AppProject resources. Sync policies: manual, automatic, self-heal, prune. ApplicationSets: cluster generator, git generator, list generator, matrix generator. Multi-cluster ArgoCD patterns. App-of-apps pattern. Image updater. RBAC and SSO integration. ArgoCD in production: HA setup, performance tuning, sharding"
+        resources:
+          - title: "ArgoCD Documentation"
+            url: "https://argo-cd.readthedocs.io/en/stable/"
+            type: documentation
+            free: true
+          - title: "ArgoCD ApplicationSet Controller"
+            url: "https://argo-cd.readthedocs.io/en/stable/user-guide/application-set/"
+            type: documentation
+            free: true
+
+      - id: flux
+        name: "Flux CD"
+        estimated_hours: 5
+        priority: medium
+        description: "Flux architecture: source controller, kustomize controller, helm controller, notification controller. GitRepository, HelmRepository, Kustomization, HelmRelease resources. Flux vs ArgoCD trade-offs: GitOps toolkit approach, composable controllers. Flux multi-tenancy model. Flux image automation. Notification and alerting providers"
+        resources:
+          - title: "Flux Documentation"
+            url: "https://fluxcd.io/flux/"
+            type: documentation
+            free: true
+
+  - id: infrastructure-abstraction
+    name: "Infrastructure Abstraction"
+    description: "Building reusable, self-service infrastructure components"
+    topics:
+      - id: crossplane
+        name: "Crossplane & Composite Resources"
+        estimated_hours: 8
+        priority: high
+        description: "Crossplane architecture: provider, managed resource, composite resource, claim. CompositeResourceDefinition (XRD) and Composition authoring. Platform API design: building opinionated cloud abstractions for developers. Provider ecosystem: AWS, GCP, Azure, Kubernetes. Upbound Control Plane. Crossplane vs Terraform: when to use each. Function pipeline for composition logic"
+        resources:
+          - title: "Crossplane Documentation"
+            url: "https://docs.crossplane.io/latest/"
+            type: documentation
+            free: true
+          - title: "Crossplane — Composite Resources"
+            url: "https://docs.crossplane.io/latest/concepts/composite-resources/"
+            type: documentation
+            free: true
+
+      - id: helm-and-kustomize
+        name: "Helm & Kustomize at Scale"
+        estimated_hours: 6
+        priority: high
+        description: "Helm chart design for platform consumption: library charts, subcharts, values schema validation. Helmfile for multi-chart orchestration. Kustomize overlays and bases for environment promotion. Combining Helm and Kustomize (post-render hooks). Chart testing with ct (chart-testing). Versioning strategies for internal Helm charts"
+        resources:
+          - title: "Helm Documentation"
+            url: "https://helm.sh/docs/"
+            type: documentation
+            free: true
+          - title: "Kustomize Documentation"
+            url: "https://kubectl.docs.kubernetes.io/guides/introduction/kustomize/"
+            type: documentation
+            free: true
+
+      - id: terraform-for-platform
+        name: "Terraform for Platform Teams"
+        estimated_hours: 6
+        priority: medium
+        description: "Module design for platform reuse: input/output contracts, version constraints. Terraform Registry for internal module distribution. Atlantis or Terraform Cloud for GitOps-style Terraform. Module composition patterns. When Terraform is the right tool vs Crossplane vs direct Kubernetes operators. Managing Terraform state at scale (workspaces, module registry, state locking)"
+        resources:
+          - title: "HashiCorp Terraform Documentation"
+            url: "https://developer.hashicorp.com/terraform/docs"
+            type: documentation
+            free: true
+          - title: "Atlantis Documentation"
+            url: "https://www.runatlantis.io/docs/"
+            type: documentation
+            free: true
+
+  - id: platform-observability
+    name: "Platform Observability"
+    description: "Measuring platform health and developer productivity"
+    topics:
+      - id: platform-slos
+        name: "Platform SLOs & Health Metrics"
+        estimated_hours: 5
+        priority: medium
+        description: "Defining SLOs for a platform: pipeline success rate, time to first deployment for new services, self-service provisioning success rate, portal availability. DORA metrics as platform health indicators. Developer NPS and satisfaction tracking. Tracking golden path adoption: what percentage of services use the paved road vs going off-piste"
+        resources:
+          - title: "Google SRE Workbook — Implementing SLOs"
+            url: "https://sre.google/workbook/implementing-slos/"
+            type: documentation
+            free: true
+
+      - id: kubernetes-observability
+        name: "Kubernetes Cluster Observability"
+        estimated_hours: 6
+        priority: high
+        description: "kube-state-metrics for cluster resource visibility. Node Exporter for host metrics. Kubernetes events monitoring. Resource quota and LimitRange monitoring. Cluster-level Grafana dashboards. Cluster-level alerts: node NotReady, PVC pending, OOMKilled frequency. Prometheus Operator and ServiceMonitor/PodMonitor patterns"
+        resources:
+          - title: "kube-state-metrics Documentation"
+            url: "https://github.com/kubernetes/kube-state-metrics"
+            type: documentation
+            free: true
+          - title: "Prometheus Operator Documentation"
+            url: "https://prometheus-operator.dev/docs/prologue/introduction/"
+            type: documentation
+            free: true
+
+  - id: security-and-policy
+    name: "Security & Policy Enforcement"
+    description: "Embedding security guardrails into the platform by default"
+    topics:
+      - id: admission-controllers
+        name: "Admission Controllers & Policy Engines"
+        estimated_hours: 7
+        priority: high
+        description: "Kubernetes admission webhook architecture: validating vs mutating. OPA Gatekeeper: ConstraintTemplate and Constraint resources, writing Rego policies for Kubernetes. Kyverno: policy, cluster policy, generate and mutate rules — no Rego required. Policy-as-code in CI: pre-deployment validation. Pod Security Standards (restricted, baseline, privileged). Comparing OPA Gatekeeper vs Kyverno: use case fit"
+        resources:
+          - title: "OPA Gatekeeper Documentation"
+            url: "https://open-policy-agent.github.io/gatekeeper/website/docs/"
+            type: documentation
+            free: true
+          - title: "Kyverno Documentation"
+            url: "https://kyverno.io/docs/"
+            type: documentation
+            free: true
+          - title: "Kubernetes Pod Security Standards"
+            url: "https://kubernetes.io/docs/concepts/security/pod-security-standards/"
+            type: documentation
+            free: true
+
+      - id: secrets-management
+        name: "Secrets Management at Platform Scale"
+        estimated_hours: 5
+        priority: high
+        description: "Why Kubernetes Secrets are insufficient (base64 ≠ encryption). External Secrets Operator (ESO): syncing from AWS Secrets Manager, GCP Secret Manager, Azure Key Vault, HashiCorp Vault. Sealed Secrets for GitOps-safe secrets. Vault agent injector and Vault CSI driver. Secrets rotation patterns. Audit logging for secret access"
+        resources:
+          - title: "External Secrets Operator Documentation"
+            url: "https://external-secrets.io/latest/"
+            type: documentation
+            free: true
+          - title: "Sealed Secrets Documentation"
+            url: "https://sealed-secrets.netlify.app/"
+            type: documentation
+            free: true
+          - title: "HashiCorp Vault on Kubernetes"
+            url: "https://developer.hashicorp.com/vault/docs/platform/k8s"
+            type: documentation
+            free: true
+
+  - id: interview-preparation
+    name: "Interview Preparation"
+    description: "Targeted preparation for Platform Engineer interviews"
+    topics:
+      - id: platform-technical-prep
+        name: "Technical Interview Practice"
+        estimated_hours: 10
+        priority: high
+        description: "Practice platform design scenarios: design an IDP for 50 teams, design a multi-cluster GitOps delivery pipeline, design secrets management for a regulated environment. Practice Backstage and Crossplane architecture walkthroughs"
+        quiz_bank: "platform-engineer"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: platform-scenario-prep
+        name: "Scenario-Based Practice"
+        estimated_hours: 5
+        priority: high
+        description: "Practice: selling the platform investment to leadership, handling developer resistance to golden paths, deciding build vs buy for platform components, migrating from push-based CI/CD to GitOps"
+
+certifications_suggested:
+  - name: "Certified Kubernetes Administrator (CKA)"
+    provider: "CNCF / Linux Foundation"
+    url: "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/"
+    priority: high
+    estimated_prep_hours: 50
+  - name: "HashiCorp Terraform Associate"
+    provider: "HashiCorp"
+    url: "https://www.hashicorp.com/certification/terraform-associate"
+    priority: high
+    estimated_prep_hours: 25
+  - name: "Argo Project Certification (Argo Workflows & ArgoCD)"
+    provider: "CNCF / Linux Foundation"
+    url: "https://training.linuxfoundation.org/certification/argo-certified-associate-aca/"
+    priority: medium
+    estimated_prep_hours: 30
+  - name: "AWS Certified DevOps Engineer – Professional"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-devops-engineer-professional/"
+    priority: medium
+    estimated_prep_hours: 60
+  - name: "Certified Kubernetes Security Specialist (CKS)"
+    provider: "CNCF / Linux Foundation"
+    url: "https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/"
+    priority: low
+    estimated_prep_hours: 60
+
+interview_questions:
+  technical:
+    - "Design an internal developer platform for an organization with 40 engineering teams. What components would you build, what would you buy, and what would you defer?"
+    - "Explain the difference between push-based and pull-based GitOps. What are the security implications of each model?"
+    - "Walk me through how you would design a Crossplane Composition that lets developers self-provision a 'database' abstraction that could be backed by RDS or Cloud SQL depending on environment."
+    - "How would you handle secrets in a GitOps repository? Compare at least two approaches."
+    - "A developer says 'the golden path is slower than doing it myself.' How do you respond and what would you investigate?"
+    - "Explain ArgoCD ApplicationSets. Design an ApplicationSet that deploys an application to every cluster registered in ArgoCD."
+    - "How would you design Kyverno policies to enforce that every Deployment must have resource limits set and a specific label schema?"
+    - "How do you measure whether your internal developer platform is successful? What metrics would you report to engineering leadership?"
+    - "Walk me through the Backstage plugin architecture. How would you build a plugin that shows real-time deployment status for a service?"
+    - "How would you migrate 100 existing services from a legacy Jenkins-based push pipeline to an ArgoCD pull-based GitOps pipeline? What would be your phased approach?"
+  leadership:
+    - "How do you prioritize the platform roadmap when you have requests from 40 different teams with competing needs?"
+    - "Tell me about a time you drove adoption of a platform tool that developers were initially resistant to. What worked?"
+    - "How do you balance platform stability (don't break existing users) with platform evolution (deprecate old patterns)?"
+    - "Describe how you would build a platform engineering team from scratch. What roles would you hire first and why?"
+    - "How do you make the case to leadership for investing in platform engineering when it doesn't directly ship customer features?"
+
+content_suggestions:
+  - type: blog_post
+    title: "Backstage in Production: What They Don't Tell You in the Docs"
+    description: "Honest account of the operational realities of running Backstage at scale: catalog data quality problems, plugin maintenance burden, SSO integration gotchas, and how to drive adoption when engineers don't self-register their services. Include practical strategies for each problem."
+    audience: "Platform engineers evaluating or operating Backstage"
+  - type: blog_post
+    title: "Crossplane vs Terraform: A Decision Framework"
+    description: "Structured comparison across five dimensions: developer UX, infrastructure lifecycle management, state management, multi-tenancy, and operational complexity. Include a concrete decision flowchart and real scenarios where each wins."
+    audience: "Platform engineers choosing infrastructure abstraction tooling"
+  - type: project
+    title: "Backstage Golden Path Template with Embedded Security"
+    description: "Build and publish a production-ready Backstage software template that scaffolds a new service with: container image, Helm chart, ArgoCD Application, External Secrets integration, Prometheus ServiceMonitor, and Kyverno policy compliance. Demonstrate how security and observability are baked in, not bolted on."
+    audience: "Platform engineering community"

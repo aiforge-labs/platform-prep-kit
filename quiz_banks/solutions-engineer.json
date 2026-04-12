@@ -1,0 +1,218 @@
+{
+  "topic_id": "solutions-engineer",
+  "title": "Solutions Engineering",
+  "version": 1,
+  "questions": [
+    {
+      "id": "se-01",
+      "question": "What is MEDDPICC and why do sales engineers use it?",
+      "type": "multiple_choice",
+      "options": [
+        "A) A software development methodology for enterprise features",
+        "B) A qualification framework: Metrics, Economic Buyer, Decision Criteria, Decision Process, Identify Pain, Champion, Competition — used to qualify deals and ensure the SE invests time in winnable, high-value opportunities",
+        "C) A customer success scoring model for renewal likelihood",
+        "D) An acronym for the seven steps of a product demo"
+      ],
+      "answer": "B",
+      "explanation": "MEDDPICC is a deal qualification framework from enterprise sales. SE relevance: (1) Metrics — what measurable outcome does the customer need? SE must quantify ROI, (2) Economic Buyer — who controls the budget? SE should get access to technical AND economic stakeholders, (3) Decision Criteria — what technical and business criteria will the decision be made on? SE aligns demo and POC to these, (4) Champion — who inside the account is advocating for you? SE builds relationship with champion, (5) Competition — what alternatives are being evaluated? SE must address competitive differentiation. SEs who understand MEDDPICC focus technical effort on deals likely to close.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "se-02",
+      "question": "What is the difference between a technical discovery call and a product demo?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Discovery is for new prospects; demo is for existing customers",
+        "B) Discovery uncovers the prospect's problems, environment, and success criteria before you show anything. A demo should be tailored using that discovery — showing only relevant capabilities that address identified pain points",
+        "C) Discovery is done by the AE; demo is done by the SE",
+        "D) They are the same meeting with different names at different companies"
+      ],
+      "answer": "B",
+      "explanation": "The critical error many SEs make: leading with a demo before discovery. A discovery call answers: What is the current state? What are the pain points and their business impact? What have they tried? What does success look like in 6 months? Who else is involved in the decision? The demo then tells a story where YOUR product solves THEIR specific problem. A generic 'feature tour' demo is far less effective than a tailored demo that directly addresses the prospect's stated challenges.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "se-03",
+      "question": "A prospect says: 'Your solution is too expensive compared to Competitor X.' How do you handle this objection?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Immediately offer a discount to match the competitor's price",
+        "B) Acknowledge the concern, clarify what's being compared (feature parity? implementation cost? TCO?), then reframe around total value delivered and cost-of-doing-nothing",
+        "C) Explain why your product's features justify the higher price",
+        "D) Agree to revisit pricing in the next quarter"
+      ],
+      "answer": "B",
+      "explanation": "The Acknowledge → Clarify → Respond → Confirm framework: (1) Acknowledge: 'I understand cost is an important factor.' (2) Clarify: 'Can you help me understand what you're comparing? Is it license cost, or total cost of ownership including implementation, maintenance, and staffing?' (3) Respond: Compare apples-to-apples — often cheaper tools have higher implementation/maintenance costs. Calculate cost-of-inaction: what does the problem cost them today? (4) Confirm: 'Does that change how you're thinking about the comparison?' Never discount before understanding what's actually being compared.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "se-04",
+      "question": "What is a Mutual Success Plan (also called a POC Success Criteria document) and why is it important?",
+      "type": "open",
+      "key_points": [
+        "A Mutual Success Plan is a written document agreed to by both the prospect and the vendor BEFORE the POC begins, defining: specific technical criteria that must be validated, timelines with milestones, resource commitments from both sides, and the decision process following POC completion",
+        "Why it matters: without it, POCs can drag on indefinitely with moving goalposts. The prospect can always find a reason to extend or delay. With a signed MSP, both parties are committed to a timeline and clear success definition",
+        "Key sections: executive summary (business objective), technical success criteria (measurable, specific — e.g., 'ingest 10,000 events/sec with < 100ms p99 latency'), resources committed (prospect's engineer time, vendor's SE time), timeline (week-by-week milestones), decision timeline (when will the decision be made post-POC?)",
+        "SE's role: the SE often drafts the MSP based on discovery. Getting the champion to co-author it increases buy-in. The MSP is a test of whether the champion can get internal alignment on the criteria",
+        "After the POC: the MSP is the objective scorecard. If criteria are met, the SE can reference it when the decision stalls: 'Based on the criteria we agreed on, you achieved X and Y — what's holding back the decision?'"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "se-05",
+      "question": "A prospect's engineering team is enthusiastic about your product, but their CISO is raising security objections. How do you handle this?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Focus on the engineering team and let them convince the CISO internally",
+        "B) Request a dedicated security review meeting with the CISO, come prepared with SOC 2 report, pen test results, architecture security docs, and be ready to address their specific concerns about data handling, access controls, and compliance",
+        "C) Send a security questionnaire and wait for them to respond",
+        "D) Offer to add contractual security commitments to the contract"
+      ],
+      "answer": "B",
+      "explanation": "The CISO is a key stakeholder who can kill deals that engineers love. Best practices: (1) proactively request the meeting — don't wait for issues to surface late, (2) come prepared with: security documentation (SOC 2 Type II, ISO 27001, pen test results), architecture diagrams showing data flows and trust boundaries, answers to common security questionnaires, and an assigned security contact at your company, (3) understand their specific concerns — regulatory requirements (HIPAA, PCI, FedRAMP), data residency, access controls, (4) involve your security team for complex questions. The CISO's concerns are often about risk — help them see you as a partner in managing that risk.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "se-06",
+      "question": "When designing a demo environment for a cloud security product, what are the most important principles?",
+      "type": "open",
+      "key_points": [
+        "Realistic but controlled: the demo environment should look real enough to be credible (realistic resource names, genuine misconfiguration examples, believable scale) but be isolated from anything that could cause real security issues or data exposure",
+        "Scripted for story flow: the demo should tell a story with a beginning (problem state — here are the misconfigurations), middle (detection and investigation), and end (remediation and clean state). Sequence resources to demonstrate the narrative",
+        "Repeatable and resettable: the demo environment should be IaC-managed (Terraform) so it can be torn down and recreated in minutes. Nothing worse than a demo environment that's been broken by a previous demo",
+        "Persona-tailored: security demos often need to show different views — the security engineer view (technical findings), the CISO view (risk dashboard, compliance posture), the developer view (fixing the issue). Have switching between personas scripted",
+        "Failsafes: have a backup plan for every failure point. Screenshots/recording for connectivity failures, fallback data for API outages, pre-loaded 'demo mode' if live data doesn't load",
+        "Do not demo on production or prospect environments: even if the prospect offers access, demo on your own environment first — unexpected findings in a prospect's live environment can derail the conversation"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "se-07",
+      "question": "What is the difference between a Solution Architect (SA) at a cloud provider and a Solutions Engineer (SE) at a SaaS company?",
+      "type": "multiple_choice",
+      "options": [
+        "A) SAs work pre-sales; SEs work post-sales",
+        "B) Cloud provider SAs help customers architect solutions using a broad portfolio of cloud services, often post-sale in an advisory capacity. SaaS SEs are primarily pre-sales, driving technical validation and removing blockers for a specific product's adoption",
+        "C) They are the same role with different titles at different companies",
+        "D) SAs are senior; SEs are junior"
+      ],
+      "answer": "B",
+      "explanation": "SA at AWS/Azure/GCP: the customer has already committed to the cloud; the SA helps them build well-architected systems using the cloud's services — advisory, architecture review, migration planning. Often ongoing post-sale relationship. SaaS SE: pre-sales focus — help prospects evaluate and adopt the specific product. Responsible for technical win. Skills: product expertise, competitive intelligence, discovery, demo, POC, RFP responses, security reviews. Overlap: both need cloud architecture depth and technical communication skills. The SaaS SE role often transitions to SA-style work post-sale for enterprise accounts.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "se-08",
+      "question": "A prospect asks you to complete a 200-question security questionnaire before proceeding with the POC. How do you respond?",
+      "type": "open",
+      "key_points": [
+        "This is common in enterprise deals. The right approach: don't refuse, but manage it efficiently",
+        "First, check if you have a pre-completed questionnaire: most mature SaaS companies maintain a pre-filled security questionnaire (shared assessment, CAIQ, or custom) in a tool like Whistic, Panorays, or a shared Google doc. Send this first — it may answer 80% of questions",
+        "Use a shared assessment platform if available: SOC 2 Type II report, ISO 27001 certificate, and a pre-filled questionnaire can be shared via Vanta, Drata, or Whistic, which tracks access and reduces re-work",
+        "Triage the questionnaire: skim the 200 questions — which ones are new or nuanced that the standard document doesn't cover? Focus your time on those 20 questions, not the 180 standard ones",
+        "Set expectations: 'Our security team can complete this in X business days. To prioritize: would it be helpful to first share our SOC 2 Type II report and pre-filled questionnaire? That covers most common questions and may unblock you faster'",
+        "Involve your security/compliance team: don't answer security questions you're not certain of. Wrong answers on a security questionnaire can create liability"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "se-09",
+      "question": "How do you calculate and present ROI for a cloud security or DevOps tooling purchase?",
+      "type": "open",
+      "key_points": [
+        "Cost-of-doing-nothing (CODN): quantify the cost of the current problem: engineering hours spent on manual processes (e.g., compliance evidence collection takes 2 engineers × 2 weeks per audit × $150/hr = $12,000/audit), incident costs (mean time to resolve × engineer cost + revenue impact), risk cost (probability × impact of a security breach or compliance failure)",
+        "Hard cost savings: engineering time freed by automation (convert hours to FTE cost), tooling consolidation (replace 3 tools with 1 — show license cost savings), cloud cost reduction if applicable",
+        "Soft benefits (harder to quantify): faster time to market (hours saved per deployment × deployment frequency × developer cost), reduced cognitive load, improved developer satisfaction (reduces turnover)",
+        "Build the model collaboratively: don't present ROI figures that the prospect hasn't validated. Ask 'How many engineers spend time on this today? What's your average fully-loaded eng cost?' Let them fill in their numbers — they'll trust a model they helped build",
+        "Payback period: calculate months to break even: (cost of solution) / (monthly savings) = payback period. Enterprise decisions rarely proceed without < 12 months payback",
+        "Conservative framing: present a conservative scenario. If the actual ROI is much higher, great — but you want to commit only to what you can prove"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "se-10",
+      "question": "What does 'technical win' mean in a SaaS SE context?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Winning a hackathon or technical competition against the competitor",
+        "B) Achieving confirmation from the technical evaluator that your product technically meets their requirements — a necessary but not sufficient condition for closing the commercial deal",
+        "C) Completing the technical portion of the sales certification",
+        "D) Getting the prospect's engineers to prefer your product over the AE's recommendation"
+      ],
+      "answer": "B",
+      "explanation": "Technical win = the technical decision maker (lead engineer, architect, or CISO) has validated that your product solves their problem and they are recommending it internally. This is the SE's primary deliverable. However, a technical win doesn't close a deal — commercial objections (price, legal, budget timing), champion not having executive support, or competitor relationships can still block it. The SE works to achieve technical win as efficiently as possible, then supports the AE in navigating commercial blockers. Tracking technical win rate is the most direct measure of SE effectiveness.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "se-11",
+      "question": "During a POC, the prospect engineer discovers that your product doesn't support a use case that was central to their evaluation. How do you handle this?",
+      "type": "open",
+      "key_points": [
+        "Be transparent immediately: don't spin or deflect. Acknowledge the gap directly. Trust is the foundation of an SE relationship — losing trust by obscuring a gap is worse than the gap itself",
+        "Qualify the severity: is this a hard blocker (deal-stopper) or a workaround scenario? 'Can you walk me through how critical this is and what you'd do today without this feature?' Some 'must-haves' turn out to be 'nice-to-haves' when examined",
+        "Explore workarounds: 'Here's how some customers handle this today: [alternative approach].' Be honest about the limitations of the workaround",
+        "Product roadmap: if the feature is on the roadmap, share the timeline honestly — but don't oversell roadmap items. A rough quarter estimate is better than a commitment you can't keep",
+        "Reframe the evaluation: 'Setting this aside, how does the product perform against the other success criteria we defined?' Determine whether the gap is truly deal-breaking or one of several factors",
+        "Escalate internally: loop in your product team. Sometimes an SE can get a feature prioritized if it represents an important customer need. Be the customer's advocate internally — but only after managing expectations appropriately",
+        "Know when to lose gracefully: if the gap is truly a blocker and won't be solved, acknowledge that this may not be the right fit right now. Losing gracefully protects the relationship for future opportunities"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "se-12",
+      "question": "What is a 'bake-off' POC and what special strategies apply?",
+      "type": "multiple_choice",
+      "options": [
+        "A) A POC where you test the product's performance under extreme load",
+        "B) A competitive POC where multiple vendors simultaneously evaluate against the same success criteria — requires extra focus on differentiators, champion development, and ensuring your evaluation criteria aligns to your strengths",
+        "C) A POC where multiple teams within the same company evaluate the product independently",
+        "D) A rapid 2-day evaluation that replaces a longer POC"
+      ],
+      "answer": "B",
+      "explanation": "Bake-off dynamics: you're not just proving your product works — you're proving it works BETTER than the competitor on the specific criteria that matter to this prospect. Strategies: (1) work hard to influence the success criteria BEFORE the bake-off starts — criteria that map to your strengths, (2) invest in your champion so they advocate for fair evaluation conditions, (3) differentiate on dimensions competitors can't match (unique features, ease of use, integration depth), (4) ask about competitive evaluation timeline — if you can land your technical win first, you set the standard they're compared to, (5) know where competitors are weak and subtly ensure those areas are included in the evaluation.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "se-13",
+      "question": "How do you explain a complex distributed system architecture to a non-technical executive during a sales conversation?",
+      "type": "open",
+      "key_points": [
+        "Lead with business outcomes, not technical components: 'This ensures your team can ship features 4× faster without manual approvals' — not 'Our Kubernetes operator reconciles desired state with a polling interval'",
+        "Use business analogies: complex technical concepts map to familiar business ideas. A distributed cache = a strategically placed warehouse that reduces delivery time. A compliance automation system = an auditor that works 24/7 and never misses a step",
+        "The whiteboard (or slide) should tell a story: before state (their pain), after state (with your product), with arrows showing the transformation. Keep it to 3-5 components maximum — executives pattern-match to familiar diagrams",
+        "Defer technical depth: 'I'd love to go into the technical details with your engineering team — for this conversation, what matters is [business outcome]. Would it be helpful to schedule a separate technical session?'",
+        "Translate technical metrics to business metrics: p99 latency < 100ms → 'your customers never wait more than a tenth of a second for a response, which our data shows reduces cart abandonment by 15%'",
+        "Ask questions to calibrate: 'How much technical detail would be useful for you?' Some executives want more depth than others — let them guide"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "se-14",
+      "question": "A prospect wants to integrate your SaaS security product with their on-premise SIEM. What questions do you ask during technical discovery?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Ask only about their budget for the integration project",
+        "B) Ask about their SIEM vendor and version, data format requirements (CEF/LEEF/JSON), connectivity constraints (on-prem vs cloud connectivity, firewall rules, egress control), log volume expectations, alerting latency requirements, and who owns the SIEM configuration",
+        "C) Tell them to check the documentation and come back with specific questions",
+        "D) Assume the integration will work and address issues during the POC"
+      ],
+      "answer": "B",
+      "explanation": "SIEM integration discovery checklist: (1) SIEM vendor + version — Splunk, QRadar, Sentinel, Elastic, etc.? Some integrations are native; others require custom connectors, (2) data format — what format does their SIEM ingest? CEF, LEEF, JSON, syslog? Does your product support it?, (3) connectivity — is the SIEM on-prem? Do they have network egress restrictions that block cloud SaaS → on-prem? Is VPN/PrivateLink needed?, (4) authentication — how does the SIEM authenticate inbound data?, (5) log volume — what event rate does their SIEM handle? Will adding your product's events create capacity issues?, (6) ownership — who manages SIEM configuration? That person needs to be in the POC. Missing any of these can cause a POC to stall on a 'simple' integration.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "se-15",
+      "question": "What metrics should a solutions engineer track to demonstrate their own impact and effectiveness?",
+      "type": "open",
+      "key_points": [
+        "Technical win rate: % of technical evaluations (POCs, demos, trials) that result in a technical win — the most direct measure of SE effectiveness. Target: > 70% for deals you're actively involved in",
+        "POC-to-close rate: of prospects that reach POC stage, what % close? If high, the POC is effective. If low, there may be a post-technical-win handoff problem or commercial blockers that the SE can help address earlier",
+        "Time to technical win: average days from first SE engagement to technical win. Reducing this frees SE capacity for more deals",
+        "Deal coverage ratio: how many active opportunities is the SE supporting simultaneously? Too high = SE is stretched thin and quality suffers. Typical range: 8-15 active opportunities per SE depending on deal complexity",
+        "Revenue influenced: total bookings from deals the SE was involved in — tied to quota for SE-quota-carrying models, or as a contribution metric for non-quota SEs",
+        "Customer satisfaction scores: post-POC NPS or CSAT from technical evaluators — measures the quality of the technical relationship",
+        "Content contributions: RFP responses completed, technical docs/competitive battlecards created — measures leverage beyond individual deals"
+      ],
+      "difficulty": "hard"
+    }
+  ]
+}

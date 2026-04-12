@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Career Prep Agent{% endblock %}</title>
+    <link rel="stylesheet" href="/static/app.css">
+    <script src="/static/vendor/htmx.min.js" defer></script>
+    <script src="/static/app.js" defer></script>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">Career Prep</h1>
+                <span class="version">v0.1.0</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/" class="nav-link {% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a></li>
+                <li><a href="/today" class="nav-link {% if active_page == 'today' %}active{% endif %}">Today</a></li>
+                <li><a href="/study" class="nav-link {% if active_page == 'study' %}active{% endif %}">Study Plan</a></li>
+                <li><a href="/quiz" class="nav-link {% if active_page == 'quiz' %}active{% endif %}">Quizzes</a></li>
+                <li><a href="/knowledge" class="nav-link {% if active_page == 'knowledge' %}active{% endif %}">Knowledge</a></li>
+                <li><a href="/portfolio" class="nav-link {% if active_page == 'portfolio' %}active{% endif %}">Portfolio</a></li>
+                <li><a href="/settings" class="nav-link {% if active_page == 'settings' %}active{% endif %}">Settings</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div id="flash-messages">
+                {% block flash %}{% endblock %}
+            </div>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<h3>Fitment Analysis</h3>
+<p class="text-muted">We analyzed your resume against the job posting. Here's how you match up.</p>
+
+<div class="fitment-results">
+    <!-- Overall Score -->
+    <div class="fitment-score-card">
+        <div class="stat-value {% if fitment.overall_score >= 70 %}stat-success{% elif fitment.overall_score >= 50 %}stat-warning{% else %}stat-error{% endif %}">
+            {{ fitment.overall_score|round|int }}%
+        </div>
+        <div class="stat-label">Overall Fitment Score</div>
+    </div>
+
+    {% if job_title %}
+    <p class="text-muted" style="text-align:center; margin-bottom: 1.5rem;">Target: <strong>{{ job_title }}</strong></p>
+    {% endif %}
+
+    <!-- Component Scores -->
+    {% if fitment.component_scores %}
+    <div class="section">
+        <h4>Score Breakdown</h4>
+        {% for component, score in fitment.component_scores.items() %}
+        <div class="track-row">
+            <div class="track-info">
+                <span class="track-name">{{ component|replace('_', ' ')|title }}</span>
+                <span class="text-muted">{{ score|round|int }}%</span>
+            </div>
+            <div class="progress-bar-container progress-small">
+                <div class="progress-bar-fill" style="width: {{ score }}%"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Skills Match -->
+    {% if fitment.skills_match %}
+    <div class="section">
+        <h4>Skills</h4>
+        {% if fitment.skills_match.matched %}
+        <p><strong>Matched:</strong>
+            {% for s in fitment.skills_match.matched %}
+            <span class="badge badge-done">{{ s }}</span>
+            {% endfor %}
+        </p>
+        {% endif %}
+        {% if fitment.skills_match.missing %}
+        <p><strong>Gaps:</strong>
+            {% for s in fitment.skills_match.missing %}
+            <span class="badge badge-pending">{{ s }}</span>
+            {% endfor %}
+        </p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Gaps -->
+    {% if fitment.gaps %}
+    <div class="section">
+        <h4>Identified Gaps ({{ fitment.gaps|length }})</h4>
+        <table class="data-table">
+            <thead>
+                <tr><th>Area</th><th>Priority</th><th>Est. Hours</th></tr>
+            </thead>
+            <tbody>
+                {% for g in fitment.gaps %}
+                <tr>
+                    <td>{{ g.area|default(g.name|default('')) }}</td>
+                    <td><span class="badge badge-{{ g.priority|default('moderate') }}">{{ g.priority|default('moderate') }}</span></td>
+                    <td>{{ g.estimated_hours|default('—') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+
+<form hx-post="/onboarding/step/timeline-from-fitment" hx-target=".content" hx-swap="innerHTML">
+    <input type="hidden" name="session_id" value="{{ session_id }}">
+    <button type="submit" class="btn btn-accent btn-large">Continue to Timeline</button>
+</form>

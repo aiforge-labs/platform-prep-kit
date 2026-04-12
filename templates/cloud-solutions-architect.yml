@@ -1,0 +1,298 @@
+name: "Cloud Solutions Architect"
+description: "Preparation plan for a Cloud Solutions Architect role focusing on multi-cloud design, migration, cost optimization, and infrastructure leadership"
+version: 1
+suggested_timeline: "8-10 weeks"
+
+bridge_from:
+  software_engineering:
+    strengths:
+      - "Application architecture and design patterns"
+      - "CI/CD pipeline experience"
+      - "API design and microservices understanding"
+    gaps:
+      - "Infrastructure-level networking (VPCs, Transit Gateway, peering)"
+      - "Cost modeling and FinOps practices"
+      - "Enterprise migration strategies"
+    recommended_start: "well-architected-framework"
+  system_administration:
+    strengths:
+      - "Networking fundamentals"
+      - "OS-level configuration and troubleshooting"
+      - "Monitoring and capacity planning"
+    gaps:
+      - "Infrastructure as Code at scale"
+      - "Serverless and container orchestration patterns"
+      - "Cloud-native application design"
+    recommended_start: "well-architected-framework"
+  network_engineering:
+    strengths:
+      - "Deep networking knowledge"
+      - "Load balancing and DNS"
+      - "Firewall and security group design"
+    gaps:
+      - "Application-layer architecture patterns"
+      - "Serverless and event-driven design"
+      - "Cost optimization and reserved capacity planning"
+    recommended_start: "cloud-networking"
+
+tracks:
+  - id: cloud-architecture-fundamentals
+    name: "Cloud Architecture Fundamentals"
+    description: "Core architectural principles and frameworks used across all cloud platforms"
+    topics:
+      - id: well-architected-framework
+        name: "Well-Architected Framework"
+        estimated_hours: 10
+        priority: high
+        description: "All six pillars: operational excellence, security, reliability, performance efficiency, cost optimization, and sustainability. Understand trade-offs between pillars."
+        resources:
+          - title: "AWS Well-Architected Framework"
+            url: "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+            type: documentation
+            free: true
+          - title: "Azure Well-Architected Framework"
+            url: "https://learn.microsoft.com/en-us/azure/well-architected/"
+            type: documentation
+            free: true
+          - title: "Google Cloud Architecture Framework"
+            url: "https://cloud.google.com/architecture/framework"
+            type: documentation
+            free: true
+
+      - id: landing-zones
+        name: "Landing Zones and Account Strategy"
+        estimated_hours: 8
+        priority: high
+        description: "Multi-account/subscription/project structures, organizational units, guardrails, and baseline security configurations"
+        resources:
+          - title: "AWS Control Tower Documentation"
+            url: "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html"
+            type: documentation
+            free: true
+          - title: "Azure Landing Zones"
+            url: "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/"
+            type: documentation
+            free: true
+
+      - id: iac-at-scale
+        name: "Infrastructure as Code at Scale"
+        estimated_hours: 8
+        priority: high
+        description: "Terraform modules, CloudFormation StackSets, Pulumi, state management, drift detection, and policy-as-code (OPA, Sentinel)"
+        resources:
+          - title: "Terraform Best Practices"
+            url: "https://developer.hashicorp.com/terraform/cloud-docs/recommended-practices"
+            type: documentation
+            free: true
+          - title: "AWS CloudFormation Best Practices"
+            url: "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html"
+            type: documentation
+            free: true
+
+      - id: cloud-networking
+        name: "Cloud Networking Deep Dive"
+        estimated_hours: 10
+        priority: high
+        description: "VPC design, Transit Gateway, VPC peering, PrivateLink, hybrid connectivity (Direct Connect, ExpressRoute, Interconnect), DNS architecture, and load balancing strategies"
+        resources:
+          - title: "AWS Networking Reference Architectures"
+            url: "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"
+            type: documentation
+            free: true
+          - title: "Azure Networking Documentation"
+            url: "https://learn.microsoft.com/en-us/azure/networking/"
+            type: documentation
+            free: true
+
+  - id: multi-cloud-design
+    name: "Multi-Cloud Design"
+    description: "Patterns and practices for architectures spanning multiple cloud providers"
+    topics:
+      - id: multi-cloud-patterns
+        name: "Multi-Cloud Architecture Patterns"
+        estimated_hours: 8
+        priority: high
+        description: "When and why to use multi-cloud, abstraction layers, service mesh across clouds, data sovereignty patterns, and avoiding lowest-common-denominator traps"
+        resources:
+          - title: "Google Cloud Multi-Cloud Architecture Guide"
+            url: "https://cloud.google.com/architecture/hybrid-and-multi-cloud-patterns-and-practices"
+            type: documentation
+            free: true
+
+      - id: container-orchestration
+        name: "Container Orchestration Across Clouds"
+        estimated_hours: 8
+        priority: high
+        description: "Kubernetes (EKS, AKS, GKE), service mesh (Istio, Linkerd), container registries, and portable workload strategies"
+        resources:
+          - title: "Kubernetes Documentation"
+            url: "https://kubernetes.io/docs/home/"
+            type: documentation
+            free: true
+          - title: "EKS Best Practices Guide"
+            url: "https://aws.github.io/aws-eks-best-practices/"
+            type: documentation
+            free: true
+
+      - id: serverless-patterns
+        name: "Serverless and Event-Driven Architecture"
+        estimated_hours: 6
+        priority: medium
+        description: "Lambda/Functions/Cloud Functions, event buses, step functions, API gateways, and when serverless is and is not the right choice"
+        resources:
+          - title: "AWS Serverless Application Lens"
+            url: "https://docs.aws.amazon.com/wellarchitected/latest/serverless-applications-lens/welcome.html"
+            type: documentation
+            free: true
+
+  - id: cost-optimization
+    name: "Cost Optimization"
+    description: "FinOps practices, cost modeling, and optimization strategies"
+    topics:
+      - id: finops-fundamentals
+        name: "FinOps Fundamentals"
+        estimated_hours: 6
+        priority: high
+        description: "FinOps lifecycle (inform, optimize, operate), cost allocation tagging, showback/chargeback models, and organizational culture"
+        resources:
+          - title: "FinOps Foundation"
+            url: "https://www.finops.org/framework/"
+            type: documentation
+            free: true
+
+      - id: cost-optimization-strategies
+        name: "Cost Optimization Strategies"
+        estimated_hours: 6
+        priority: high
+        description: "Reserved instances vs savings plans vs spot, right-sizing, auto-scaling policies, storage tiering, and data transfer cost management"
+        resources:
+          - title: "AWS Cost Optimization Pillar"
+            url: "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html"
+            type: documentation
+            free: true
+          - title: "Azure Cost Management Best Practices"
+            url: "https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/cost-mgt-best-practices"
+            type: documentation
+            free: true
+
+      - id: cost-modeling
+        name: "Architecture Cost Modeling"
+        estimated_hours: 4
+        priority: medium
+        description: "Building cost models for architecture proposals, TCO analysis, pricing calculator mastery, and presenting cost trade-offs to stakeholders"
+        resources:
+          - title: "AWS Pricing Calculator"
+            url: "https://calculator.aws/"
+            type: documentation
+            free: true
+          - title: "Azure Pricing Calculator"
+            url: "https://azure.microsoft.com/en-us/pricing/calculator/"
+            type: documentation
+            free: true
+
+  - id: migration-modernization
+    name: "Migration & Modernization"
+    description: "Strategies for moving workloads to cloud and modernizing existing applications"
+    topics:
+      - id: migration-strategies
+        name: "The 7 R's of Migration"
+        estimated_hours: 6
+        priority: high
+        description: "Rehost, replatform, repurchase, refactor, retire, retain, relocate — when to use each strategy, decision frameworks, and migration factory patterns"
+        resources:
+          - title: "AWS Migration Strategies"
+            url: "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+            type: documentation
+            free: true
+          - title: "Azure Cloud Adoption Framework - Migrate"
+            url: "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/migrate/"
+            type: documentation
+            free: true
+
+      - id: database-migration
+        name: "Database Migration and Modernization"
+        estimated_hours: 6
+        priority: medium
+        description: "DMS, Schema Conversion Tool, Aurora migration, managed database selection, NoSQL vs SQL trade-offs, and data replication strategies"
+        resources:
+          - title: "AWS Database Migration Service"
+            url: "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html"
+            type: documentation
+            free: true
+
+      - id: app-modernization
+        name: "Application Modernization Patterns"
+        estimated_hours: 6
+        priority: medium
+        description: "Strangler fig, CQRS, saga patterns, domain-driven design, breaking monoliths, and API-first design"
+        resources:
+          - title: "Microservices on AWS"
+            url: "https://docs.aws.amazon.com/whitepapers/latest/microservices-on-aws/microservices-on-aws.html"
+            type: documentation
+            free: true
+
+  - id: interview-prep
+    name: "Interview Preparation"
+    description: "Structured preparation for solutions architect interviews"
+    topics:
+      - id: system-design-practice
+        name: "System Design Interview Practice"
+        estimated_hours: 12
+        priority: high
+        description: "Practice designing systems end-to-end: requirements gathering, component selection, trade-off analysis, scaling strategy, and cost estimation"
+        resources:
+          - title: "System Design Primer (GitHub)"
+            url: "https://github.com/donnemartin/system-design-primer"
+            type: article
+            free: true
+
+      - id: whiteboard-architecture
+        name: "Whiteboard Architecture Sessions"
+        estimated_hours: 8
+        priority: high
+        description: "Practice drawing and explaining architectures clearly: start with requirements, show data flow, identify single points of failure, and discuss evolution over time"
+
+      - id: sa-behavioral-prep
+        name: "Behavioral and Leadership Prep"
+        estimated_hours: 6
+        priority: medium
+        description: "Prepare stories about customer-facing work, technical trade-offs, and influencing without authority"
+        quiz_bank: "interview-behavioral"
+
+certifications_suggested:
+  - name: "AWS Solutions Architect - Professional"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-solutions-architect-professional/"
+    priority: high
+    estimated_prep_hours: 80
+  - name: "Google Cloud Professional Cloud Architect"
+    provider: "Google Cloud"
+    url: "https://cloud.google.com/learn/certification/cloud-architect"
+    priority: medium
+    estimated_prep_hours: 60
+  - name: "Azure Solutions Architect Expert"
+    provider: "Microsoft"
+    url: "https://learn.microsoft.com/en-us/credentials/certifications/azure-solutions-architect/"
+    priority: medium
+    estimated_prep_hours: 60
+  - name: "HashiCorp Certified: Terraform Associate"
+    provider: "HashiCorp"
+    url: "https://www.hashicorp.com/certification/terraform-associate"
+    priority: low
+    estimated_prep_hours: 30
+
+interview_questions:
+  technical:
+    - "Design a globally distributed e-commerce platform that handles 100,000 requests per second with 99.99% availability. Walk through your architecture decisions."
+    - "A customer wants to migrate 500 VMs from on-premises to cloud in 6 months. How would you plan and execute this migration?"
+    - "Explain the trade-offs between using a managed Kubernetes service versus a serverless container platform. When would you recommend each?"
+    - "How would you design a data lake architecture that supports both real-time analytics and batch processing while maintaining data governance?"
+    - "A company has three separate AWS accounts with overlapping VPC CIDR ranges. They need to connect all workloads. Walk me through the solution."
+    - "Design a disaster recovery architecture with an RPO of 1 hour and RTO of 15 minutes for a multi-tier application. What are the cost implications?"
+    - "How would you approach reducing a customer's cloud bill by 30% without impacting performance? Walk through your methodology."
+    - "Explain how you would implement a zero-trust network architecture in a multi-cloud environment."
+  leadership:
+    - "Tell me about a time you convinced a customer to adopt a different technical approach than what they originally wanted."
+    - "How do you handle a situation where the engineering team disagrees with the architecture you proposed?"
+    - "Describe a project where you had to balance technical debt against feature delivery. How did you communicate trade-offs to stakeholders?"
+    - "How do you stay current across multiple cloud platforms and evaluate when to recommend one over another?"

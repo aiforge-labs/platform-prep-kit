@@ -1,0 +1,344 @@
+name: "Cloud Compliance Engineer"
+description: "Preparation plan for a Cloud Compliance Engineer role — automating cloud security posture, authoring policy-as-code, implementing CIS benchmarks, and building continuous compliance pipelines"
+version: 1
+suggested_timeline: "8-10 weeks"
+
+bridge_from:
+  cloud_engineering:
+    strengths:
+      - "Cloud resource provisioning, IAM, and networking"
+      - "Managed service configuration and cloud monitoring"
+      - "Infrastructure as Code basics"
+    gaps:
+      - "Compliance frameworks: CIS, SOC 2, PCI-DSS, ISO 27001"
+      - "Policy-as-code: OPA/Rego, Sentinel, cloud-native policies"
+      - "Automated evidence collection and audit workflows"
+      - "Continuous compliance monitoring and remediation"
+    recommended_start: "compliance-frameworks"
+  security_engineering:
+    strengths:
+      - "Security controls design and vulnerability management"
+      - "Risk assessment and threat modeling"
+      - "Security monitoring and incident response"
+    gaps:
+      - "Cloud-native compliance automation tools"
+      - "IaC scanning and policy enforcement pipelines"
+      - "Audit evidence collection automation"
+      - "Multi-cloud compliance posture management"
+    recommended_start: "policy-as-code-track"
+  audit_compliance:
+    strengths:
+      - "Compliance framework knowledge (SOC 2, ISO 27001, PCI-DSS)"
+      - "Control design, testing, and documentation"
+      - "Audit evidence collection and examiner communication"
+    gaps:
+      - "Cloud-native infrastructure and service configuration"
+      - "Automated compliance tooling and CSPM platforms"
+      - "IaC and GitOps workflows for compliance enforcement"
+      - "API-driven evidence collection and reporting"
+    recommended_start: "cspm-fundamentals-track"
+  devops_sre:
+    strengths:
+      - "CI/CD pipelines and automation tooling"
+      - "IaC and configuration management"
+      - "Monitoring and alerting"
+    gaps:
+      - "Compliance frameworks and control mapping"
+      - "Policy-as-code syntax and governance integration"
+      - "Audit documentation and examiner communication"
+      - "Risk-based prioritization of compliance findings"
+    recommended_start: "policy-as-code-track"
+
+tracks:
+  - id: compliance-frameworks
+    name: "Compliance Frameworks"
+    description: "Understanding the major compliance frameworks that drive cloud security requirements"
+    topics:
+      - id: cis-benchmarks
+        name: "CIS Benchmarks"
+        estimated_hours: 8
+        priority: high
+        description: "CIS Benchmark structure: profile levels (L1 = minimum baseline, L2 = defense-in-depth), recommendation categories, scoring. CIS AWS Foundations Benchmark key controls: IAM, logging, monitoring, networking. CIS Azure, GCP, and Kubernetes benchmarks. How CIS maps to other frameworks (NIST CSF, SOC 2). Automated CIS assessment tools: AWS Security Hub, Scout Suite, Prowler. Remediation workflows for CIS findings"
+        resources:
+          - title: "CIS Benchmarks — Free Downloads"
+            url: "https://www.cisecurity.org/cis-benchmarks/"
+            type: documentation
+            free: true
+          - title: "Prowler — AWS Security Tool"
+            url: "https://docs.prowler.com/"
+            type: documentation
+            free: true
+          - title: "AWS Security Hub — CIS AWS Foundations Standard"
+            url: "https://docs.aws.amazon.com/securityhub/latest/userguide/cis-aws-foundations-benchmark.html"
+            type: documentation
+            free: true
+
+      - id: soc2-framework
+        name: "SOC 2 Type II"
+        estimated_hours: 7
+        priority: high
+        description: "Trust Service Criteria (TSC): Security, Availability, Processing Integrity, Confidentiality, Privacy. Common Criteria (CC): logical and physical access, system operations, change management, risk mitigation. Type I vs Type II distinction. Control design for cloud environments: automated vs manual controls. Evidence collection: log exports, configuration snapshots, access reviews. Preparing for a SOC 2 audit with cloud-native controls. Continuous compliance vs point-in-time assessment"
+        resources:
+          - title: "AICPA — SOC 2 Trust Service Criteria"
+            url: "https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria"
+            type: documentation
+            free: true
+          - title: "Vanta — SOC 2 Guide"
+            url: "https://www.vanta.com/resources/soc-2-compliance"
+            type: article
+            free: true
+
+      - id: pci-dss
+        name: "PCI-DSS"
+        estimated_hours: 6
+        priority: medium
+        description: "PCI-DSS v4.0 requirements: cardholder data environment (CDE) scoping, network segmentation, encryption requirements, access control, monitoring. Cloud-specific PCI guidance: shared responsibility in cloud, tokenization vs encryption, cloud storage of cardholder data. Automated PCI scanning: ASV scans, internal vulnerability scanning. Reducing CDE scope: tokenization, point-to-point encryption. PCI compliance in Kubernetes"
+        resources:
+          - title: "PCI Security Standards Council — PCI DSS v4.0"
+            url: "https://www.pcisecuritystandards.org/document_library/"
+            type: documentation
+            free: true
+
+      - id: iso27001-and-nist-csf
+        name: "ISO 27001 & NIST CSF"
+        estimated_hours: 6
+        priority: medium
+        description: "ISO 27001:2022 structure: Annex A controls, ISMS scope, risk assessment and treatment. Mapping ISO 27001 to cloud environments: cloud-specific controls in Annex A. NIST Cybersecurity Framework 2.0: GOVERN, IDENTIFY, PROTECT, DETECT, RESPOND, RECOVER functions. NIST CSF profiles and tiers. Mapping controls across frameworks: ISO 27001 ↔ NIST CSF ↔ SOC 2 ↔ CIS. Using cross-mapping to reduce audit duplication"
+        resources:
+          - title: "NIST Cybersecurity Framework 2.0"
+            url: "https://www.nist.gov/cyberframework"
+            type: documentation
+            free: true
+          - title: "ISO 27001 Overview — IT Governance"
+            url: "https://www.itgovernance.co.uk/iso27001"
+            type: article
+            free: true
+
+  - id: policy-as-code-track
+    name: "Policy-as-Code"
+    description: "Encoding compliance requirements as executable policies"
+    topics:
+      - id: opa-rego-compliance
+        name: "OPA/Rego for Compliance"
+        estimated_hours: 8
+        priority: high
+        description: "OPA architecture and use cases: Kubernetes admission control, Terraform plan validation, API authorization. Rego language: rules, sets, objects, comprehensions, built-in functions. Writing compliance policies: deny rules for CIS controls, data-driven policies for allow-lists. Testing Rego: opa test framework, writing thorough test suites. Conftest for testing Terraform plans, Kubernetes manifests, and Dockerfiles. OPA bundle distribution and policy lifecycle management"
+        resources:
+          - title: "OPA Documentation"
+            url: "https://www.openpolicyagent.org/docs/latest/"
+            type: documentation
+            free: true
+          - title: "Rego Playground"
+            url: "https://play.openpolicyagent.org/"
+            type: documentation
+            free: true
+          - title: "Conftest Documentation"
+            url: "https://www.conftest.dev/"
+            type: documentation
+            free: true
+
+      - id: cloud-native-policies
+        name: "Cloud-Native Policy Controls"
+        estimated_hours: 7
+        priority: high
+        description: "AWS Service Control Policies: guardrails at the organization level. AWS Config Rules: managed vs custom Lambda rules for continuous configuration assessment. AWS Config conformance packs: grouped rules for compliance frameworks (CIS, PCI, HIPAA). Azure Policy: built-in definitions, custom policies, initiatives (policy sets), and remediation tasks. Azure Blueprints for environment governance. GCP Organization Policy constraints and custom constraints. Cross-cloud policy management and normalization"
+        resources:
+          - title: "AWS Config Conformance Packs"
+            url: "https://docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html"
+            type: documentation
+            free: true
+          - title: "Azure Policy Documentation"
+            url: "https://learn.microsoft.com/en-us/azure/governance/policy/overview"
+            type: documentation
+            free: true
+          - title: "GCP Organization Policy"
+            url: "https://cloud.google.com/resource-manager/docs/organization-policy/overview"
+            type: documentation
+            free: true
+
+      - id: iac-compliance-scanning
+        name: "IaC Compliance Scanning in CI/CD"
+        estimated_hours: 6
+        priority: high
+        description: "Checkov: scanning Terraform, CloudFormation, Kubernetes, Dockerfiles, and Helm charts. Writing custom Checkov checks in Python. tfsec for Terraform-specific compliance. KICS (Keeping Infrastructure as Code Secure) for multi-platform scanning. Integrating IaC scanning as CI gates: pass/fail thresholds, severity filtering. Pre-commit hooks for developer-local scanning. Reporting findings to security dashboards"
+        resources:
+          - title: "Checkov Documentation"
+            url: "https://www.checkov.io/"
+            type: documentation
+            free: true
+          - title: "KICS Documentation"
+            url: "https://docs.kics.io/"
+            type: documentation
+            free: true
+
+  - id: cspm-fundamentals-track
+    name: "Cloud Security Posture Management"
+    description: "Continuous visibility and remediation of cloud misconfigurations"
+    topics:
+      - id: cspm-tools
+        name: "CSPM Tools & Platforms"
+        estimated_hours: 6
+        priority: high
+        description: "CSPM concepts: continuous discovery, misconfiguration detection, compliance scoring, and prioritization. Native CSPM: AWS Security Hub, Azure Defender for Cloud, GCP Security Command Center. Open-source CSPM: Prowler (AWS-focused), ScoutSuite (multi-cloud). Commercial CSPM platforms: Wiz, Orca, Lacework, Prisma Cloud (evaluation criteria only). CSPM vs CWPP (Cloud Workload Protection Platform). Risk prioritization: CVE severity + exploitability + exposure = priority"
+        resources:
+          - title: "AWS Security Hub Documentation"
+            url: "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+            type: documentation
+            free: true
+          - title: "ScoutSuite Documentation"
+            url: "https://github.com/nccgroup/ScoutSuite"
+            type: documentation
+            free: true
+          - title: "Azure Defender for Cloud"
+            url: "https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-cloud-introduction"
+            type: documentation
+            free: true
+
+      - id: drift-detection-remediation
+        name: "Drift Detection & Automated Remediation"
+        estimated_hours: 5
+        priority: medium
+        description: "Configuration drift: resources modified outside IaC. Scheduled Terraform plans as drift detection. AWS Config remediation actions: SSM Automation documents triggered by non-compliant rules. Event-driven remediation: CloudTrail event → EventBridge rule → Lambda remediation. Guardrails patterns: detective vs preventive controls. Remediation risk: when automated remediation can break things and how to gate it safely"
+        resources:
+          - title: "AWS Config Remediation Actions"
+            url: "https://docs.aws.amazon.com/config/latest/developerguide/remediation.html"
+            type: documentation
+            free: true
+
+  - id: audit-automation
+    name: "Audit Automation & Evidence Collection"
+    description: "Replacing manual audit work with automated, continuous evidence pipelines"
+    topics:
+      - id: evidence-collection
+        name: "Automated Evidence Collection"
+        estimated_hours: 6
+        priority: high
+        description: "What auditors actually need: configuration state, access logs, change records, and testing evidence. Building evidence pipelines: cloud APIs → storage → audit portal. AWS Config snapshots as configuration evidence. CloudTrail logs as change and access evidence. Access review automation: scheduled reports of IAM users, roles, and permissions. Certificate and vulnerability scan evidence. Structuring evidence for SOC 2, ISO 27001, and PCI audits"
+        resources:
+          - title: "AWS Config — Configuration History"
+            url: "https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html#config-history"
+            type: documentation
+            free: true
+
+      - id: compliance-reporting
+        name: "Compliance Reporting & Dashboards"
+        estimated_hours: 5
+        priority: medium
+        description: "Building compliance dashboards from CSPM findings. Compliance score calculations: controls passing / total controls. Trend reporting: compliance posture over time. Executive-level reporting vs technical reporting. Integrating findings from multiple tools into a single compliance view. Jira/ServiceNow integration for compliance remediation tracking. Reporting cadence: real-time dashboard, weekly trend report, quarterly board report"
+        resources:
+          - title: "AWS Security Hub — Insights and Dashboards"
+            url: "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-insights.html"
+            type: documentation
+            free: true
+
+  - id: governance-at-scale
+    name: "Governance at Scale"
+    description: "Managing compliance across multi-account, multi-cloud, and multi-region environments"
+    topics:
+      - id: multi-account-governance
+        name: "Multi-Account & Landing Zone Governance"
+        estimated_hours: 7
+        priority: high
+        description: "AWS Organizations: organizational units, SCPs, centralized logging. AWS Control Tower: guardrails, landing zone, Account Factory. Account vending machine pattern. Centralized security tooling: GuardDuty delegated admin, Security Hub aggregation, CloudTrail organization trail. Azure Management Groups and Policy inheritance. GCP resource hierarchy and folder-level policy application. Cross-account logging and compliance aggregation"
+        resources:
+          - title: "AWS Control Tower Documentation"
+            url: "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html"
+            type: documentation
+            free: true
+          - title: "AWS Landing Zone Accelerator"
+            url: "https://aws.amazon.com/solutions/implementations/landing-zone-accelerator-on-aws/"
+            type: documentation
+            free: true
+
+      - id: fedramp-basics
+        name: "FedRAMP Basics (Federal and Regulated Industries)"
+        estimated_hours: 4
+        priority: low
+        description: "FedRAMP authorization tiers: Low, Moderate, High. NIST SP 800-53 control families. FedRAMP Marketplace: authorized cloud services. Impact level definitions and data classification. FedRAMP vs StateRAMP. Cloud provider shared responsibility for FedRAMP (AWS GovCloud, Azure Government). Who needs FedRAMP and why"
+        resources:
+          - title: "FedRAMP Official Site"
+            url: "https://www.fedramp.gov/"
+            type: documentation
+            free: true
+
+  - id: interview-preparation
+    name: "Interview Preparation"
+    description: "Targeted preparation for Cloud Compliance Engineer interviews"
+    topics:
+      - id: compliance-technical-prep
+        name: "Technical Interview Practice"
+        estimated_hours: 10
+        priority: high
+        description: "Practice: writing OPA/Rego policies for specific compliance requirements, designing a multi-account compliance architecture, explaining SOC 2 controls for a cloud-native environment, walking through a compliance remediation pipeline"
+        quiz_bank: "cloud-compliance"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: compliance-scenario-prep
+        name: "Scenario-Based Practice"
+        estimated_hours: 5
+        priority: high
+        description: "Practice: responding to a critical CIS finding in production, explaining compliance posture to a non-technical executive, designing a continuous compliance pipeline from scratch, handling a SOC 2 audit preparation timeline"
+
+certifications_suggested:
+  - name: "Certified Cloud Security Professional (CCSP)"
+    provider: "ISC2"
+    url: "https://www.isc2.org/certifications/ccsp"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "AWS Certified Security – Specialty"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-security-specialty/"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "ISACA CISA — Certified Information Systems Auditor"
+    provider: "ISACA"
+    url: "https://www.isaca.org/credentialing/cisa"
+    priority: medium
+    estimated_prep_hours: 80
+  - name: "ISACA CISM — Certified Information Security Manager"
+    provider: "ISACA"
+    url: "https://www.isaca.org/credentialing/cism"
+    priority: medium
+    estimated_prep_hours: 80
+  - name: "CompTIA Security+"
+    provider: "CompTIA"
+    url: "https://www.comptia.org/certifications/security"
+    priority: low
+    estimated_prep_hours: 40
+
+interview_questions:
+  technical:
+    - "Design a continuous compliance pipeline for a multi-account AWS environment that must maintain SOC 2 compliance. Cover tooling, evidence collection, and remediation workflows."
+    - "Write an OPA Rego policy that denies any S3 bucket creation without server-side encryption enabled and public access blocked."
+    - "What is the difference between a preventive control and a detective control? Give three examples of each in a cloud environment."
+    - "How would you design AWS Config rules for PCI-DSS compliance? Which rules are available managed vs custom-built?"
+    - "Explain how AWS Service Control Policies work. What is a common SCP you would implement for all accounts in an organization?"
+    - "A critical CIS Benchmark finding — unrestricted SSH access from 0.0.0.0/0 — is found in 15 production accounts. Walk me through your remediation approach."
+    - "How do you handle false positives in automated compliance scanning without disabling important rules entirely?"
+    - "Design a compliance evidence collection system for a SOC 2 audit that minimizes manual effort during audit preparation."
+    - "Explain the difference between AWS Security Hub, AWS Config, and AWS GuardDuty. When would you use each?"
+    - "How would you build a compliance posture dashboard that shows trend over time, not just current state?"
+  leadership:
+    - "How do you prioritize compliance remediation when you have 500 open findings and limited engineering resources?"
+    - "How do you explain the business value of automated compliance tooling to an executive who sees it as overhead?"
+    - "Tell me about a time you prevented a compliance failure from becoming an audit finding. What detection mechanism caught it?"
+    - "How would you drive compliance adoption across engineering teams that see compliance as someone else's problem?"
+    - "How do you balance compliance requirements that seem at odds with developer velocity?"
+
+content_suggestions:
+  - type: blog_post
+    title: "Building a Continuous SOC 2 Compliance Pipeline on AWS"
+    description: "Practical walkthrough of building an automated SOC 2 compliance pipeline: AWS Config rules mapped to Trust Service Criteria, automated evidence export to S3, CloudTrail as change evidence, and a compliance dashboard in Security Hub. Include the IaC to deploy the entire pipeline."
+    audience: "Cloud engineers and compliance teams preparing for SOC 2"
+  - type: blog_post
+    title: "Writing OPA Policies for Terraform: A Practical Guide"
+    description: "Tutorial on using Conftest + OPA to validate Terraform plans against compliance policies before apply. Include five worked policy examples (S3 encryption, security group rules, public IP restrictions, encryption key requirements), test writing, and CI integration."
+    audience: "Platform engineers and cloud compliance engineers"
+  - type: project
+    title: "Multi-Framework Compliance Policy Library"
+    description: "Build and publish an open-source library of OPA/Rego policies mapped to CIS AWS Foundations Benchmark, SOC 2 CC controls, and PCI-DSS requirements. Include Conftest integration, a framework cross-mapping document, and CI workflows. Community can contribute policies for additional frameworks."
+    audience: "Cloud compliance engineers needing policy-as-code starting points"

@@ -1,0 +1,104 @@
+role: site-reliability-engineer
+version: 1
+
+projects:
+  - id: sli-slo-dashboard
+    title: "SLI/SLO Monitoring Dashboard"
+    description: >
+      Define SLIs and SLOs for a sample web service, build a data
+      pipeline that computes error budgets from synthetic metrics,
+      and display the results in a dashboard. Demonstrate alerting
+      logic that fires when error budget burn rate exceeds thresholds.
+    track_id: sre-fundamentals
+    topics:
+      - sli-slo-sla
+      - monitoring-alerting
+    difficulty: intermediate
+    estimated_hours: 10
+    skills_demonstrated:
+      - "SLI/SLO definition and measurement"
+      - "Error budget calculation"
+      - "Burn rate alerting"
+      - "Metrics pipeline design"
+      - "Dashboard visualization"
+    rubric:
+      - description: "At least 2 SLIs defined (e.g., availability + latency)"
+      - description: "SLO targets documented with rationale"
+      - description: "Error budget computed from metrics data"
+      - description: "Burn rate calculation implemented"
+      - description: "Alert fires when burn rate exceeds threshold"
+      - description: "Dashboard shows SLI trends, error budget remaining, and alerts"
+      - description: "Uses synthetic or sample metrics (no real infra needed)"
+      - description: "README explains SLI/SLO choices and alert tuning"
+    starter_files:
+      README.md: |
+        # SLI/SLO Monitoring Dashboard
+
+        ## Goal
+        Demonstrate SRE observability practices with SLIs, SLOs, and error budgets.
+
+        ## SLO Definitions
+        <!-- Define your SLIs, targets, and windows -->
+
+        ## Quick Start
+        ```bash
+        pip install -r requirements.txt
+        python generate_metrics.py
+        python dashboard.py
+        ```
+      requirements.txt: |
+        # Add your dependencies
+      generate_metrics.py: |
+        """Generate synthetic request metrics for the demo."""
+      compute_slo.py: |
+        """Compute SLI values, error budgets, and burn rates."""
+      dashboard.py: |
+        """Visualize SLO status and error budget."""
+    resources:
+      - "Google SRE Book — SLOs: https://sre.google/sre-book/service-level-objectives/"
+      - "Sloth SLO generator: https://github.com/slok/sloth"
+
+  - id: incident-response-runbook
+    title: "Automated Incident Response Runbook"
+    description: >
+      Build a runbook automation tool that detects a simulated incident
+      (high error rate), executes diagnostic steps (check logs, check
+      dependencies, check recent deploys), and produces a structured
+      incident report with timeline and remediation suggestions.
+    track_id: sre-fundamentals
+    topics:
+      - incident-management
+      - toil-reduction
+    difficulty: starter
+    estimated_hours: 8
+    skills_demonstrated:
+      - "Incident response process"
+      - "Runbook automation"
+      - "Diagnostic scripting"
+      - "Incident report generation"
+    rubric:
+      - description: "Simulated incident trigger (e.g., error rate spike)"
+      - description: "At least 3 automated diagnostic steps"
+      - description: "Diagnostic results collected into structured output"
+      - description: "Incident report generated with timeline"
+      - description: "Remediation suggestions included"
+      - description: "README documents the incident response process"
+    starter_files:
+      README.md: |
+        # Automated Incident Response Runbook
+
+        ## Goal
+        Demonstrate incident response automation.
+
+        ## Usage
+        ```bash
+        python simulate_incident.py
+        python respond.py
+        ```
+      simulate_incident.py: |
+        """Simulate an incident (error rate spike)."""
+      respond.py: |
+        """Execute runbook: diagnose, collect evidence, generate report."""
+    resources:
+      - "Google SRE Book — Incident Response: https://sre.google/sre-book/managing-incidents/"
+      - "PagerDuty Incident Response: https://response.pagerduty.com/"

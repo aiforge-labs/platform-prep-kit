@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% set active_page = "quiz" %}
+{% block title %}Quiz History - Career Prep Agent{% endblock %}
+
+{% block content %}
+<h2>Quiz History</h2>
+
+{% if history %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Topic</th>
+            <th>Score</th>
+            <th>Percentage</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for h in history %}
+        <tr>
+            <td>{{ h.timestamp[:10] if h.timestamp else '—' }}</td>
+            <td>{{ h.topic }}</td>
+            <td>{{ h.score }}/{{ h.total }}</td>
+            <td>
+                <span class="{% if h.percentage >= 70 %}text-success{% elif h.percentage >= 50 %}text-warning{% else %}text-error{% endif %}">
+                    {{ "%.0f"|format(h.percentage) }}%
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+    <p>No quizzes taken yet.</p>
+    <a href="/quiz" class="btn btn-outline">Take a Quiz</a>
+</div>
+{% endif %}
+{% endblock %}

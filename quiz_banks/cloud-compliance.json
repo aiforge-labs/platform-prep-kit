@@ -1,0 +1,217 @@
+{
+  "topic_id": "cloud-compliance",
+  "title": "Cloud Compliance Engineering",
+  "version": 1,
+  "questions": [
+    {
+      "id": "cc-01",
+      "question": "What is the difference between a CIS Benchmark Level 1 and Level 2 control?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Level 1 is for small companies; Level 2 is for enterprises",
+        "B) Level 1 represents the minimum security baseline with no performance or operational impact. Level 2 adds defense-in-depth controls that may reduce functionality or increase operational overhead",
+        "C) Level 1 is automatically enforced; Level 2 requires manual implementation",
+        "D) Level 1 covers IAM; Level 2 covers networking"
+      ],
+      "answer": "B",
+      "explanation": "CIS levels are about security-to-operational-impact trade-off. L1: essential security with no impact to normal operations — should be implemented by all. L2: additional hardening for sensitive environments where security outweighs convenience (e.g., disabling all unused services may break some workflows). Most organizations should achieve L1 first; L2 is for regulated industries or high-security environments. L2 builds on L1 — implementing L2 without L1 is not the intent.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cc-02",
+      "question": "What are the five Trust Service Criteria (TSC) in SOC 2?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Confidentiality, Integrity, Availability, Authentication, Non-repudiation",
+        "B) Security, Availability, Processing Integrity, Confidentiality, Privacy",
+        "C) Access Control, Encryption, Monitoring, Incident Response, Change Management",
+        "D) GDPR, HIPAA, PCI-DSS, ISO 27001, NIST CSF"
+      ],
+      "answer": "B",
+      "explanation": "SOC 2 TSC: Security (mandatory — all SOC 2 reports include this), Availability (uptime SLAs), Processing Integrity (accurate, complete, timely processing), Confidentiality (protecting confidential information), Privacy (handling personal information). Security is required; the others are selected based on the service's nature. Most SaaS companies add Availability. Companies handling personal data add Privacy. Security covers Common Criteria (CC) logical/physical access, change management, risk mitigation.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cc-03",
+      "question": "What is the difference between a preventive control and a detective control in cloud compliance?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Preventive controls are more expensive; detective controls are cheaper",
+        "B) Preventive controls block non-compliant actions before they occur (SCP denying unencrypted S3 creation). Detective controls identify non-compliant state after it exists (AWS Config rule alerting on existing unencrypted S3 buckets)",
+        "C) Preventive controls apply to infrastructure; detective controls apply to applications",
+        "D) They are the same concept described from different perspectives"
+      ],
+      "answer": "B",
+      "explanation": "Defense-in-depth uses both: preventive controls stop bad configurations from being created (SCP, OPA Gatekeeper admission controller, IaC validation), but can be bypassed or may have gaps. Detective controls (AWS Config, CSPM scanning) catch what slips through. Example: SCP prevents creating S3 buckets without encryption (preventive). AWS Config rule alerts if an existing bucket loses encryption settings (detective). A complete compliance program needs both layers — neither alone is sufficient.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cc-04",
+      "question": "An AWS Config rule finds 30 non-compliant resources across 5 accounts. How do you design the remediation workflow?",
+      "type": "open",
+      "key_points": [
+        "Triage: classify findings by severity (CIS L1 vs L2, risk level). Group by resource type and finding type — 20 unencrypted EBS volumes may all be fixable with the same automated remediation",
+        "Automated remediation: for well-understood, low-risk remediations (enable S3 encryption, delete open security group rules), use AWS Config remediation actions backed by SSM Automation documents. Test the automation in a non-prod account first",
+        "Change management gate: even automated remediations need a change review for production. Create tickets, get approval, then trigger remediation during maintenance window",
+        "Manual remediation: for complex findings (overly permissive IAM policies), remediation requires engineering judgment — assign to the resource owner team with SLA",
+        "Tracking: integrate with JIRA or ServiceNow. Each finding creates a ticket with resource ID, finding description, remediation steps, owner, and due date. Dashboard showing open vs closed over time",
+        "Verification: after remediation, AWS Config reassesses automatically. Verify findings move to COMPLIANT state",
+        "Suppress accepted risks: findings that are intentional exceptions (e.g., public S3 bucket for website hosting) should be suppressed with a documented justification and expiry date"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "cc-05",
+      "question": "What is a conformance pack in AWS Config?",
+      "type": "multiple_choice",
+      "options": [
+        "A) A bundle of AWS CloudFormation templates for deploying security resources",
+        "B) A collection of AWS Config rules and remediation actions that together address a compliance framework (CIS, PCI-DSS, HIPAA). Deployable as a single unit across an organization via AWS Organizations",
+        "C) A set of IAM policies for compliance team members",
+        "D) An audit report generated automatically by AWS Config"
+      ],
+      "answer": "B",
+      "explanation": "Conformance packs bundle related Config rules for a framework, deploying them consistently across accounts. AWS provides managed conformance packs: Operational-Best-Practices-for-CIS-AWS-v1.4-Level1, Operational-Best-Practices-for-PCI-DSS, and others. Organizations can also create custom conformance packs. Benefits: single deployment for 30+ rules instead of deploying each individually, consistent compliance baseline across all accounts, framework-level compliance score reporting.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "cc-06",
+      "question": "Write the Rego rule logic (in plain English description) for denying any AWS security group that has port 22 (SSH) open to 0.0.0.0/0.",
+      "type": "open",
+      "key_points": [
+        "Input: Terraform plan JSON containing resource_changes",
+        "Filter step 1: find all resources in resource_changes where type == 'aws_security_group' OR type == 'aws_security_group_rule'",
+        "Filter step 2: for security groups, look in change.after.ingress (array of ingress rules)",
+        "Condition: an ingress rule is violating if: (from_port <= 22) AND (to_port >= 22) AND ('0.0.0.0/0' is in cidr_blocks)",
+        "Deny message: 'Security group [address] has SSH (port 22) open to 0.0.0.0/0 — restrict to a specific CIDR range'",
+        "Also check: '::/0' (IPv6 all addresses) for the same port — SSH should not be open to the internet in IPv6 either",
+        "Edge cases: from_port=0, to_port=65535 (all traffic) also covers port 22 — the condition must use range comparison, not equality"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "cc-07",
+      "question": "How does AWS Security Hub differ from AWS Config?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Security Hub is for applications; Config is for infrastructure",
+        "B) AWS Config continuously records configuration changes and evaluates rules against resource configurations. AWS Security Hub aggregates, correlates, and prioritizes security findings from Config, GuardDuty, Inspector, Macie, and third-party tools into a single pane of glass",
+        "C) Config requires manual remediation; Security Hub automatically remediates findings",
+        "D) They are identical services with different pricing models"
+      ],
+      "answer": "B",
+      "explanation": "Config's job: track 'what did this resource look like?' and 'does it comply with rule X?'. Security Hub's job: aggregate findings from multiple security services (Config is one source), normalize them to ASFF (Amazon Security Finding Format), enable cross-service correlation, provide compliance standards dashboards (CIS, PCI, NIST), and support workflow management (assign to owners, suppress false positives). Use both: Config generates findings, Security Hub surfaces and manages them.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "cc-08",
+      "question": "What is the difference between SOC 2 Type I and Type II?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Type I covers 3 trust criteria; Type II covers all 5",
+        "B) Type I assesses whether controls are suitably designed at a point in time. Type II assesses whether controls were suitably designed AND operating effectively over a period (typically 6-12 months)",
+        "C) Type I is for startups; Type II is for enterprises",
+        "D) Type I covers security only; Type II covers all trust criteria"
+      ],
+      "answer": "B",
+      "explanation": "Type I: snapshot in time — auditor reviews whether your controls are designed correctly on the audit date. Can be obtained faster (2-3 months). Less trusted by enterprise customers. Type II: operating effectiveness over a period — auditor tests whether controls actually worked consistently over 6-12 months by examining evidence (logs, access reviews, change records, incident tickets). Enterprise customers usually require Type II. Type I → Type II: operate for 6 months with good evidence collection, then get Type II audit. Type II must be renewed annually.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cc-09",
+      "question": "How does the CDE (Cardholder Data Environment) scoping concept in PCI-DSS help reduce compliance burden?",
+      "type": "multiple_choice",
+      "options": [
+        "A) The CDE defines which employees can access cardholder data",
+        "B) By reducing the scope of systems subject to PCI-DSS requirements through network segmentation, tokenization, and encryption — systems outside the CDE are exempt from most PCI controls, reducing the total compliance effort",
+        "C) The CDE determines which PCI-DSS requirements apply based on transaction volume",
+        "D) CDE scoping allows companies to self-certify rather than use a QSA"
+      ],
+      "answer": "B",
+      "explanation": "Every system in scope for PCI-DSS adds compliance work. Strategies to reduce scope: tokenization (replace card numbers with tokens — only the tokenization vault is in-scope), network segmentation (CDE is isolated from rest of infrastructure — systems outside the segmented CDE are not in-scope), using PCI-compliant payment processors (offload cardholder data to a third party). Example: replace raw card storage with Stripe tokens — now Stripe's infrastructure is in scope, yours largely is not. This is why segmentation architecture matters so much in PCI environments.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "cc-10",
+      "question": "What is an AWS Organization Trail and why is it important for compliance?",
+      "type": "multiple_choice",
+      "options": [
+        "A) A record of all AWS Organizations API calls only",
+        "B) A CloudTrail configuration that captures API activity from ALL accounts in an AWS Organization into a centralized S3 bucket — members cannot disable or modify it, providing tamper-evident audit logs across the entire organization",
+        "C) A network traffic log for all inter-account communication",
+        "D) An AWS Config rule that audits organization-level settings"
+      ],
+      "answer": "B",
+      "explanation": "Key compliance properties: (1) centralized — all accounts' API activity flows to one S3 bucket in the logging account, (2) tamper-resistant — member accounts cannot disable the org trail or modify its S3 destination (SCP prevents this), (3) complete — captures management events and optionally data events across all services. For SOC 2 and ISO 27001, CloudTrail org trail provides the audit evidence for change management (CC8) and access monitoring (CC6). Enable log integrity validation to detect log tampering.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "cc-11",
+      "question": "Describe how you would build automated evidence collection for a SOC 2 availability criterion (A1).",
+      "type": "open",
+      "key_points": [
+        "A1.1 requires the organization to document system availability commitments and service levels. Evidence: SLA documentation, availability metrics reports from Prometheus/CloudWatch",
+        "A1.2 requires monitoring of system capacity and performance. Evidence: automated export of CloudWatch metrics (CPU, memory, request rate) showing capacity headroom; autoscaling events showing the system responded to load",
+        "A1.3 requires environmental protections (backup power, redundancy). Evidence: for cloud: AWS SLA documentation, multi-AZ configuration evidence (AWS Config rule checking for Multi-AZ RDS), automated backup configuration evidence",
+        "Automation approach: schedule a Lambda function or GitHub Action weekly to: (1) export CloudWatch metrics for the evidence period to S3, (2) run AWS Config query to confirm multi-AZ enabled on all databases, (3) export backup completion reports from AWS Backup",
+        "Audit portal integration: evidence files in S3 are automatically linked in the GRC platform (Vanta, Drata, Secureframe) to the corresponding A1 criteria",
+        "The goal: when the auditor asks for A1 evidence, click export — not spend a week manually collecting screenshots"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "cc-12",
+      "question": "What is Prowler and what are its primary use cases for cloud compliance?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Prowler is a commercial CSPM platform from AWS",
+        "B) Prowler is an open-source security tool for AWS (also GCP/Azure) that performs hundreds of checks against CIS Benchmarks, PCI-DSS, HIPAA, ISO 27001, and other frameworks, generating compliance reports for audits and continuous monitoring",
+        "C) Prowler is a penetration testing tool for AWS IAM policies",
+        "D) Prowler is a cost optimization tool that identifies unused cloud resources"
+      ],
+      "answer": "B",
+      "explanation": "Prowler runs compliance checks against your AWS account and reports findings per control, with remediation guidance. Use cases: (1) pre-audit assessment — run Prowler before a SOC 2 or ISO 27001 audit to find gaps, (2) continuous compliance monitoring in CI/CD, (3) evidence generation for auditors (JSON/CSV reports), (4) security baseline establishment for new accounts. Supports 300+ checks across multiple frameworks. CLI-based, easy to integrate into pipelines. Free and open-source (Apache 2.0).",
+      "difficulty": "easy"
+    },
+    {
+      "id": "cc-13",
+      "question": "What is the principle behind AWS Service Control Policies and why can't even an administrator bypass them?",
+      "type": "open",
+      "key_points": [
+        "SCPs define the maximum permissions available in an account — they are guardrails set by the organization that constrain what any principal in the account can do, including the root user and administrators",
+        "Permission evaluation: effective permissions = (what SCP allows) AND (what IAM allows). Both must allow an action. SCPs don't grant permissions — they only restrict the ceiling",
+        "Why administrators can't bypass: SCPs are evaluated at the AWS Organizations level, above any individual account's IAM. The root account of a member account is still subject to SCPs applied to that account's OU. The only way to override is to modify the SCP from the management account — which only the organization's management account administrators can do",
+        "Example: SCP denies ec2:RunInstances in ap-southeast-1. An account admin grants themselves ec2:RunInstances full access in IAM. They try to launch an instance in ap-southeast-1. Denied — IAM allows it but SCP denies it",
+        "Design principle: use SCPs for organizational non-negotiables (region restriction, service restriction, resource tagging requirements). Use IAM for access control within those guardrails"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "cc-14",
+      "question": "How does NIST CSF 2.0 differ from version 1.1?",
+      "type": "multiple_choice",
+      "options": [
+        "A) CSF 2.0 only covers AI systems; 1.1 covers all cybersecurity",
+        "B) CSF 2.0 adds a 6th function 'GOVERN' to address organizational cybersecurity risk governance, expands scope beyond critical infrastructure to all organizations, and provides improved supply chain risk guidance",
+        "C) CSF 2.0 replaces the five functions with ten new ones",
+        "D) CSF 2.0 is only applicable to federal government agencies"
+      ],
+      "answer": "B",
+      "explanation": "CSF 1.1 had five functions: IDENTIFY, PROTECT, DETECT, RESPOND, RECOVER. CSF 2.0 adds GOVERN as the overarching function that establishes context, priorities, and oversight for the other five — recognizing that cybersecurity is fundamentally a leadership and governance challenge, not just a technical one. CSF 2.0 also: expands scope (no longer 'for critical infrastructure' but 'for all organizations'), strengthens supply chain risk management (GOVERN function addresses third-party risk), provides more implementation examples and quick-start guides.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "cc-15",
+      "question": "What is the FedRAMP authorization process and why does achieving FedRAMP Moderate authorization matter commercially?",
+      "type": "open",
+      "key_points": [
+        "FedRAMP process: (1) Readiness Assessment by a 3PAO (Third-Party Assessment Organization), (2) system security plan documenting all NIST SP 800-53 controls, (3) full security assessment by 3PAO, (4) Agency authorization (sponsor agency grants ATO — Authority to Operate) or Joint Authorization Board (JAB) review for Provisional ATO, (5) continuous monitoring obligations",
+        "NIST 800-53 control count: FedRAMP Low ~125 controls, Moderate ~325 controls, High ~425 controls. Moderate is the most common requirement for SaaS handling federal data",
+        "Commercial significance: any cloud service processing federal government data must be FedRAMP authorized. US federal IT spend is tens of billions per year. FedRAMP authorization gates access to this market — without it, you cannot sell to federal agencies",
+        "Reuse model: once authorized, all federal agencies can review the package in the FedRAMP Marketplace and grant their own ATO more quickly ('use FedRAMP, don't redo the assessment')",
+        "Timeline and cost: typically 12-18 months and $500K-$2M to achieve Moderate authorization — significant investment justified only by material federal sales opportunity"
+      ],
+      "difficulty": "hard"
+    }
+  ]
+}

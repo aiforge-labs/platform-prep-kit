@@ -1,0 +1,5 @@
+{% macro flash_message(message, category="info") %}
+<div class="flash flash-{{ category }}" data-auto-dismiss>
+    {{ message }}
+</div>
+{% endmacro %}

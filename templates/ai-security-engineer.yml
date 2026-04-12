@@ -1,0 +1,345 @@
+name: "AI Security Engineer"
+description: "Preparation plan for an AI Security Engineer role — securing AI/ML systems, red-teaming LLM applications, implementing AI governance frameworks, and building secure AI pipelines"
+version: 1
+suggested_timeline: "8-10 weeks"
+
+bridge_from:
+  security_engineering:
+    strengths:
+      - "Vulnerability assessment and penetration testing methodology"
+      - "Secure architecture design and threat modeling"
+      - "Compliance frameworks and security controls"
+    gaps:
+      - "ML-specific attack surfaces: data poisoning, model evasion, model extraction"
+      - "LLM-specific vulnerabilities: prompt injection, jailbreaking, indirect injection"
+      - "AI governance frameworks: NIST AI RMF, EU AI Act, MITRE ATLAS"
+      - "AI model supply chain security and SBOM for ML"
+    recommended_start: "ai-attack-taxonomy"
+  ml_engineering:
+    strengths:
+      - "ML model lifecycle: training, validation, deployment, monitoring"
+      - "ML pipeline architecture and component interactions"
+      - "Model evaluation and performance metrics"
+    gaps:
+      - "Adversarial robustness and attack resistance evaluation"
+      - "Security review process for ML models pre-production"
+      - "LLM red-teaming methodology and adversarial prompting"
+      - "AI compliance and regulatory requirements"
+    recommended_start: "llm-security"
+  cloud_security:
+    strengths:
+      - "Cloud IAM, network security, and encryption"
+      - "CSPM and cloud compliance monitoring"
+      - "Security monitoring and incident response"
+    gaps:
+      - "AI-specific threat modeling and MITRE ATLAS"
+      - "Model supply chain risks and ML artifact integrity"
+      - "LLM application architecture and attack vectors"
+      - "AI governance implementation and documentation"
+    recommended_start: "ai-attack-taxonomy"
+  penetration_testing:
+    strengths:
+      - "Offensive security techniques and exploitation"
+      - "Vulnerability research and proof-of-concept development"
+      - "Red team methodology and report writing"
+    gaps:
+      - "AI/ML attack taxonomy specific to model-based systems"
+      - "LLM red-teaming tooling and methodology"
+      - "AI governance and defensive architecture design"
+      - "Secure AI system design principles"
+    recommended_start: "llm-red-teaming"
+
+tracks:
+  - id: ai-attack-taxonomy
+    name: "AI Attack Taxonomy"
+    description: "Understanding the full spectrum of attacks against AI and ML systems"
+    topics:
+      - id: adversarial-ml-fundamentals
+        name: "Adversarial ML Fundamentals"
+        estimated_hours: 8
+        priority: high
+        description: "The four primary attack categories: evasion (fooling a deployed model), poisoning (corrupting training data), extraction (stealing the model), and inference (extracting private training data). White-box vs black-box vs transfer attacks. Physical-world adversarial examples. Robustness vs accuracy trade-off. Certified defenses vs empirical defenses. The adversarial ML research landscape"
+        quiz_bank: "ai-security"
+        resources:
+          - title: "NIST AI 100-2 — Adversarial Machine Learning Taxonomy"
+            url: "https://csrc.nist.gov/pubs/ai/100/2/e2023/final"
+            type: documentation
+            free: true
+          - title: "Adversarial Robustness Toolbox (ART)"
+            url: "https://adversarial-robustness-toolbox.readthedocs.io/"
+            type: documentation
+            free: true
+          - title: "CleverHans — Adversarial Examples Library"
+            url: "https://github.com/cleverhans-lab/cleverhans"
+            type: documentation
+            free: true
+
+      - id: mitre-atlas
+        name: "MITRE ATLAS Framework"
+        estimated_hours: 7
+        priority: high
+        description: "ATLAS (Adversarial Threat Landscape for AI Systems): structure, tactic categories, and case studies. Mapping ATLAS to ATT&CK: similarities and where AI threats diverge. Key ATLAS tactics: ML supply chain compromise, crafting adversarial data, ML model access. Navigator tool usage. Building threat models using ATLAS. Case study analysis: real-world AI attacks mapped to ATLAS"
+        quiz_bank: "ai-security"
+        resources:
+          - title: "MITRE ATLAS Official Site"
+            url: "https://atlas.mitre.org/"
+            type: documentation
+            free: true
+          - title: "ATLAS Navigator"
+            url: "https://atlas.mitre.org/navigator"
+            type: documentation
+            free: true
+
+      - id: data-poisoning
+        name: "Data Poisoning Attacks"
+        estimated_hours: 5
+        priority: high
+        description: "Clean-label poisoning: mislabeled training examples. Backdoor attacks: trigger patterns that cause specific misclassification. Trojan attacks in neural networks. Supply chain poisoning: compromising data pipelines or annotation workflows. Poisoning defenses: data sanitization, anomaly detection, certified defenses. Detecting poisoned datasets"
+        resources:
+          - title: "MITRE ATLAS — ML Supply Chain Compromise"
+            url: "https://atlas.mitre.org/techniques/AML.T0010"
+            type: documentation
+            free: true
+          - title: "TrojanZoo — Backdoor Attack Toolbox"
+            url: "https://github.com/ain-soph/trojanzoo"
+            type: documentation
+            free: true
+
+  - id: llm-security
+    name: "LLM Security"
+    description: "Security vulnerabilities specific to large language model applications"
+    topics:
+      - id: owasp-llm-top10
+        name: "OWASP LLM Top 10"
+        estimated_hours: 8
+        priority: high
+        description: "Deep dive into all 10 LLM vulnerabilities: prompt injection (direct and indirect), insecure output handling, training data poisoning, model denial of service, supply chain vulnerabilities, sensitive information disclosure, insecure plugin design, excessive agency, overreliance, and model theft. For each: attack mechanics, real-world examples, and layered mitigations"
+        quiz_bank: "owasp-llm-top10"
+        resources:
+          - title: "OWASP Top 10 for LLM Applications"
+            url: "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+            type: documentation
+            free: true
+          - title: "OWASP LLM Top 10 Knowledge Pack"
+            url: "file://knowledge_packs/owasp-llm-top10.md"
+            type: article
+            free: true
+
+      - id: prompt-injection-deep-dive
+        name: "Prompt Injection Deep Dive"
+        estimated_hours: 6
+        priority: high
+        description: "Direct vs indirect prompt injection mechanics. Prompt injection in RAG systems: malicious content embedded in retrieved documents. Multi-turn injection: building context across conversation turns. Jailbreaking techniques: role-playing, hypothetical framing, token manipulation. Evaluating injection resilience: automated test suites, PromptBench. Defensive architecture: privilege separation, output validation, content filtering, sandboxing tool execution"
+        resources:
+          - title: "Simon Willison — Prompt Injection Explained"
+            url: "https://simonwillison.net/2023/Apr/14/worst-that-can-happen/"
+            type: article
+            free: true
+          - title: "PromptBench — Adversarial Prompt Benchmarks"
+            url: "https://github.com/microsoft/promptbench"
+            type: documentation
+            free: true
+
+  - id: llm-red-teaming
+    name: "LLM Red-Teaming"
+    description: "Offensive testing methodology for LLM-powered applications"
+    topics:
+      - id: red-team-methodology
+        name: "LLM Red-Team Methodology"
+        estimated_hours: 8
+        priority: high
+        description: "Red-teaming vs penetration testing for AI systems. Threat model definition: attacker goals, capabilities, access levels. Attack surface mapping: inputs, tools, retrieved content, system prompts, output channels. Manual red-teaming techniques: role assignment, context manipulation, encoding tricks. Automated red-teaming: Garak, PyRIT. Building adversarial prompt libraries. Scoring and triaging findings: severity classification for AI vulnerabilities. Writing red-team reports for LLM systems"
+        resources:
+          - title: "Microsoft PyRIT — AI Red Teaming Toolkit"
+            url: "https://github.com/Azure/PyRIT"
+            type: documentation
+            free: true
+          - title: "Garak — LLM Vulnerability Scanner"
+            url: "https://garak.ai/"
+            type: documentation
+            free: true
+          - title: "NIST — Adversarial ML Taxonomy and Terminology"
+            url: "https://airc.nist.gov/Docs/1"
+            type: documentation
+            free: true
+
+      - id: harmful-output-testing
+        name: "Harmful Output & Safety Testing"
+        estimated_hours: 5
+        priority: high
+        description: "Safety evaluation categories: harmful content generation, bias and discrimination, privacy leakage, misinformation. Safety benchmarks: TruthfulQA, BBQ, WinoBias. Red-teaming for content policy bypass. Testing content filters: adversarial inputs designed to evade filters. Evaluating refusal behavior quality: not just 'does it refuse' but 'does it refuse appropriately'. AI safety evaluation tools and frameworks"
+        resources:
+          - title: "TruthfulQA Benchmark"
+            url: "https://github.com/sylinrl/TruthfulQA"
+            type: documentation
+            free: true
+          - title: "EleutherAI LM Evaluation Harness"
+            url: "https://github.com/EleutherAI/lm-evaluation-harness"
+            type: documentation
+            free: true
+
+  - id: ai-governance-frameworks
+    name: "AI Governance Implementation"
+    description: "Operationalizing AI governance frameworks and regulatory requirements"
+    topics:
+      - id: nist-ai-rmf
+        name: "NIST AI Risk Management Framework"
+        estimated_hours: 8
+        priority: high
+        description: "NIST AI RMF 1.0 structure: GOVERN, MAP, MEASURE, MANAGE. Trustworthy AI characteristics: accurate, explainable, interpretable, privacy-enhanced, reliable, safe, secure, resilient, and fair. GenAI Profile (AI 600-1): risks specific to generative AI. Implementing AI RMF: organizational roles, documentation requirements, and measurement approaches. AI RMF Playbook"
+        quiz_bank: "nist-ai-rmf"
+        resources:
+          - title: "NIST AI RMF 1.0"
+            url: "https://www.nist.gov/system/files/documents/2023/01/26/AI%20RMF%201.0.pdf"
+            type: documentation
+            free: true
+          - title: "NIST AI RMF Playbook"
+            url: "https://airc.nist.gov/Docs/2"
+            type: documentation
+            free: true
+          - title: "NIST AI RMF Knowledge Pack"
+            url: "file://knowledge_packs/nist-ai-rmf.md"
+            type: article
+            free: true
+
+      - id: eu-ai-act-compliance
+        name: "EU AI Act & Global AI Regulation"
+        estimated_hours: 6
+        priority: medium
+        description: "EU AI Act risk tiers: unacceptable risk (prohibited), high-risk, limited-risk, minimal risk. High-risk AI requirements: conformity assessment, technical documentation, human oversight, robustness testing. GPAI model obligations for foundation models. Compliance timelines and enforcement mechanisms. Mapping EU AI Act to organizational AI inventories. US AI Executive Order and NIST alignment. Sector-specific AI regulations: healthcare, financial services, critical infrastructure"
+        resources:
+          - title: "EU AI Act — Official Text"
+            url: "https://artificialintelligenceact.eu/"
+            type: documentation
+            free: true
+          - title: "EU AI Act Explorer"
+            url: "https://artificialintelligenceact.eu/ai-act-explorer/"
+            type: documentation
+            free: true
+
+      - id: ai-supply-chain-security
+        name: "AI/ML Supply Chain Security"
+        estimated_hours: 6
+        priority: high
+        description: "ML artifact integrity: model weights, training data, and pipeline code. SafeTensors vs Pickle: preventing code execution on model load. Model cards and model provenance documentation. SBOM for ML: model lineage, dataset provenance, dependency tracking. HuggingFace model hub risks: unsigned models, malicious serialization. Verified build pipelines for ML artifacts. Signing ML models with Sigstore"
+        resources:
+          - title: "SafeTensors Documentation"
+            url: "https://huggingface.co/docs/safetensors/index"
+            type: documentation
+            free: true
+          - title: "CISA — AI Supply Chain Security"
+            url: "https://www.cisa.gov/ai"
+            type: documentation
+            free: true
+          - title: "MITRE ATLAS — ML Supply Chain Compromise"
+            url: "https://atlas.mitre.org/techniques/AML.T0010"
+            type: documentation
+            free: true
+
+  - id: secure-ai-design
+    name: "Secure AI System Design"
+    description: "Architectural patterns for building secure AI systems by default"
+    topics:
+      - id: secure-rag-design
+        name: "Secure RAG System Architecture"
+        estimated_hours: 6
+        priority: high
+        description: "Defense-in-depth for RAG: input sanitization, retrieval access controls, output validation, privilege separation for tool use. Multi-tenant access control in vector databases. Content moderation for retrieved documents. Preventing indirect injection through retrieved content. Logging and audit trail design for RAG systems. Security architecture review checklist for RAG deployments"
+        resources:
+          - title: "OWASP LLM Top 10 Knowledge Pack"
+            url: "file://knowledge_packs/owasp-llm-top10.md"
+            type: article
+            free: true
+
+      - id: ai-incident-response
+        name: "AI Incident Response"
+        estimated_hours: 5
+        priority: medium
+        description: "AI-specific incident categories: prompt injection exploitation, model output manipulation, data exfiltration via LLM, model abuse at scale. Detection: monitoring for unusual query patterns, output anomalies, cost spikes. Response playbooks for AI incidents. Forensics: reconstructing attack chains from logs and traces. Post-incident model evaluation: did the incident affect model integrity? AI incident documentation and disclosure"
+        resources:
+          - title: "MITRE ATLAS — Case Studies"
+            url: "https://atlas.mitre.org/studies/"
+            type: documentation
+            free: true
+
+  - id: interview-preparation
+    name: "Interview Preparation"
+    description: "Targeted preparation for AI Security Engineer interviews"
+    topics:
+      - id: ai-security-technical-prep
+        name: "Technical Interview Practice"
+        estimated_hours: 10
+        priority: high
+        description: "Practice AI threat modeling exercises, secure AI architecture design, and governance framework implementation scenarios. Common interview formats: threat model a given AI system architecture, design security controls for a specific LLM use case, walk through an AI vulnerability and mitigation"
+        quiz_bank: "ai-security"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: portfolio-and-research
+        name: "Portfolio & Research Contribution"
+        estimated_hours: 8
+        priority: medium
+        description: "Build demonstrable AI security work: published red-team findings for an open-source LLM application, a threat model document for a public AI system architecture, a blog post explaining a specific AI attack with defense recommendations, or a contribution to an open-source AI security tool"
+
+certifications_suggested:
+  - name: "AWS Certified Security – Specialty"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-security-specialty/"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "Certified Ethical Hacker (CEH)"
+    provider: "EC-Council"
+    url: "https://www.eccouncil.org/train-certify/certified-ethical-hacker-ceh/"
+    priority: medium
+    estimated_prep_hours: 50
+  - name: "GIAC Cloud Security Automation (GCSA)"
+    provider: "SANS / GIAC"
+    url: "https://www.giac.org/certifications/cloud-security-automation-gcsa/"
+    priority: medium
+    estimated_prep_hours: 50
+  - name: "Certified Information Systems Security Professional (CISSP)"
+    provider: "ISC2"
+    url: "https://www.isc2.org/certifications/cissp"
+    priority: high
+    estimated_prep_hours: 80
+  - name: "Offensive Security Certified Professional (OSCP)"
+    provider: "Offensive Security"
+    url: "https://www.offsec.com/courses/pen-200/"
+    priority: low
+    estimated_prep_hours: 200
+
+interview_questions:
+  technical:
+    - "Explain the difference between direct and indirect prompt injection. Design a defense-in-depth strategy for a RAG-based internal knowledge assistant that is resistant to both."
+    - "Walk me through a threat model for an AI agent that can read emails, query a database, and send calendar invitations. Use MITRE ATLAS to structure your analysis."
+    - "What is a backdoor attack in ML? How would you detect one in a model you received from a third party?"
+    - "Explain the difference between model extraction and membership inference attacks. What does each attacker gain?"
+    - "How would you design a security review process for ML models before they go to production? What would your checklist include?"
+    - "An LLM application starts exhibiting unusual behavior — generating outputs that seem to follow instructions from retrieved documents rather than the system prompt. Walk me through your investigation."
+    - "How would you implement and test content filtering for an LLM application? What are the failure modes of keyword-based filtering vs model-based filtering?"
+    - "Explain how SafeTensors prevents malicious model execution and why Pickle files are dangerous for ML models."
+    - "A company wants to use a foundation model from an external provider for processing customer support tickets. What security questions would you ask before approving this?"
+    - "How does the EU AI Act's concept of 'high-risk AI' apply to a fraud detection model used by a bank? What compliance requirements would apply?"
+  leadership:
+    - "How do you build an AI security review process that doesn't become a bottleneck for product teams shipping AI features?"
+    - "How would you explain the risk of prompt injection to an executive who is evaluating an LLM deployment?"
+    - "Tell me about a time you had to push back on an AI deployment due to security concerns. How did you handle the business pressure?"
+    - "How do you stay current with the rapidly evolving AI threat landscape? How do you prioritize what to focus on?"
+    - "How would you build an AI red team? What skills would you look for in the first three hires?"
+
+content_suggestions:
+  - type: blog_post
+    title: "Threat Modeling a RAG System with MITRE ATLAS"
+    description: "A worked example of threat modeling an enterprise RAG system using MITRE ATLAS. Map each component (document ingestion, embedding pipeline, vector store, retrieval, LLM, output) to ATLAS tactics, identify the highest-risk attack paths, and produce a prioritized mitigation list. Include the actual threat model document."
+    audience: "Security engineers and architects evaluating RAG deployments"
+  - type: blog_post
+    title: "Indirect Prompt Injection: The Attack That Scales"
+    description: "Deep technical explanation of indirect prompt injection: how malicious instructions embedded in retrieved documents can hijack an LLM agent's behavior. Include a proof-of-concept (against a safe, controlled test environment), the conditions that make systems vulnerable, and the layered defenses that actually work."
+    audience: "AI engineers and security engineers building LLM applications"
+  - type: project
+    title: "AI Security Evaluation Toolkit"
+    description: "Build and publish a lightweight toolkit that runs a standard battery of security tests against any OpenAI-compatible LLM endpoint: prompt injection resistance, harmful output generation, model information disclosure, and denial-of-service resilience. Output a scored security report. Contributes to the community's ability to evaluate AI system security systematically."
+    audience: "AI security engineers and red teamers"

@@ -1,0 +1,42 @@
+Cloud Security Lead
+
+Location: New York, NY
+Department: Information Security
+Type: Full-Time
+
+About the Role
+
+We are looking for a Cloud Security Lead to join our Information Security team. You will be responsible for developing and implementing security strategies for our cloud infrastructure and AI/ML workloads.
+
+Key Responsibilities
+
+- Develop comprehensive cloud security strategies, policies, and standards
+- Build security control frameworks and reference architectures
+- Conduct threat modeling exercises to identify risks in cloud and AI systems
+- Perform security assessments on cloud applications and AI systems
+- Develop hardening guidelines for cloud AI services
+- Ensure compliance with security regulations and standards
+- Provide thought leadership on cloud and AI security governance
+
+Required Qualifications
+
+- 10+ years information security experience with cloud focus
+- 5+ years software engineering experience
+- Strong understanding of AI/ML security concepts including OWASP LLM Top 10
+- Security architecture assessment experience (Web, Mobile, APIs, Cloud)
+- Experience developing reference security architectures
+- Knowledge of security standards (NIST, CIS, PCI DSS)
+- Proficiency in Python, JavaScript
+- Strong communication skills
+
+Preferred Qualifications
+
+- AWS Certified Security Specialty or equivalent
+- Experience with AI/ML cloud services (SageMaker, Bedrock, Azure AI)
+- MITRE ATLAS framework knowledge
+- Experience with threat modeling methodologies
+- Background in financial services security
+
+Benefits
+
+Competitive salary, health coverage, flexible time off, continuous learning resources.

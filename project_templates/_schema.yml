@@ -1,0 +1,19 @@
+# Project template schema reference.
+# Each role YAML file contains a list of projects under the `projects` key.
+
+# projects:
+#   - id: unique-project-id
+#     title: Human-readable title
+#     description: What the user builds and why it matters for the role
+#     track_id: which study track this maps to (from role template)
+#     topics: [topic-ids this project covers]
+#     difficulty: starter | intermediate | advanced
+#     estimated_hours: number
+#     skills_demonstrated: [list of skills this proves to an interviewer]
+#     rubric:
+#       - description: checklist item for self-evaluation
+#     starter_files:
+#       filename.ext: |
+#         file content template
+#     resources:
+#       - reference URLs or notes

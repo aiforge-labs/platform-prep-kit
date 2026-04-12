@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% set active_page = "today" %}
+{% block title %}Today - Career Prep Agent{% endblock %}
+
+{% block flash %}
+{% if flash %}<div class="flash flash-{{ flash_type|default('info') }}" data-auto-dismiss>{{ flash }}</div>{% endif %}
+{% endblock %}
+
+{% block content %}
+<h2>Today's Plan</h2>
+
+{% if entry %}
+<div class="today-card">
+    <div class="today-header">
+        <span class="badge badge-{{ entry.status }}">{{ entry.status }}</span>
+        <span class="today-day">Day {{ entry.day_num }}</span>
+    </div>
+
+    <div class="today-topic">
+        <h3>{{ entry.topic }}</h3>
+        <p class="text-muted">Track: {{ entry.track_id }}</p>
+    </div>
+
+    {% if entry.morning_focus or entry.evening_focus %}
+    <div class="today-focus">
+        {% if entry.morning_focus %}
+        <div class="focus-item">
+            <strong>Morning:</strong> {{ entry.morning_focus }}
+        </div>
+        {% endif %}
+        {% if entry.evening_focus %}
+        <div class="focus-item">
+            <strong>Evening:</strong> {{ entry.evening_focus }}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if entry.status != 'done' %}
+    <form hx-post="/today/done" hx-target="body" hx-swap="innerHTML" class="done-form">
+        <h4>Mark Complete</h4>
+        <div class="form-row">
+            <label>Notes</label>
+            <textarea name="notes" rows="2" placeholder="What did you learn?"></textarea>
+        </div>
+        <div class="form-row-inline">
+            <div>
+                <label>Score (1-10)</label>
+                <input type="number" name="score" min="1" max="10" placeholder="—">
+            </div>
+            <div>
+                <label>Minutes</label>
+                <input type="number" name="minutes" min="1" placeholder="—">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">Mark Done</button>
+    </form>
+    {% else %}
+    <div class="done-summary">
+        <p>Session completed!</p>
+        {% if entry.score %}<p>Score: {{ entry.score }}</p>{% endif %}
+        {% if entry.minutes %}<p>Time: {{ entry.minutes }} minutes</p>{% endif %}
+        {% if entry.notes %}<p>Notes: {{ entry.notes }}</p>{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="today-actions">
+        <a href="/study/day/{{ entry.day_num }}" class="btn btn-outline">View Details</a>
+        <a href="/knowledge/{{ entry.track_id }}" class="btn btn-outline">Study Material</a>
+    </div>
+</div>
+
+{% else %}
+<div class="empty-state">
+    <p>No study session scheduled for today.</p>
+    {% if next_study_day %}
+    <p class="text-muted">Next study day: {{ next_study_day }}</p>
+    {% endif %}
+    <a href="/study" class="btn btn-outline">View Full Plan</a>
+</div>
+{% endif %}
+{% endblock %}

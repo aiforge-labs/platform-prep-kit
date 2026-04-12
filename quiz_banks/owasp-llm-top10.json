@@ -1,0 +1,274 @@
+{
+  "topic_id": "owasp-llm-top10",
+  "title": "OWASP Top 10 for LLM Applications",
+  "version": 1,
+  "questions": [
+    {
+      "id": "owasp-llm-01",
+      "question": "What is the fundamental difference between direct and indirect prompt injection?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Direct injection uses the API while indirect injection uses the UI",
+        "B) Direct injection comes from the user's input while indirect injection comes from external data the LLM processes (e.g., documents, web pages)",
+        "C) Direct injection targets the model weights while indirect injection targets the training data",
+        "D) Direct injection requires authentication while indirect injection does not"
+      ],
+      "answer": "B",
+      "explanation": "Direct prompt injection occurs when the user themselves provides malicious instructions in their prompt. Indirect prompt injection occurs when malicious instructions are embedded in external data sources that the LLM processes, such as web pages, emails, or documents retrieved by a RAG system. The LLM cannot reliably distinguish between legitimate instructions and injected ones embedded in data.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "owasp-llm-02",
+      "question": "Which OWASP LLM vulnerability is most analogous to SQL injection in traditional web applications?",
+      "type": "multiple_choice",
+      "options": [
+        "A) LLM02 — Insecure Output Handling",
+        "B) LLM01 — Prompt Injection",
+        "C) LLM10 — Model Theft",
+        "D) LLM03 — Training Data Poisoning"
+      ],
+      "answer": "B",
+      "explanation": "Both prompt injection and SQL injection involve untrusted user input being interpreted as instructions by a processing engine. In SQL injection, user input becomes SQL commands. In prompt injection, user input becomes model instructions. The mitigation philosophy is similar: never trust user input, use parameterized approaches, and validate outputs.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "owasp-llm-03",
+      "question": "Training Data Poisoning (LLM03) is most similar to which traditional security attack?",
+      "type": "multiple_choice",
+      "options": [
+        "A) DDoS attack",
+        "B) Man-in-the-middle attack",
+        "C) Software supply chain compromise",
+        "D) Brute force password attack"
+      ],
+      "answer": "C",
+      "explanation": "Training data poisoning compromises the AI supply chain by corrupting the data used to build the model, similar to compromising a software dependency. The trust in upstream sources and the difficulty of detecting subtle changes mirror the challenges of securing software supply chains.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "owasp-llm-04",
+      "question": "Sensitive Information Disclosure (LLM06) can occur because LLMs may:",
+      "type": "multiple_choice",
+      "options": [
+        "A) Memorize and reproduce training data including PII, credentials, or proprietary content",
+        "B) Only process encrypted data that users cannot read",
+        "C) Never access external data sources during inference",
+        "D) Always verify user authorization before generating any response"
+      ],
+      "answer": "A",
+      "explanation": "LLMs can memorize fragments of their training data and reproduce them in responses, potentially leaking PII, credentials, or proprietary information. Additionally, in RAG systems, the retrieval component may surface documents the user should not have access to. The model does not inherently understand data classification.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "owasp-llm-05",
+      "question": "What is the recommended serialization format for ML models to prevent code execution during model loading?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Pickle (.pkl)",
+        "B) SafeTensors (.safetensors)",
+        "C) YAML (.yml)",
+        "D) Compressed archive (.tar.gz)"
+      ],
+      "answer": "B",
+      "explanation": "SafeTensors is designed specifically to prevent arbitrary code execution during model loading. Pickle files (.pkl) can contain embedded Python code that executes on deserialization, making them a common supply chain attack vector (LLM05). SafeTensors stores only tensor data without the ability to embed executable code.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "owasp-llm-06",
+      "question": "Overreliance (LLM09) is primarily a risk because:",
+      "type": "multiple_choice",
+      "options": [
+        "A) LLMs always produce correct and verified outputs",
+        "B) Users may trust LLM outputs without verification, leading to flawed decisions based on hallucinated or incorrect information",
+        "C) LLMs cannot generate plausible-sounding content",
+        "D) All LLM outputs are automatically fact-checked before delivery"
+      ],
+      "answer": "B",
+      "explanation": "LLMs generate confident, plausible-sounding but potentially incorrect content (hallucinations). Overreliance occurs when humans or automated systems act on these outputs without verification, leading to real-world consequences — from citing nonexistent references to shipping code with security vulnerabilities.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "owasp-llm-07",
+      "question": "An LLM-powered chatbot generates HTML responses displayed in a web interface. An attacker uses prompt injection to make the chatbot output a <script> tag that steals cookies. Which TWO OWASP LLM vulnerabilities are involved?",
+      "type": "multiple_choice",
+      "options": [
+        "A) LLM01 (Prompt Injection) and LLM02 (Insecure Output Handling)",
+        "B) LLM01 (Prompt Injection) and LLM06 (Sensitive Information Disclosure)",
+        "C) LLM02 (Insecure Output Handling) and LLM07 (Insecure Plugin Design)",
+        "D) LLM05 (Supply Chain Vulnerabilities) and LLM08 (Excessive Agency)"
+      ],
+      "answer": "A",
+      "explanation": "This is a two-stage attack. LLM01 (Prompt Injection) is exploited to make the model generate malicious JavaScript. LLM02 (Insecure Output Handling) is exploited because the application renders the LLM's output without sanitization, allowing the XSS payload to execute. Fixing either vulnerability would break the attack chain — this is why defense in depth matters.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "owasp-llm-08",
+      "question": "Which mitigation is MOST effective against training data poisoning (LLM03)?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Implementing rate limiting on the model's API",
+        "B) Using output encoding on all LLM responses",
+        "C) Maintaining data provenance tracking and validating training data from multiple independent sources",
+        "D) Adding a system prompt that instructs the model to ignore malicious inputs"
+      ],
+      "answer": "C",
+      "explanation": "Training data poisoning attacks corrupt the model at the training stage. Rate limiting (A) addresses DoS, output encoding (B) addresses insecure output handling, and system prompts (D) are ineffective against training-level attacks. Data provenance tracking and multi-source validation (C) directly address the root cause by ensuring training data integrity.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "owasp-llm-09",
+      "question": "A company's LLM assistant can send emails, update CRM records, and generate price quotes. Without human review, a prompt injection in a forwarded email causes the assistant to send an unauthorized discount quote. Which vulnerability is the PRIMARY root cause?",
+      "type": "multiple_choice",
+      "options": [
+        "A) LLM01 — Prompt Injection",
+        "B) LLM07 — Insecure Plugin Design",
+        "C) LLM08 — Excessive Agency",
+        "D) LLM06 — Sensitive Information Disclosure"
+      ],
+      "answer": "C",
+      "explanation": "While prompt injection (LLM01) is the attack vector, the PRIMARY root cause is Excessive Agency (LLM08). The assistant was granted the ability to send binding price quotes without human approval. If the system required human-in-the-loop for financial commitments, the prompt injection would not have caused business harm. Excessive Agency is about granting the LLM more autonomous capability than is safe.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "owasp-llm-10",
+      "question": "In a RAG system, which access control principle is most critical for preventing LLM06 (Sensitive Information Disclosure)?",
+      "type": "multiple_choice",
+      "options": [
+        "A) The LLM should have access to all documents so it can provide comprehensive answers",
+        "B) The retrieval component should enforce the same access controls as the underlying document management system, filtering by user permissions",
+        "C) All documents should be encrypted at rest to prevent unauthorized access",
+        "D) The LLM should be trained to recognize and refuse to share sensitive information"
+      ],
+      "answer": "B",
+      "explanation": "The retrieval component must enforce user-level access controls. If a user lacks permission to view an HR document in the document management system, the RAG retriever must not include that document in the LLM's context. Encryption at rest (C) protects against infrastructure compromise but not authorized retrieval. LLM-level filtering (D) is unreliable.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "owasp-llm-11",
+      "question": "An attacker systematically queries a company's LLM API with thousands of carefully designed inputs and records the outputs to train a functionally equivalent model. Which vulnerability is this?",
+      "type": "multiple_choice",
+      "options": [
+        "A) LLM03 — Training Data Poisoning",
+        "B) LLM04 — Model Denial of Service",
+        "C) LLM10 — Model Theft",
+        "D) LLM05 — Supply Chain Vulnerabilities"
+      ],
+      "answer": "C",
+      "explanation": "This describes a model extraction attack, which falls under LLM10 (Model Theft). The attacker uses the API to build a shadow model that replicates the target model's behavior. Defenses include rate limiting, query anomaly detection, and watermarking model outputs.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "owasp-llm-12",
+      "question": "Which combination of mitigations provides the BEST defense-in-depth against indirect prompt injection in a RAG system?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Input length limits + rate limiting + cost monitoring",
+        "B) Model watermarking + access logging + legal protections",
+        "C) Input sanitization + output validation + privilege separation for tool use + instruction-data separation in prompts",
+        "D) Encrypted storage + network segmentation + MFA for all users"
+      ],
+      "answer": "C",
+      "explanation": "Defense-in-depth against indirect prompt injection requires controls at multiple layers: (1) sanitize retrieved content before it reaches the model, (2) validate outputs before they reach users or downstream systems, (3) limit what the LLM can do even if injection succeeds (privilege separation), and (4) structurally separate instructions from data in prompts. Option A addresses DoS, B addresses model theft, D addresses infrastructure security.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "owasp-llm-13",
+      "question": "What is 'Insecure Output Handling' (LLM02) and how can it lead to XSS or server-side code execution? Explain the mitigation approach.",
+      "type": "open",
+      "key_points": [
+        "LLM output is used unsanitized in downstream systems — browsers, databases, APIs, or template engines",
+        "If LLM output containing HTML/JavaScript is rendered in a browser without encoding, it causes XSS. If passed to eval() or a template engine, it enables server-side code execution",
+        "The key principle: treat ALL LLM output as untrusted user input, applying the same encoding and validation you would for any external data source",
+        "Specific mitigations: Content Security Policy headers, parameterized queries for database operations, output format enforcement via JSON schemas, and sandboxed execution for any generated code"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "owasp-llm-14",
+      "question": "Explain the difference between LLM07 (Insecure Plugin Design) and LLM08 (Excessive Agency). How do they interact to create compound risk?",
+      "type": "open",
+      "key_points": [
+        "LLM07 is about individual plugins having security flaws: excessive permissions, no input validation, accepting free-form text from the LLM without schema validation",
+        "LLM08 is about the overall system granting the LLM too many capabilities, too much autonomy, or too broad permissions — it is a system-level design issue",
+        "They compound: an LLM with excessive agency (many tools available) combined with insecure plugin design (tools with broad permissions) creates a large blast radius for any successful prompt injection",
+        "Cloud analogy: LLM07 is like an over-permissioned IAM role; LLM08 is like having no service control policies at the organization level"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "owasp-llm-15",
+      "question": "How can an attacker cause Model Denial of Service (LLM04), and what makes it different from traditional DDoS? What AI-specific mitigations are needed?",
+      "type": "open",
+      "key_points": [
+        "Attack methods: sending maximum-length prompts requiring maximum output tokens, crafting prompts that trigger complex reasoning loops, using fan-out attacks that trigger multiple downstream API calls",
+        "Key difference from traditional DDoS: a single LLM request can consume dramatically more compute (GPU time) than a traditional web request, making low-volume attacks economically devastating",
+        "Cost dimension: LLM DoS has a direct and potentially severe financial impact on cloud compute bills, unlike traditional DDoS which primarily affects availability",
+        "AI-specific mitigations: per-request token input/output limits, request-level cost estimation, complexity-based rate limiting, budget alerting with automatic circuit breakers"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "owasp-llm-16",
+      "question": "Explain how you would design a security architecture for an LLM-powered customer support chatbot that has access to customer account data. Address at least three OWASP LLM vulnerabilities.",
+      "type": "open",
+      "key_points": [
+        "LLM01 (Prompt Injection): Input sanitization, structured prompting with clear delimiters between system instructions and user messages, monitoring for injection patterns",
+        "LLM06 (Sensitive Information Disclosure): The chatbot should only access the authenticated customer's own data. Output filtering should detect and redact PII like full credit card numbers or SSNs",
+        "LLM08 (Excessive Agency): The chatbot should be read-only for account data. Account modifications (password reset, billing changes) should require explicit customer confirmation through a separate channel",
+        "LLM02 (Insecure Output Handling): If responses are rendered in a browser, apply output encoding to prevent XSS",
+        "Defense-in-depth: Multiple independent controls rather than relying on any single mitigation"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "owasp-llm-17",
+      "question": "A company wants to fine-tune an LLM on their internal documentation to create a knowledge assistant. What security risks should they evaluate before starting, and what controls would you recommend?",
+      "type": "open",
+      "key_points": [
+        "Training data risks (LLM03): Internal docs may contain credentials, PII, or financial data the model could memorize and later disclose. Data classification and scrubbing is essential",
+        "Information disclosure (LLM06): The fine-tuned model may reproduce sensitive training data. Apply differential privacy techniques and test for memorization after fine-tuning",
+        "Supply chain risks (LLM05): Ensure the base model comes from a trusted source with verified provenance. Use SafeTensors format. Validate integrity before and after fine-tuning",
+        "Access control: Implement user-level access controls so the model only shares information the requesting user is authorized to see",
+        "Ongoing monitoring: Monitor outputs for data leakage, track access, and establish a retraining process if sensitive data exposure is detected"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "owasp-llm-18",
+      "question": "Explain the concept of 'privilege separation' as a mitigation for prompt injection. How would you implement it for a system where an LLM needs to both read and write to a database?",
+      "type": "open",
+      "key_points": [
+        "Privilege separation means the LLM should not directly perform actions — it generates structured intent that a separate trusted component validates and executes",
+        "For database access: the LLM generates a structured query request (not raw SQL), a validation layer checks the request against allowed operations, and a separate execution layer with appropriate permissions runs the query",
+        "Read vs. write separation: Use different database connections with different permission sets. Read operations can be more permissive; write operations require additional validation and potentially human approval",
+        "Audit trail: Log every LLM-initiated action with original user context, the LLM's intent, and the actual operation executed"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "owasp-llm-19",
+      "question": "A developer uses an LLM code assistant that suggests importing a nonexistent Python package called 'python-httplib3'. An attacker registers this package name on PyPI with malicious code. What type of attack is this, and which OWASP LLM vulnerabilities does it exploit?",
+      "type": "open",
+      "key_points": [
+        "This is a 'package hallucination attack' — the LLM confabulates a package name that does not exist, creating an opportunity for an attacker to register it",
+        "Primary vulnerability: LLM09 (Overreliance) — the developer blindly trusts the code suggestion without verifying the package exists or is legitimate",
+        "Secondary vulnerability: LLM05 (Supply Chain) — once the malicious package is installed, it becomes a supply chain compromise",
+        "Mitigation: automated verification of LLM code suggestions (lint, dependency check), developer training to treat LLM output as untrusted drafts, package allowlisting in CI/CD pipelines"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "owasp-llm-20",
+      "question": "A financial services company asks you to assess the security of their LLM-powered investment research assistant that can analyze market data, generate reports, and email summaries to portfolio managers. What are the top 5 risks you would evaluate?",
+      "type": "open",
+      "key_points": [
+        "LLM09 (Overreliance): Portfolio managers making investment decisions based on LLM-generated analysis without independent verification — hallucinated financial data could lead to significant losses",
+        "LLM06 (Sensitive Information Disclosure): The assistant may access material non-public information (MNPI); improper access controls could cause information leakage and insider trading violations",
+        "LLM08 (Excessive Agency): Email capability means prompt injection could cause the assistant to send misleading information or MNPI to unauthorized recipients",
+        "LLM01 (Prompt Injection): Malicious content in market data feeds or research documents could manipulate the assistant's analysis or recommendations",
+        "LLM02 (Insecure Output Handling): Generated reports could contain manipulated charts or injected content that misrepresents analysis if rendered without validation"
+      ],
+      "difficulty": "hard"
+    }
+  ]
+}

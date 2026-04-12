@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% set active_page = "dashboard" %}
+
+{% block title %}Dashboard - Career Prep Agent{% endblock %}
+
+{% block content %}
+<h2>Dashboard</h2>
+
+<!-- Metrics Row -->
+<div class="metrics-row">
+    <div class="stat-card">
+        <div class="stat-value">{{ completed_days }}/{{ total_days }}</div>
+        <div class="stat-label">Days Completed</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ streak }}</div>
+        <div class="stat-label">Day Streak</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ "%.1f"|format(progress_pct) }}%</div>
+        <div class="stat-label">Overall Progress</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ quiz_history|length }}</div>
+        <div class="stat-label">Quizzes Taken</div>
+    </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-section">
+    <h3>Overall Progress</h3>
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" style="width: {{ progress_pct }}%"></div>
+    </div>
+    <p class="progress-text">{{ completed_days }} of {{ total_days }} study days completed</p>
+</div>
+
+<!-- Track Breakdown with Progress Bars -->
+{% if track_progress %}
+<div class="section">
+    <h3>Track Progress</h3>
+    {% for tp in track_progress %}
+    <div class="track-row">
+        <div class="track-info">
+            <span class="track-name">{{ tp.name }}</span>
+            <span class="text-muted">{{ tp.done }}/{{ tp.total }}</span>
+        </div>
+        <div class="progress-bar-container progress-small">
+            <div class="progress-bar-fill" style="width: {{ (tp.done / tp.total * 100) if tp.total else 0 }}%"></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Recent Quiz Results -->
+{% if quiz_history %}
+<div class="section">
+    <h3>Recent Quiz Results</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Topic</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for q in quiz_history[-5:]|reverse %}
+            <tr>
+                <td>{{ q.date }}</td>
+                <td>{{ q.topic }}</td>
+                <td>{{ q.score }}/{{ q.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<!-- Study Timeline Preview -->
+{% if days %}
+<div class="section">
+    <h3>Upcoming Days</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Date</th>
+                <th>Topic</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in days[:10] %}
+            <tr class="{% if d.status == 'done' %}row-done{% endif %}">
+                <td>{{ d.day_num }}</td>
+                <td>{{ d.date }}</td>
+                <td>{{ d.topic }}</td>
+                <td><span class="badge badge-{{ d.status }}">{{ d.status }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if days|length > 10 %}
+    <p><a href="/study">View full study plan &rarr;</a></p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

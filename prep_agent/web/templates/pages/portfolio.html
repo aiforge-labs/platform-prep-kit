@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% set active_page = "portfolio" %}
+{% block title %}Portfolio - Career Prep Agent{% endblock %}
+
+{% block content %}
+<h2>Portfolio</h2>
+
+{% if hire_readiness > 0 %}
+<div class="metrics-row">
+    <div class="stat-card">
+        <div class="stat-value {% if hire_readiness >= 70 %}stat-success{% elif hire_readiness >= 40 %}stat-warning{% else %}stat-error{% endif %}">
+            {{ hire_readiness }}%
+        </div>
+        <div class="stat-label">Hire Readiness</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ user_projects|length }}</div>
+        <div class="stat-label">Projects Started</div>
+    </div>
+</div>
+{% endif %}
+
+{% if user_projects %}
+<div class="section">
+    <h3>Your Projects</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Status</th>
+                <th>Rubric Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in user_projects %}
+            <tr>
+                <td>{{ p.title|default(p.id|default('Unknown')) }}</td>
+                <td><span class="badge badge-{{ p.status|default('pending') }}">{{ p.status|default('pending') }}</span></td>
+                <td>{{ p.rubric_score|default('—') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if projects %}
+<div class="section">
+    <h3>Available Projects</h3>
+    <div class="card-grid">
+        {% for p in projects %}
+        <div class="quiz-bank-card">
+            <h4>{{ p.title|default(p.id|default('Project')) }}</h4>
+            <p class="text-muted">{{ p.description|default('')|truncate(100) }}</p>
+            {% if p.difficulty %}<span class="badge badge-{{ p.difficulty }}">{{ p.difficulty }}</span>{% endif %}
+            {% if p.estimated_hours %}<span class="text-muted">~{{ p.estimated_hours }}h</span>{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No project templates found for the current role.</p>
+    <p class="text-muted">Portfolio projects are loaded from template-specific project files.</p>
+</div>
+{% endif %}
+{% endblock %}

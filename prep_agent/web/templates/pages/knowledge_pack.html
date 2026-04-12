@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% set active_page = "knowledge" %}
+{% block title %}{{ title }} - Career Prep Agent{% endblock %}
+
+{% block content %}
+<div class="knowledge-header">
+    <a href="/knowledge">&larr; All Packs</a>
+    <h2>{{ title }}</h2>
+    <p class="text-muted">{{ done_sections }}/{{ total_sections }} sections completed</p>
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" style="width: {{ (done_sections / total_sections * 100) if total_sections else 0 }}%"></div>
+    </div>
+</div>
+
+<!-- Table of Contents -->
+{% if sections %}
+<div class="toc-sidebar">
+    <h4>Sections</h4>
+    <ul class="toc-list">
+        {% for s in sections %}
+        <li class="{% if s.id in completed %}toc-done{% endif %}">
+            <a href="#{{ s.id }}">{{ s.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<!-- Content with section checkboxes -->
+<div class="knowledge-content">
+    {% for s in sections %}
+    <div class="knowledge-section" id="{{ s.id }}">
+        <div class="section-header">
+            <button
+                hx-post="/knowledge/{{ slug }}/section/{{ s.id }}/complete"
+                hx-swap="outerHTML"
+                class="section-check {% if s.id in completed %}done{% endif %}">
+                {% if s.id in completed %}[x]{% else %}[ ]{% endif %}
+            </button>
+            <span class="section-title">{{ s.title }}</span>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="rendered-content">
+        {{ html_content|safe }}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+role: devsecops-engineer
+version: 1
+
+projects:
+  - id: security-scanning-pipeline
+    title: "Security Scanning CI/CD Pipeline"
+    description: >
+      Build a CI/CD pipeline that integrates SAST, dependency scanning,
+      secret detection, and container image scanning. Demonstrate
+      gate logic (block on critical, warn on medium) and produce a
+      consolidated security report.
+    track_id: devsecops-pipeline
+    topics:
+      - sast-dast
+      - dependency-scanning
+      - container-security
+    difficulty: intermediate
+    estimated_hours: 10
+    skills_demonstrated:
+      - "SAST integration (Semgrep, Bandit, or similar)"
+      - "Dependency vulnerability scanning"
+      - "Secret detection in code"
+      - "Container image scanning"
+      - "Pipeline gate logic"
+      - "Consolidated security reporting"
+    rubric:
+      - description: "Pipeline runs at least 3 types of security scans"
+      - description: "Secret detection catches test secrets in sample code"
+      - description: "Dependency scanner finds known CVEs in test dependencies"
+      - description: "Container scan runs on a sample Dockerfile"
+      - description: "Gate logic blocks pipeline on critical findings"
+      - description: "Consolidated report in markdown or JSON"
+      - description: "Sample vulnerable code provided for demo"
+      - description: "README explains each scan type and gate thresholds"
+    starter_files:
+      README.md: |
+        # Security Scanning CI/CD Pipeline
+
+        ## Goal
+        Demonstrate shift-left security with integrated scanning.
+
+        ## Scans Included
+        1. SAST — static analysis
+        2. Dependency scanning — known CVEs
+        3. Secret detection — leaked credentials
+        4. Container scanning — image vulnerabilities
+
+        ## Quick Start
+        ```bash
+        ./run_pipeline.sh
+        ```
+      run_pipeline.sh: |
+        #!/bin/bash
+        # Run all security scans and generate report
+      sample_app/.gitkeep: ""
+      report_generator.py: |
+        """Consolidate scan results into a single report."""
+    resources:
+      - "Semgrep: https://semgrep.dev/docs/"
+      - "Trivy container scanning: https://aquasecurity.github.io/trivy/"
+      - "Gitleaks: https://github.com/gitleaks/gitleaks"
+
+  - id: policy-as-code-demo
+    title: "Policy-as-Code Compliance Framework"
+    description: >
+      Implement a policy-as-code framework using OPA/Rego (or
+      Checkov/Sentinel) that validates Terraform plans and Kubernetes
+      manifests against custom security policies. Include a test suite
+      for the policies themselves.
+    track_id: policy-as-code
+    topics:
+      - opa-rego
+      - compliance-automation
+    difficulty: intermediate
+    estimated_hours: 10
+    skills_demonstrated:
+      - "Policy-as-Code with OPA/Rego or Checkov"
+      - "Terraform plan validation"
+      - "Kubernetes manifest validation"
+      - "Policy testing"
+      - "Compliance reporting"
+    rubric:
+      - description: "At least 5 custom policies defined"
+      - description: "Policies validate Terraform plans"
+      - description: "Policies validate Kubernetes manifests"
+      - description: "Test suite verifies each policy (pass + fail cases)"
+      - description: "Violation report generated with severity levels"
+      - description: "README explains policy rationale and enforcement model"
+    starter_files:
+      README.md: |
+        # Policy-as-Code Compliance Framework
+
+        ## Goal
+        Enforce security policies on infrastructure code.
+
+        ## Quick Start
+        ```bash
+        # Validate Terraform
+        python validate.py --target terraform/plan.json
+
+        # Validate Kubernetes
+        python validate.py --target k8s/deployment.yaml
+
+        # Run policy tests
+        python test_policies.py
+        ```
+      validate.py: |
+        """Validate infrastructure code against policies."""
+      test_policies.py: |
+        """Test suite for policy rules."""
+      policies/.gitkeep: ""
+      test_fixtures/.gitkeep: ""
+    resources:
+      - "OPA/Rego: https://www.openpolicyagent.org/docs/latest/"
+      - "Checkov: https://www.checkov.io/1.Welcome/Quick%20Start.html"

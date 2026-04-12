@@ -1,0 +1,9 @@
+{% macro progress_bar(pct, label="", size="default") %}
+<div class="progress-section">
+    {% if label %}<p class="progress-label">{{ label }}</p>{% endif %}
+    <div class="progress-bar-container {% if size == 'small' %}progress-small{% endif %}">
+        <div class="progress-bar-fill" style="width: {{ pct }}%"></div>
+    </div>
+    <p class="progress-text">{{ "%.1f"|format(pct) }}%</p>
+</div>
+{% endmacro %}

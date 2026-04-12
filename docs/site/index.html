@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Career Prep Agent — Architecture</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0e1a;--bg2:#121829;--card:#1a2138;--border:#2a3454;--text:#e2e8f0;--muted:#64748b;--accent:#3b82f6;--accent2:#8b5cf6;--success:#22c55e;--warn:#f59e0b;--pink:#ec4899;--cyan:#06b6d4;--radius:14px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}
+
+/* Header */
+.hero{text-align:center;padding:4rem 2rem 3rem;background:linear-gradient(135deg,#0a0e1a 0%,#1a1040 50%,#0a0e1a 100%)}
+.hero h1{font-size:2.8rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
+.hero .subtitle{color:var(--muted);font-size:1.15rem;max-width:700px;margin:0 auto 2rem}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin-bottom:1rem}
+.badge{padding:.3rem .8rem;border-radius:20px;font-size:.75rem;font-weight:600;border:1px solid}
+.b-python{background:rgba(59,130,246,.12);color:var(--accent);border-color:rgba(59,130,246,.3)}
+.b-fastapi{background:rgba(6,182,212,.12);color:var(--cyan);border-color:rgba(6,182,212,.3)}
+.b-htmx{background:rgba(139,92,246,.12);color:var(--accent2);border-color:rgba(139,92,246,.3)}
+.b-sqlite{background:rgba(34,197,94,.12);color:var(--success);border-color:rgba(34,197,94,.3)}
+.b-click{background:rgba(236,72,153,.12);color:var(--pink);border-color:rgba(236,72,153,.3)}
+.b-pydantic{background:rgba(245,158,11,.12);color:var(--warn);border-color:rgba(245,158,11,.3)}
+.b-jinja{background:rgba(100,116,139,.15);color:#94a3b8;border-color:rgba(100,116,139,.3)}
+.b-mit{background:rgba(34,197,94,.12);color:var(--success);border-color:rgba(34,197,94,.3)}
+
+.stats{display:flex;justify-content:center;gap:2.5rem;margin-top:1.5rem;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-val{font-size:1.8rem;font-weight:700;color:var(--accent)}
+.stat-lbl{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* Sections */
+.section{max-width:1200px;margin:0 auto;padding:3rem 2rem}
+.section-title{text-align:center;font-size:1.8rem;font-weight:700;margin-bottom:.5rem;position:relative}
+.section-title::after{content:'';display:block;width:60px;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));margin:8px auto 0;border-radius:2px}
+.section-sub{text-align:center;color:var(--muted);margin-bottom:2.5rem;font-size:.95rem}
+
+/* Architecture Diagram */
+.arch{display:flex;flex-direction:column;align-items:center;gap:1.5rem}
+.arch-row{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.arch-box{padding:1rem 1.5rem;border-radius:var(--radius);cursor:pointer;text-align:center;min-width:140px;transition:transform .2s,box-shadow .2s;position:relative;backdrop-filter:blur(10px)}
+.arch-box:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.arch-box .icon{font-size:1.5rem;margin-bottom:.3rem}
+.arch-box .name{font-weight:600;font-size:.9rem}
+.arch-box .desc{font-size:.7rem;color:var(--muted);margin-top:.2rem}
+
+.box-user{background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(139,92,246,.15));border:1px solid rgba(59,130,246,.3)}
+.box-interface{background:linear-gradient(135deg,rgba(6,182,212,.12),rgba(59,130,246,.12));border:1px solid rgba(6,182,212,.3)}
+.box-core{background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(236,72,153,.12));border:1px solid rgba(139,92,246,.3)}
+.box-agent{background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(236,72,153,.12));border:1px solid rgba(245,158,11,.3)}
+.box-storage{background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(6,182,212,.12));border:1px solid rgba(34,197,94,.3)}
+.box-integration{background:linear-gradient(135deg,rgba(100,116,139,.12),rgba(59,130,246,.12));border:1px solid rgba(100,116,139,.3)}
+
+.arrow{color:var(--muted);font-size:1.5rem;text-align:center}
+.arrow-down::after{content:'▼'}
+.arrow-up::after{content:'▲'}
+
+/* Flow */
+.flow{display:flex;flex-wrap:wrap;justify-content:center;gap:0;align-items:center}
+.flow-step{text-align:center;max-width:180px;padding:1rem}
+.flow-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:.9rem;display:flex;align-items:center;justify-content:center;margin:0 auto .5rem}
+.flow-title{font-weight:600;font-size:.85rem;margin-bottom:.2rem}
+.flow-desc{font-size:.75rem;color:var(--muted)}
+.flow-arrow{color:var(--muted);font-size:1.2rem;padding:0 .25rem}
+
+/* Feature Grid */
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;transition:border-color .2s,transform .2s;cursor:pointer}
+.feature-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.feature-card .f-icon{font-size:1.5rem;margin-bottom:.5rem}
+.feature-card .f-title{font-weight:600;font-size:.95rem;margin-bottom:.3rem}
+.feature-card .f-desc{font-size:.8rem;color:var(--muted);line-height:1.5}
+
+/* Components Table */
+.comp-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.comp-table th{text-align:left;padding:.75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border)}
+.comp-table td{padding:.75rem;border-bottom:1px solid rgba(42,52,84,.5)}
+.comp-table tr:hover td{background:rgba(59,130,246,.04)}
+.tag{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.7rem;font-weight:600;margin-right:.3rem}
+.tag-blue{background:rgba(59,130,246,.15);color:var(--accent)}
+.tag-green{background:rgba(34,197,94,.15);color:var(--success)}
+.tag-purple{background:rgba(139,92,246,.15);color:var(--accent2)}
+.tag-cyan{background:rgba(6,182,212,.15);color:var(--cyan)}
+.tag-orange{background:rgba(245,158,11,.15);color:var(--warn)}
+.tag-pink{background:rgba(236,72,153,.15);color:var(--pink)}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:1000;justify-content:center;align-items:center;padding:2rem}
+.modal-overlay.active{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);max-width:700px;width:100%;max-height:80vh;overflow-y:auto;padding:2rem;position:relative}
+.modal h2{font-size:1.3rem;margin-bottom:1rem;padding-right:2rem}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--text)}
+.modal p,.modal li{font-size:.9rem;color:var(--muted);margin-bottom:.5rem;line-height:1.6}
+.modal ul{padding-left:1.5rem;margin-bottom:1rem}
+.modal code{background:rgba(59,130,246,.1);padding:.15rem .4rem;border-radius:4px;font-size:.8rem;font-family:'SF Mono',Consolas,monospace}
+.modal .section-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);font-weight:600;margin:1rem 0 .5rem}
+
+/* Footer */
+.footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--border)}
+
+@media(max-width:900px){.features{grid-template-columns:repeat(2,1fr)}.arch-row{flex-direction:column;align-items:center}.stats{gap:1.5rem}.hero h1{font-size:2rem}}
+@media(max-width:600px){.features{grid-template-columns:1fr}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>Career Prep Agent</h1>
+  <p class="subtitle">A privacy-first, self-hosted career coaching platform with CLI + web UI, multi-agent system, interactive quizzes, and adaptive study plans.</p>
+  <div class="badges">
+    <span class="badge b-python">Python 3.10+</span>
+    <span class="badge b-fastapi">FastAPI</span>
+    <span class="badge b-htmx">HTMX</span>
+    <span class="badge b-sqlite">SQLite</span>
+    <span class="badge b-click">Click CLI</span>
+    <span class="badge b-pydantic">Pydantic</span>
+    <span class="badge b-jinja">Jinja2</span>
+    <span class="badge b-mit">MIT License</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">12</div><div class="stat-lbl">Role Templates</div></div>
+    <div class="stat"><div class="stat-val">11</div><div class="stat-lbl">Quiz Banks</div></div>
+    <div class="stat"><div class="stat-val">13</div><div class="stat-lbl">Knowledge Packs</div></div>
+    <div class="stat"><div class="stat-val">193</div><div class="stat-lbl">Tests Passing</div></div>
+    <div class="stat"><div class="stat-val">22</div><div class="stat-lbl">CLI Commands</div></div>
+  </div>
+</div>
+
+<!-- System Architecture -->
+<div class="section">
+  <h2 class="section-title">System Architecture</h2>
+  <p class="section-sub">Click any component to see implementation details</p>
+
+  <div class="arch">
+    <!-- User Layer -->
+    <div class="arch-row">
+      <div class="arch-box box-user" onclick="openModal('user')">
+        <div class="icon">👤</div><div class="name">User</div>
+      </div>
+    </div>
+    <div class="arrow arrow-down"></div>
+
+    <!-- Interface Layer -->
+    <div class="arch-row">
+      <div class="arch-box box-interface" onclick="openModal('cli')">
+        <div class="icon">⌨️</div><div class="name">CLI (Click)</div><div class="desc">22 commands</div>
+      </div>
+      <div class="arch-box box-interface" onclick="openModal('webui')">
+        <div class="icon">🌐</div><div class="name">Web UI (FastAPI)</div><div class="desc">12 routes</div>
+      </div>
+      <div class="arch-box box-interface" onclick="openModal('mcp')">
+        <div class="icon">🔌</div><div class="name">MCP Server</div><div class="desc">IDE integration</div>
+      </div>
+    </div>
+    <div class="arrow arrow-down"></div>
+
+    <!-- Orchestrator -->
+    <div class="arch-row">
+      <div class="arch-box box-core" onclick="openModal('orchestrator')">
+        <div class="icon">🧠</div><div class="name">Orchestrator</div><div class="desc">ReAct meta-loop</div>
+      </div>
+    </div>
+    <div class="arrow arrow-down"></div>
+
+    <!-- Agents -->
+    <div class="arch-row">
+      <div class="arch-box box-agent" onclick="openModal('planner')">
+        <div class="icon">📋</div><div class="name">Planner Agent</div><div class="desc">Schedule & adapt</div>
+      </div>
+      <div class="arch-box box-agent" onclick="openModal('tutor')">
+        <div class="icon">📖</div><div class="name">Tutor Agent</div><div class="desc">Teach & guide</div>
+      </div>
+      <div class="arch-box box-agent" onclick="openModal('quiz_agent')">
+        <div class="icon">❓</div><div class="name">Quiz Agent</div><div class="desc">Test & evaluate</div>
+      </div>
+      <div class="arch-box box-agent" onclick="openModal('reviewer')">
+        <div class="icon">📊</div><div class="name">Reviewer Agent</div><div class="desc">Analyze & recommend</div>
+      </div>
+      <div class="arch-box box-agent" onclick="openModal('project_agent')">
+        <div class="icon">🏗️</div><div class="name">Project Agent</div><div class="desc">Portfolio & rubrics</div>
+      </div>
+    </div>
+    <div class="arrow arrow-down"></div>
+
+    <!-- Core Layer -->
+    <div class="arch-row">
+      <div class="arch-box box-core" onclick="openModal('planner_core')">
+        <div class="icon">📅</div><div class="name">Planner</div><div class="desc">Plan generation</div>
+      </div>
+      <div class="arch-box box-core" onclick="openModal('tracker')">
+        <div class="icon">📈</div><div class="name">Tracker</div><div class="desc">Progress state</div>
+      </div>
+      <div class="arch-box box-core" onclick="openModal('quiz_engine')">
+        <div class="icon">🎯</div><div class="name">Quiz Engine</div><div class="desc">173 questions</div>
+      </div>
+      <div class="arch-box box-core" onclick="openModal('knowledge')">
+        <div class="icon">📚</div><div class="name">Knowledge Base</div><div class="desc">13 packs + TF-IDF</div>
+      </div>
+      <div class="arch-box box-core" onclick="openModal('analyzer')">
+        <div class="icon">🔍</div><div class="name">Analyzer</div><div class="desc">Fitment scoring</div>
+      </div>
+    </div>
+    <div class="arrow arrow-down"></div>
+
+    <!-- Storage & Integrations -->
+    <div class="arch-row">
+      <div class="arch-box box-storage" onclick="openModal('sqlite')">
+        <div class="icon">🗄️</div><div class="name">SQLite (WAL)</div><div class="desc">Web UI state</div>
+      </div>
+      <div class="arch-box box-storage" onclick="openModal('markdown')">
+        <div class="icon">📝</div><div class="name">Markdown</div><div class="desc">CLI state</div>
+      </div>
+      <div class="arch-box box-storage" onclick="openModal('yaml')">
+        <div class="icon">⚙️</div><div class="name">YAML Config</div><div class="desc">User config</div>
+      </div>
+      <div class="arch-box box-integration" onclick="openModal('ai_bridge')">
+        <div class="icon">🤖</div><div class="name">AI Bridge</div><div class="desc">5 providers</div>
+      </div>
+      <div class="arch-box box-integration" onclick="openModal('notifier')">
+        <div class="icon">🔔</div><div class="name">Notifier</div><div class="desc">OS-native</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Study Flow -->
+<div class="section" style="background:var(--bg2)">
+  <h2 class="section-title">Study Session Flow</h2>
+  <p class="section-sub">How a typical study day works — from plan to progress</p>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-title">View Today</div><div class="flow-desc">See topic, track, morning/evening focus</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-title">Study</div><div class="flow-desc">Knowledge pack with section checkboxes</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-title">Quiz</div><div class="flow-desc">Interactive quiz with answer feedback</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-title">Mark Done</div><div class="flow-desc">Log notes, score, time spent</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-title">Adapt</div><div class="flow-desc">Plan adjusts based on quiz performance</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">6</div><div class="flow-title">Track</div><div class="flow-desc">Dashboard, streak, hire-readiness score</div></div>
+  </div>
+</div>
+
+<!-- Onboarding Flow -->
+<div class="section">
+  <h2 class="section-title">Web Onboarding Flow</h2>
+  <p class="section-sub">Browser-based setup wizard — replaces CLI init</p>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-title">Profile</div><div class="flow-desc">Name & current role</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-title">Template</div><div class="flow-desc">Pick from 12 role paths</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-title">Job + Resume</div><div class="flow-desc">Paste URL, upload resume</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-title">Fitment</div><div class="flow-desc">Gap analysis & score</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-title">Timeline</div><div class="flow-desc">Weeks, hours, study days</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="flow-num">6</div><div class="flow-title">Create</div><div class="flow-desc">Plan generated instantly</div></div>
+  </div>
+</div>
+
+<!-- Features -->
+<div class="section" style="background:var(--bg2)">
+  <h2 class="section-title">Design Patterns</h2>
+  <p class="section-sub">Architectural patterns used throughout the system</p>
+  <div class="features">
+    <div class="feature-card" onclick="openModal('pattern_react')"><div class="f-icon">🔄</div><div class="f-title">ReAct Reasoning</div><div class="f-desc">Observe → Reason → Act → Evaluate loop in every agent</div></div>
+    <div class="feature-card" onclick="openModal('pattern_multi')"><div class="f-icon">🤝</div><div class="f-title">Multi-Agent</div><div class="f-desc">5 specialized agents coordinated by orchestrator</div></div>
+    <div class="feature-card" onclick="openModal('pattern_sync')"><div class="f-icon">🔁</div><div class="f-title">Write-Through Sync</div><div class="f-desc">SQLite ↔ Markdown bidirectional state sync</div></div>
+    <div class="feature-card" onclick="openModal('pattern_csrf')"><div class="f-icon">🛡️</div><div class="f-title">CSRF Protection</div><div class="f-desc">Signed tokens on every mutating request</div></div>
+    <div class="feature-card" onclick="openModal('pattern_session')"><div class="f-icon">💾</div><div class="f-title">Session Resume</div><div class="f-desc">Quiz sessions persisted to SQLite, resume on return</div></div>
+    <div class="feature-card" onclick="openModal('pattern_fuzzy')"><div class="f-icon">🔎</div><div class="f-title">Fuzzy Matching</div><div class="f-desc">Topic → knowledge pack lookup via keyword scoring</div></div>
+    <div class="feature-card" onclick="openModal('pattern_provider')"><div class="f-icon">🔌</div><div class="f-title">Provider Agnostic</div><div class="f-desc">Bridge pattern decouples from any AI provider</div></div>
+    <div class="feature-card" onclick="openModal('pattern_adaptive')"><div class="f-icon">📐</div><div class="f-title">Adaptive Plans</div><div class="f-desc">Low quiz scores insert review days, high scores compress</div></div>
+  </div>
+</div>
+
+<!-- Components Table -->
+<div class="section">
+  <h2 class="section-title">Key Components</h2>
+  <p class="section-sub">File structure and responsibilities</p>
+  <table class="comp-table">
+    <thead><tr><th>Component</th><th>Path</th><th>Type</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>CLI Entry</td><td><code>prep_agent/cli.py</code></td><td><span class="tag tag-blue">Interface</span></td><td>22 Click commands, lazy loading</td></tr>
+      <tr><td>FastAPI App</td><td><code>prep_agent/web/app.py</code></td><td><span class="tag tag-cyan">Web</span></td><td>App factory, middleware, router registration</td></tr>
+      <tr><td>Database</td><td><code>prep_agent/web/database.py</code></td><td><span class="tag tag-green">Storage</span></td><td>SQLite schema, WAL mode, connection factory</td></tr>
+      <tr><td>Migration</td><td><code>prep_agent/web/migrate.py</code></td><td><span class="tag tag-green">Storage</span></td><td>Markdown ↔ SQLite bidirectional sync</td></tr>
+      <tr><td>Services</td><td><code>prep_agent/web/services.py</code></td><td><span class="tag tag-purple">Logic</span></td><td>Service layer bridging routes to core</td></tr>
+      <tr><td>Orchestrator</td><td><code>prep_agent/agents/orchestrator.py</code></td><td><span class="tag tag-orange">Agent</span></td><td>ReAct meta-loop, session routing</td></tr>
+      <tr><td>Planner</td><td><code>prep_agent/core/planner.py</code></td><td><span class="tag tag-purple">Logic</span></td><td>Calendar-aware study plan generation</td></tr>
+      <tr><td>Tracker</td><td><code>prep_agent/core/tracker.py</code></td><td><span class="tag tag-green">Storage</span></td><td>Markdown-based progress state machine</td></tr>
+      <tr><td>Quiz Engine</td><td><code>prep_agent/core/quiz_engine.py</code></td><td><span class="tag tag-purple">Logic</span></td><td>Quiz banks, spaced repetition, scoring</td></tr>
+      <tr><td>Knowledge</td><td><code>prep_agent/core/knowledge.py</code></td><td><span class="tag tag-purple">Logic</span></td><td>TF-IDF search across packs + user notes</td></tr>
+      <tr><td>Analyzer</td><td><code>prep_agent/core/analyzer.py</code></td><td><span class="tag tag-purple">Logic</span></td><td>5-component fitment scoring, 200+ skill aliases</td></tr>
+      <tr><td>AI Bridge</td><td><code>prep_agent/integrations/ai_bridge.py</code></td><td><span class="tag tag-pink">Integration</span></td><td>5 AI providers (None, Ollama, Claude, ChatGPT, OpenAI)</td></tr>
+      <tr><td>Templates</td><td><code>templates/*.yml</code></td><td><span class="tag tag-orange">Content</span></td><td>12 role templates with tracks, topics, resources</td></tr>
+      <tr><td>Quiz Banks</td><td><code>quiz_banks/*.json</code></td><td><span class="tag tag-orange">Content</span></td><td>11 banks, 173+ questions (MC + open-ended)</td></tr>
+      <tr><td>Knowledge Packs</td><td><code>knowledge_packs/*.md</code></td><td><span class="tag tag-orange">Content</span></td><td>13 study guides with section-level tracking</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Data Flow -->
+<div class="section" style="background:var(--bg2)">
+  <h2 class="section-title">Data Storage</h2>
+  <p class="section-sub">Dual storage with automatic sync — CLI uses Markdown, Web UI uses SQLite</p>
+  <div class="features" style="grid-template-columns:repeat(3,1fr)">
+    <div class="feature-card"><div class="f-icon">📝</div><div class="f-title">~/.prep/tracker.md</div><div class="f-desc">CLI source of truth. Day-by-day progress as Markdown tables. Human-editable.</div></div>
+    <div class="feature-card"><div class="f-icon">🗄️</div><div class="f-title">~/.prep/prep.db</div><div class="f-desc">Web UI source of truth. SQLite with WAL mode for concurrent access. 8 tables.</div></div>
+    <div class="feature-card"><div class="f-icon">⚙️</div><div class="f-title">~/.prep/config.yml</div><div class="f-desc">User config: target role, timeline, AI provider, reminders. YAML format.</div></div>
+    <div class="feature-card"><div class="f-icon">📊</div><div class="f-title">~/.prep/quiz-history.json</div><div class="f-desc">Append-only quiz results with scores, weak areas, timestamps.</div></div>
+    <div class="feature-card"><div class="f-icon">📅</div><div class="f-title">~/.prep/study-plan.md</div><div class="f-desc">Generated plan overview. Read-only reference (tracker.md is authoritative).</div></div>
+    <div class="feature-card"><div class="f-icon">🔒</div><div class="f-title">Privacy</div><div class="f-desc">All data local. No telemetry. No cloud. Unencrypted by design (personal tool).</div></div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>Career Prep Agent &middot; MIT License &middot; <a href="https://github.com/aiforge-labs/career-prep-agent">GitHub</a></p>
+  <p style="margin-top:.5rem">Built with Python, FastAPI, HTMX, SQLite &middot; Zero external services required</p>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h2 id="modalTitle"></h2>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const details = {
+  user: {title: "User", body: `
+    <div class="section-label">Interaction Modes</div>
+    <ul>
+      <li><strong>CLI</strong> — <code>prep</code> command with 22 subcommands</li>
+      <li><strong>Web UI</strong> — <code>prep serve</code> opens browser at localhost:8080</li>
+      <li><strong>MCP</strong> — IDE integration for Claude Code, Cursor, etc.</li>
+    </ul>
+    <div class="section-label">Getting Started</div>
+    <p><code>pip install career-prep-agent[ui]</code> then <code>prep serve</code></p>
+  `},
+  cli: {title: "CLI (Click)", body: `
+    <div class="section-label">Technology</div>
+    <p><span class="tag tag-pink">Click 8.x</span> <span class="tag tag-purple">Rich</span></p>
+    <div class="section-label">Commands (22)</div>
+    <ul>
+      <li><code>prep init</code> — Initialize workspace (job URL, resume, template)</li>
+      <li><code>prep today / study / done</code> — Daily workflow</li>
+      <li><code>prep quiz</code> — Interactive quizzes with spaced repetition</li>
+      <li><code>prep status / insights</code> — Progress analytics</li>
+      <li><code>prep serve</code> — Launch web UI</li>
+      <li><code>prep build</code> — Portfolio projects with rubrics</li>
+      <li><code>prep pivot</code> — Role transition recommendations</li>
+    </ul>
+    <div class="section-label">Design</div>
+    <p>Lazy-loaded commands — missing modules produce warnings, never crashes.</p>
+  `},
+  webui: {title: "Web UI (FastAPI + HTMX)", body: `
+    <div class="section-label">Technology</div>
+    <p><span class="tag tag-cyan">FastAPI</span> <span class="tag tag-purple">Jinja2</span> <span class="tag tag-blue">HTMX</span> <span class="tag tag-green">SQLite</span></p>
+    <div class="section-label">Pages (12 routes)</div>
+    <ul>
+      <li><strong>/</strong> — Dashboard: metrics, track progress bars, timeline</li>
+      <li><strong>/today</strong> — Current day with mark-done form</li>
+      <li><strong>/study</strong> — Week-grouped plan with track filters</li>
+      <li><strong>/study/day/{n}</strong> — Day detail with study material + quiz link</li>
+      <li><strong>/quiz</strong> — Quiz hub with 11 banks, session resume</li>
+      <li><strong>/knowledge</strong> — 13 packs with section completion tracking</li>
+      <li><strong>/portfolio</strong> — Projects and hire-readiness</li>
+      <li><strong>/settings</strong> — Config, AI provider, reminders</li>
+      <li><strong>/onboarding</strong> — 5-step web wizard</li>
+    </ul>
+    <div class="section-label">Security</div>
+    <p>CSRF tokens (signed, 4hr), CSP headers, localhost-only by default, upload sandboxing.</p>
+  `},
+  mcp: {title: "MCP Server", body: `
+    <div class="section-label">Protocol</div>
+    <p>Model Context Protocol (FastMCP) — exposes 8 tools for IDE integration.</p>
+    <div class="section-label">Tools</div>
+    <ul>
+      <li><code>get_today()</code>, <code>start_study()</code>, <code>take_quiz()</code></li>
+      <li><code>add_note()</code>, <code>get_progress()</code>, <code>get_fitment()</code></li>
+      <li><code>pivot_roles()</code>, <code>list_templates()</code></li>
+    </ul>
+    <p>Launch: <code>prep mcp --transport stdio</code></p>
+  `},
+  orchestrator: {title: "Orchestrator", body: `
+    <div class="section-label">Pattern</div>
+    <p>ReAct meta-loop: decides which specialized agent to invoke based on session type.</p>
+    <div class="section-label">Session Routing</div>
+    <ul>
+      <li><code>"today"</code> → Planner + optional Reviewer</li>
+      <li><code>"study"</code> → Planner + Tutor</li>
+      <li><code>"quiz"</code> → Quiz Agent</li>
+      <li><code>"review"</code> → Reviewer + Planner</li>
+    </ul>
+    <div class="section-label">Output</div>
+    <p>Returns plan adjustments, session content, quiz prep, recommendations, and reasoning trace.</p>
+  `},
+  planner: {title: "Planner Agent", body: `<p>Determines today's optimal topic. Adjusts schedule based on quiz performance: low scores (&lt;50%) insert review days, high scores (&gt;85%) compress tracks.</p>`},
+  tutor: {title: "Tutor Agent", body: `<p>Generates adaptive study sessions using Teach → Discuss → Quiz format. Adapts approach based on mastery level: basics_first, targeted_review, deep_dive, or analogy.</p>`},
+  quiz_agent: {title: "Quiz Agent", body: `<p>Prepares quizzes adapted to current mastery. Selects difficulty, identifies weak areas, suggests spaced repetition schedule.</p>`},
+  reviewer: {title: "Reviewer Agent", body: `<p>Analyzes progress trends, identifies strongest/weakest topics, generates actionable recommendations for plan adjustments.</p>`},
+  project_agent: {title: "Project Agent", body: `<p>Manages portfolio projects — scaffolding, rubric evaluation, showcase generation. 9 projects across 4 roles with starter files.</p>`},
+  planner_core: {title: "Study Planner (Core)", body: `
+    <div class="section-label">Algorithm</div>
+    <ul>
+      <li>Priority-weighted allocation: critical=3, high=2, moderate=1</li>
+      <li>Calendar-aware: respects study days (skips weekends if configured)</li>
+      <li>Review days every 3rd session</li>
+      <li>Last 15% reserved for interview prep</li>
+      <li>Multi-day topics split: Day 1 theory, Day 2 practice</li>
+    </ul>
+  `},
+  tracker: {title: "Progress Tracker", body: `<p>Markdown-based state machine. Tracks day status (pending/done/skipped), streak, quiz history, track confidence. Generates human-readable <code>tracker.md</code>.</p>`},
+  quiz_engine: {title: "Quiz Engine", body: `
+    <div class="section-label">Features</div>
+    <ul>
+      <li>11 quiz banks with 173+ questions</li>
+      <li>Multiple choice + open-ended with self-rating</li>
+      <li>Spaced repetition of missed questions</li>
+      <li>AI-generated question banks (optional)</li>
+      <li>Mock interview prompt generation</li>
+    </ul>
+  `},
+  knowledge: {title: "Knowledge Base", body: `<p>13 bundled knowledge packs + user notes. TF-IDF search across all documents. Section-level completion tracking in the web UI.</p>`},
+  analyzer: {title: "Fitment Analyzer", body: `
+    <div class="section-label">5-Component Scoring</div>
+    <ul>
+      <li>Skills (40%) — 200+ bidirectional aliases</li>
+      <li>Experience (25%) — years comparison</li>
+      <li>Certifications (15%) — 30+ cert patterns</li>
+      <li>Education (10%) — degree level matching</li>
+      <li>Domain (10%) — keyword overlap</li>
+    </ul>
+  `},
+  sqlite: {title: "SQLite Database", body: `
+    <div class="section-label">Tables (8)</div>
+    <p><code>config</code>, <code>study_days</code>, <code>tracks</code>, <code>quiz_results</code>, <code>sessions</code>, <code>knowledge_progress</code>, <code>content_items</code>, <code>migrations</code></p>
+    <div class="section-label">Features</div>
+    <p>WAL mode for concurrent CLI + web access. Busy timeout 5s. Write-through sync to tracker.md after every mutation.</p>
+  `},
+  markdown: {title: "Markdown Storage", body: `<p>CLI's source of truth. <code>tracker.md</code> contains day-by-day tables, track status, quiz history. Human-editable — changes detected by mtime and re-imported to SQLite.</p>`},
+  yaml: {title: "YAML Config", body: `<p><code>~/.prep/config.yml</code> — target role, timeline, gaps, AI provider, reminders, template ID, fitment results. Created by <code>prep init</code> or the web onboarding wizard.</p>`},
+  ai_bridge: {title: "AI Bridge", body: `
+    <div class="section-label">Providers</div>
+    <ul>
+      <li><strong>None</strong> — standalone, all built-in content works</li>
+      <li><strong>Ollama</strong> — local LLM, fully offline</li>
+      <li><strong>ChatGPT paste</strong> — copies prompt to clipboard</li>
+      <li><strong>Claude Code</strong> — auto-resume via CLAUDE.md</li>
+      <li><strong>OpenAI API</strong> — direct API calls</li>
+    </ul>
+  `},
+  notifier: {title: "Notification System", body: `<p>Cross-platform desktop notifications: macOS (osascript), Linux (notify-send), Windows (PowerShell). Morning/evening reminders with streak counts and topic previews.</p>`},
+  pattern_react: {title: "ReAct Reasoning Pattern", body: `<p>Every agent follows: <strong>Observe</strong> (state) → <strong>Reason</strong> (decide) → <strong>Act</strong> (execute) → <strong>Evaluate</strong> (assess). Loops if not satisfied. This makes agents adaptive, not scripted.</p>`},
+  pattern_multi: {title: "Multi-Agent Decomposition", body: `<p>5 specialized agents + 1 orchestrator. Each agent has a clear, testable responsibility. Communication via Pydantic typed contracts. Orchestrator decides which agent to invoke per session type.</p>`},
+  pattern_sync: {title: "Write-Through Sync", body: `<p>SQLite is web UI truth; Markdown is CLI truth. After every web mutation, <code>sync_to_markdown()</code> regenerates tracker.md. Middleware checks tracker.md mtime on each request — if CLI changed it, re-imports to SQLite.</p>`},
+  pattern_csrf: {title: "CSRF Protection", body: `<p>Signed tokens via <code>itsdangerous</code>. Cookie set on every GET. HTMX sends it as <code>X-CSRF-Token</code> header on POST/PUT/DELETE. Middleware validates. 4-hour expiry. No server-side sessions needed.</p>`},
+  pattern_session: {title: "Session Resume", body: `<p>Quiz sessions stored in SQLite <code>sessions</code> table with full state (questions, answers, current index) as JSON. Close browser mid-quiz, return to the same URL, continue from where you left off.</p>`},
+  pattern_fuzzy: {title: "Fuzzy Knowledge Matching", body: `<p>When a topic name doesn't exactly match a knowledge pack filename, the system: (1) tries track ID, (2) searches all pack content for keyword overlap, (3) returns the best match with score ≥ 1.</p>`},
+  pattern_provider: {title: "Provider-Agnostic AI", body: `<p>Bridge pattern: <code>AIBridge</code> routes to provider-specific implementations. Adding a new provider = one method. Default ("None") gives full functionality without any AI service.</p>`},
+  pattern_adaptive: {title: "Adaptive Study Plans", body: `<p>After <code>prep done</code>, the Planner Agent evaluates quiz scores. Below 50%: inserts a review day. Above 85%: compresses remaining track days. Plan evolves with your performance.</p>`},
+};
+
+function openModal(key) {
+  const d = details[key];
+  if (!d) return;
+  document.getElementById('modalTitle').textContent = d.title;
+  document.getElementById('modalBody').innerHTML = d.body;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>

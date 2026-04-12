@@ -1,0 +1,322 @@
+name: "IaC & GitOps Engineer"
+description: "Preparation plan for an Infrastructure as Code and GitOps Engineer role — building declarative cloud infrastructure, automated delivery pipelines, and policy-enforced provisioning workflows"
+version: 1
+suggested_timeline: "8-10 weeks"
+
+bridge_from:
+  devops_sre:
+    strengths:
+      - "CI/CD pipeline design and automation"
+      - "Scripting and configuration management fundamentals"
+      - "Build, test, and deployment workflow experience"
+    gaps:
+      - "Declarative IaC at scale: module design, state management, multi-environment"
+      - "GitOps pull model and reconciliation-based delivery"
+      - "Policy-as-code for infrastructure governance"
+      - "IaC testing strategies and validation pipelines"
+    recommended_start: "iac-fundamentals"
+  cloud_engineering:
+    strengths:
+      - "Cloud resource configuration and managed service usage"
+      - "Networking, IAM, and cloud security controls"
+      - "Cost management and resource optimization"
+    gaps:
+      - "IaC module abstraction and reusable component design"
+      - "GitOps workflows for infrastructure change management"
+      - "IaC security scanning and compliance enforcement"
+      - "Multi-environment promotion pipelines"
+    recommended_start: "iac-fundamentals"
+  software_engineering:
+    strengths:
+      - "Code quality, testing, refactoring, and design patterns"
+      - "Version control workflows and code review practices"
+      - "API design and service integration"
+    gaps:
+      - "Cloud resource lifecycle and state management"
+      - "Terraform HCL syntax and ecosystem"
+      - "Infrastructure delivery pipelines (Atlantis, Terraform Cloud)"
+      - "Cloud-specific networking and security primitives"
+    recommended_start: "iac-fundamentals"
+  system_administration:
+    strengths:
+      - "Server configuration, OS management, and networking"
+      - "Scripting and automation with Bash, Python, or PowerShell"
+      - "Monitoring, storage, and capacity management"
+    gaps:
+      - "Declarative vs imperative automation paradigm"
+      - "Version-controlled infrastructure and GitOps workflows"
+      - "Cloud-native infrastructure design patterns"
+      - "IaC testing and validation pipelines"
+    recommended_start: "iac-fundamentals"
+
+tracks:
+  - id: iac-fundamentals
+    name: "IaC Fundamentals"
+    description: "Core infrastructure as code concepts and Terraform deep dive"
+    topics:
+      - id: terraform-core
+        name: "Terraform Core Concepts"
+        estimated_hours: 10
+        priority: high
+        description: "HCL syntax: resources, data sources, variables, outputs, locals, and expressions. Provider configuration and version pinning. Terraform workflow: init, plan, apply, destroy. State file: what it contains, why it is sensitive, how to inspect it. Terraform graph and dependency resolution. Meta-arguments: depends_on, count, for_each, lifecycle. Import: bringing existing resources under Terraform management"
+        resources:
+          - title: "HashiCorp Terraform Documentation"
+            url: "https://developer.hashicorp.com/terraform/docs"
+            type: documentation
+            free: true
+          - title: "HashiCorp Terraform Tutorials"
+            url: "https://developer.hashicorp.com/terraform/tutorials"
+            type: course
+            free: true
+          - title: "HashiCorp Learn — Terraform Associate Exam Prep"
+            url: "https://developer.hashicorp.com/terraform/tutorials/certification-003"
+            type: course
+            free: true
+
+      - id: terraform-state
+        name: "State Management"
+        estimated_hours: 6
+        priority: high
+        description: "Remote backends: S3+DynamoDB, Azure Blob+Table, GCS, Terraform Cloud. State locking and concurrent access. Workspace isolation patterns: one workspace per environment vs separate state files. Sensitive values in state and encryption at rest. State manipulation: terraform state mv, rm, import. Handling state drift: detecting and reconciling out-of-band changes. Backend migration"
+        resources:
+          - title: "Terraform — Backends Documentation"
+            url: "https://developer.hashicorp.com/terraform/language/backend"
+            type: documentation
+            free: true
+          - title: "Terraform — State Documentation"
+            url: "https://developer.hashicorp.com/terraform/language/state"
+            type: documentation
+            free: true
+
+      - id: terraform-modules
+        name: "Module Design & Reuse"
+        estimated_hours: 7
+        priority: high
+        description: "Module structure: main.tf, variables.tf, outputs.tf, versions.tf. Input validation with variable type constraints and validation blocks. Module composition: calling child modules, passing outputs as inputs. Module versioning: pinning source versions with Git tags or Terraform Registry. Building opinionated modules: sensible defaults, escape hatches for advanced use. Terragrunt for DRY module configuration across environments. Module testing with Terraform test framework"
+        resources:
+          - title: "Terraform — Modules Documentation"
+            url: "https://developer.hashicorp.com/terraform/language/modules"
+            type: documentation
+            free: true
+          - title: "Terragrunt Documentation"
+            url: "https://terragrunt.gruntwork.io/docs/"
+            type: documentation
+            free: true
+
+  - id: iac-alternatives
+    name: "IaC Alternatives & Trade-offs"
+    description: "AWS CDK, Pulumi, and when to choose each tool"
+    topics:
+      - id: aws-cdk
+        name: "AWS CDK"
+        estimated_hours: 7
+        priority: medium
+        description: "CDK concepts: constructs (L1/L2/L3), stacks, apps, environments. Writing infrastructure in TypeScript, Python, or Java. L2 constructs: sensible defaults and security best practices baked in. Custom L3 constructs for reusable platform abstractions. CDK Pipelines for self-mutating delivery pipelines. CDK vs Terraform: imperative vs declarative, type safety vs ecosystem breadth. CDK integration with existing Terraform code"
+        resources:
+          - title: "AWS CDK Documentation"
+            url: "https://docs.aws.amazon.com/cdk/v2/guide/home.html"
+            type: documentation
+            free: true
+          - title: "CDK Patterns"
+            url: "https://cdkpatterns.com/"
+            type: documentation
+            free: true
+
+      - id: pulumi
+        name: "Pulumi"
+        estimated_hours: 5
+        priority: low
+        description: "Pulumi concepts: stack, project, resources, component resources. Writing infrastructure in general-purpose languages (TypeScript, Python, Go). Pulumi state and secrets management. Pulumi vs Terraform: language flexibility, test frameworks, state portability. Pulumi AI for infrastructure generation. When Pulumi is the right choice vs Terraform"
+        resources:
+          - title: "Pulumi Documentation"
+            url: "https://www.pulumi.com/docs/"
+            type: documentation
+            free: true
+
+  - id: gitops-delivery
+    name: "GitOps-Style Infrastructure Delivery"
+    description: "Automating Terraform and IaC workflows via pull request workflows"
+    topics:
+      - id: atlantis
+        name: "Atlantis — GitOps for Terraform"
+        estimated_hours: 6
+        priority: high
+        description: "Atlantis workflow: PR comment triggers plan, apply on merge. Atlantis configuration: atlantis.yaml for repo-specific workflows, autoplan, automerge. RBAC: who can plan vs apply. Parallel plan/apply. Atlantis self-hosting considerations. Terraform Cloud/Enterprise as managed alternative. Comparing Atlantis, Terraform Cloud, and Spacelift. Secrets injection for provider credentials"
+        resources:
+          - title: "Atlantis Documentation"
+            url: "https://www.runatlantis.io/docs/"
+            type: documentation
+            free: true
+          - title: "HashiCorp Terraform Cloud Documentation"
+            url: "https://developer.hashicorp.com/terraform/cloud-docs"
+            type: documentation
+            free: true
+
+      - id: multi-environment-pipelines
+        name: "Multi-Environment Promotion Pipelines"
+        estimated_hours: 6
+        priority: high
+        description: "Environment promotion patterns: dev → staging → production with manual approvals. Environment-specific variable management: tfvars files, Terraform Cloud variable sets, environment-specific backends. Monorepo vs multi-repo IaC structures: trade-offs. Module promotion pipeline: test in lower environment before promoting module version. Drift detection: scheduled plans to detect out-of-band changes. Feature flags for infrastructure changes"
+        resources:
+          - title: "Gruntwork — Infrastructure Pipelines"
+            url: "https://docs.gruntwork.io/pipelines/overview/"
+            type: documentation
+            free: true
+
+  - id: iac-testing
+    name: "IaC Testing & Validation"
+    description: "Testing infrastructure code before it reaches production"
+    topics:
+      - id: iac-scanning
+        name: "Static Analysis & Security Scanning"
+        estimated_hours: 6
+        priority: high
+        description: "Checkov: multi-framework IaC scanner (Terraform, CDK, CloudFormation, Kubernetes). tfsec: Terraform-specific security scanner. KICS: open-source multi-platform IaC scanner. Integrating scanners into CI pipelines: fail on HIGH severity. Managing false positives: inline suppressions, policy exceptions. Trivy for IaC scanning. Custom policy writing: extending Checkov with Python rules"
+        resources:
+          - title: "Checkov Documentation"
+            url: "https://www.checkov.io/1.Welcome/What%20is%20Checkov.html"
+            type: documentation
+            free: true
+          - title: "tfsec Documentation"
+            url: "https://aquasecurity.github.io/tfsec/latest/"
+            type: documentation
+            free: true
+          - title: "Trivy IaC Scanning"
+            url: "https://aquasecurity.github.io/trivy/latest/docs/scanner/misconfiguration/"
+            type: documentation
+            free: true
+
+      - id: terratest
+        name: "Integration Testing with Terratest"
+        estimated_hours: 6
+        priority: medium
+        description: "Terratest: Go-based testing framework for infrastructure. Writing tests that deploy real resources, assert behavior, and tear down. Test patterns: module unit tests, end-to-end deployment tests. Idempotency tests: running apply twice should produce no changes. Cost control in testing: using minimal resource sizes, test isolation, and teardown guarantees. Testing module outputs and resource properties. CI test pipelines for IaC"
+        resources:
+          - title: "Terratest Documentation"
+            url: "https://terratest.gruntwork.io/docs/"
+            type: documentation
+            free: true
+          - title: "Terraform Test Framework"
+            url: "https://developer.hashicorp.com/terraform/language/tests"
+            type: documentation
+            free: true
+
+  - id: policy-as-code
+    name: "Policy-as-Code"
+    description: "Enforcing governance rules on infrastructure declaratively"
+    topics:
+      - id: opa-rego
+        name: "Open Policy Agent & Rego"
+        estimated_hours: 7
+        priority: high
+        description: "OPA architecture: policy engine, Rego language, bundles, and data. Rego syntax: rules, functions, comprehensions, and built-ins. Writing policies for Terraform: conftest for plan validation. Writing policies for Kubernetes: OPA Gatekeeper ConstraintTemplates. Testing Rego policies: opa test and opa eval. OPA integration patterns: admission webhook, CI pipeline, API authorization. Policy organization: modules, packages, and imports"
+        resources:
+          - title: "OPA Documentation"
+            url: "https://www.openpolicyagent.org/docs/latest/"
+            type: documentation
+            free: true
+          - title: "Rego Playground"
+            url: "https://play.openpolicyagent.org/"
+            type: documentation
+            free: true
+          - title: "Conftest Documentation"
+            url: "https://www.conftest.dev/"
+            type: documentation
+            free: true
+
+      - id: cloud-native-policy
+        name: "Cloud-Native Policy Enforcement"
+        estimated_hours: 5
+        priority: medium
+        description: "AWS Service Control Policies (SCPs): organizational guardrails that restrict even root accounts. AWS Config Rules: continuous compliance checking. Azure Policy: built-in and custom definitions, initiatives, remediation tasks. GCP Organization Policy: constraints and custom constraints. Sentinel: HashiCorp's policy framework for Terraform Cloud/Enterprise. Choosing the right enforcement layer: preventive (block) vs detective (alert) controls"
+        resources:
+          - title: "AWS Service Control Policies Documentation"
+            url: "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+            type: documentation
+            free: true
+          - title: "Azure Policy Documentation"
+            url: "https://learn.microsoft.com/en-us/azure/governance/policy/overview"
+            type: documentation
+            free: true
+
+  - id: interview-preparation
+    name: "Interview Preparation"
+    description: "Targeted preparation for IaC and GitOps Engineer interviews"
+    topics:
+      - id: iac-technical-prep
+        name: "Technical Interview Practice"
+        estimated_hours: 10
+        priority: high
+        description: "Practice IaC design scenarios: design a multi-account Terraform structure for a 10-team organization, design a GitOps pipeline with required approvals and drift detection, write OPA policies for specific governance requirements. Practice explaining state management and module design decisions"
+        quiz_bank: "iac-gitops"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: iac-scenario-prep
+        name: "Scenario-Based Practice"
+        estimated_hours: 5
+        priority: high
+        description: "Practice: migrating from manual cloud console provisioning to IaC, handling a Terraform state corruption, designing module versioning strategy for a growing organization, responding to a compliance failure caught by IaC scanning"
+
+certifications_suggested:
+  - name: "HashiCorp Terraform Associate"
+    provider: "HashiCorp"
+    url: "https://www.hashicorp.com/certification/terraform-associate"
+    priority: high
+    estimated_prep_hours: 25
+  - name: "AWS DevOps Engineer – Professional"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-devops-engineer-professional/"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "Google Professional Cloud DevOps Engineer"
+    provider: "Google Cloud"
+    url: "https://cloud.google.com/learn/certification/cloud-devops-engineer"
+    priority: medium
+    estimated_prep_hours: 40
+  - name: "HashiCorp Terraform Professional"
+    provider: "HashiCorp"
+    url: "https://www.hashicorp.com/certification/terraform-authoring-and-operations-professional"
+    priority: medium
+    estimated_prep_hours: 40
+  - name: "Certified Kubernetes Administrator (CKA)"
+    provider: "CNCF / Linux Foundation"
+    url: "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/"
+    priority: low
+    estimated_prep_hours: 50
+
+interview_questions:
+  technical:
+    - "Walk me through how Terraform determines the execution plan. What is the role of the state file and how does it handle resources that were modified outside of Terraform?"
+    - "Design a Terraform module structure for an organization with 15 teams, 3 environments (dev/staging/prod), and a shared services account. How would you handle module versioning and cross-account permissions?"
+    - "Explain the difference between count and for_each in Terraform. When would you choose one over the other?"
+    - "A Terraform apply fails halfway through, leaving resources in a partially deployed state. Walk me through how you would diagnose and recover."
+    - "How would you design a multi-environment promotion pipeline for Terraform with required approvals between stages and drift detection?"
+    - "Write an OPA Rego policy that denies any Kubernetes Pod that doesn't have resource limits set. Explain the policy evaluation logic."
+    - "What is Terragrunt and what problem does it solve that Terraform workspaces do not?"
+    - "How would you integrate IaC security scanning (Checkov/tfsec) into a CI/CD pipeline? How would you handle false positives without disabling rules entirely?"
+    - "Explain how AWS Service Control Policies differ from IAM policies. What can SCPs restrict that IAM cannot?"
+    - "How would you migrate an existing manually-managed cloud environment to Terraform-managed infrastructure without causing downtime?"
+  leadership:
+    - "How do you enforce IaC standards across 20 teams without creating a bottleneck where everything goes through your team?"
+    - "A senior engineer wants to make a quick fix directly in the cloud console instead of through Terraform. How do you handle this?"
+    - "How do you balance the speed of manual provisioning with the long-term maintainability benefits of IaC?"
+    - "Describe your strategy for IaC adoption in an organization where most teams currently provision infrastructure manually."
+    - "How do you design a module API that is both easy to use for simple cases and extensible for advanced use cases without breaking backward compatibility?"
+
+content_suggestions:
+  - type: blog_post
+    title: "Terraform State: Everything That Can Go Wrong and How to Prevent It"
+    description: "Comprehensive guide to Terraform state management pitfalls: state corruption, lock contention, sensitive data exposure, drift, and state file migrations. For each problem, explain the root cause, how to detect it, and the prevention strategy. Include real recovery procedures."
+    audience: "Terraform practitioners moving from solo use to team use"
+  - type: blog_post
+    title: "Building an Internal Terraform Module Library: A Practical Guide"
+    description: "Walk through the decisions and trade-offs in building a reusable module library: module API design principles, versioning strategy, documentation standards, testing with Terratest, distribution via private registry, and adoption strategies. Include a worked example module."
+    audience: "Platform and infrastructure engineers building reusable IaC"
+  - type: project
+    title: "Terraform Module Testing Framework Template"
+    description: "Build and publish a template repository that demonstrates: module structure with full input validation, Terratest integration tests, Checkov security scanning in CI, and automatic documentation generation with terraform-docs. Include GitHub Actions workflows for all CI stages."
+    audience: "IaC engineers establishing testing standards for their teams"

@@ -1,0 +1,213 @@
+{
+  "topic_id": "ml-engineering",
+  "title": "Machine Learning Engineering",
+  "version": 1,
+  "questions": [
+    {
+      "id": "mle-01",
+      "question": "What is train-serve skew and what is the most common cause in production ML systems?",
+      "type": "multiple_choice",
+      "options": [
+        "A) The model performs better in production than in testing, caused by more diverse production data",
+        "B) A difference between features used at training time versus serving time, caused by different code paths computing the same feature transformation",
+        "C) The gap between model training speed and inference speed",
+        "D) Using a different version of scikit-learn in training versus production"
+      ],
+      "answer": "B",
+      "explanation": "Train-serve skew: the model sees different feature values at inference than it saw during training, causing silent degradation. The most common cause: a data scientist computes a feature (e.g., rolling 7-day average) in Pandas for training, but the serving system computes it differently (different time window, different null handling, integer vs float arithmetic). Feature stores solve this by ensuring the same feature computation code runs for both training and serving.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "mle-02",
+      "question": "What is point-in-time correctness in a feature store and why does it matter for training data generation?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Ensuring all features are computed at exactly the same time each day",
+        "B) When generating training data, using only feature values that were available at the time each historical event occurred — prevents data leakage from 'future' information",
+        "C) Synchronizing feature computation across multiple data centers",
+        "D) Caching feature values to reduce latency at a specific point in time"
+      ],
+      "answer": "B",
+      "explanation": "Example: training a fraud detection model using transaction history. Without point-in-time correctness, you might use a customer's lifetime account balance (as of today) to predict whether a 2-year-old transaction was fraudulent — but that balance didn't exist at transaction time. This causes optimistically biased offline metrics that collapse in production. Point-in-time correct queries use 'as-of' timestamps: for each training example at time T, retrieve only features with values available at time T.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "mle-03",
+      "question": "What is data drift and how does it differ from concept drift?",
+      "type": "multiple_choice",
+      "options": [
+        "A) They are the same phenomenon described differently",
+        "B) Data drift (covariate shift) = input feature distribution changes; concept drift = the relationship between features and labels changes. Data drift may not immediately hurt performance; concept drift always does",
+        "C) Data drift affects batch pipelines; concept drift affects streaming pipelines",
+        "D) Data drift is detectable; concept drift is not"
+      ],
+      "answer": "B",
+      "explanation": "Data drift: P(X) changes — the distribution of input features shifts (e.g., more mobile users, seasonal demographic changes). The model may still predict correctly if the feature-label relationship is stable. Concept drift: P(Y|X) changes — even for identical inputs, the correct output has changed (e.g., fraud patterns evolve, market conditions shift). Concept drift directly causes model degradation and requires retraining. Data drift is a warning signal that concept drift may follow.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "mle-04",
+      "question": "What is the champion-challenger pattern for ML model deployment?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Training two models on the same data and choosing the one with better validation metrics",
+        "B) Deploying a new model (challenger) alongside the existing production model (champion) — typically in shadow mode first — to compare real-world performance before promoting the challenger to replace the champion",
+        "C) Running A/B tests between two different model architectures indefinitely",
+        "D) Having two teams independently train models and compete for the production slot"
+      ],
+      "answer": "B",
+      "explanation": "Champion-challenger is a safe model promotion pattern: (1) train the challenger, (2) shadow deploy alongside production champion (challenger runs but results are not served to users), (3) compare challenger vs champion predictions on production traffic, (4) if challenger is better on key metrics, promote it to champion. The old champion becomes the rollback option. This de-risks model updates and enables objective, data-driven model comparison beyond offline metrics.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "mle-05",
+      "question": "A model deployed 3 months ago for predicting e-commerce demand has seen its forecast accuracy drop by 20% over the past 2 weeks. The input data distribution looks normal. What is the most likely cause?",
+      "type": "multiple_choice",
+      "options": [
+        "A) The model's code was accidentally changed in a recent deployment",
+        "B) Concept drift — the relationship between the input features and demand has changed (e.g., market conditions, competitor pricing, seasonal event) without the input feature distribution obviously shifting",
+        "C) The training data was corrupted",
+        "D) A feature store is serving stale data"
+      ],
+      "answer": "B",
+      "explanation": "When input distribution looks normal but model performance degrades, concept drift is the primary suspect — P(Y|X) has changed even though P(X) appears stable. A 2-week timeline suggests an external event: new competitor, marketing campaign change, economic shift, or seasonality the model wasn't trained to handle. Investigation: check for recent business events in that period, analyze which output segments degraded (all categories or specific ones?), retrain with more recent data.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "mle-06",
+      "question": "What is knowledge distillation and when is it preferred over quantization for model optimization?",
+      "type": "open",
+      "key_points": [
+        "Knowledge distillation: training a smaller 'student' model to mimic the behavior of a larger 'teacher' model. The student is trained on soft probability outputs (logits) of the teacher, not just hard labels — this transfers the teacher's 'reasoning' about uncertainty",
+        "Quantization: reducing numerical precision of existing model weights (FP32 → INT8). The model architecture doesn't change, just the precision of stored values",
+        "When to prefer distillation: when you need a significantly smaller model (10-100× smaller), when the target deployment environment is severely resource-constrained (mobile, edge), or when you want a model with a different architecture optimized for inference speed",
+        "When to prefer quantization: when you want to reduce a model's memory footprint with minimal code changes and minimal quality loss, and you're deploying on hardware with INT8/INT4 acceleration (modern GPUs, NVIDIA Jetson)",
+        "They can be combined: distill to a smaller model, then quantize that smaller model for maximum compression"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "mle-07",
+      "question": "What is the offline-online evaluation gap in ML and how do you minimize it?",
+      "type": "open",
+      "key_points": [
+        "The gap: a model with great offline metrics (AUC, precision, recall on test set) often underperforms in production. The test set is a static sample; production is a live, non-stationary distribution",
+        "Causes: distribution shift between test set collection time and deployment, selection bias in training data, feedback loop effects (previous model's predictions affected what data was collected), feature distribution differences (train-serve skew)",
+        "Minimization strategies: (1) temporal train/test split — test on the most recent data, not random split, (2) track online metrics (business metrics, user behavior) alongside offline metrics, (3) shadow mode testing before full deployment, (4) canary deployments with gradual traffic increase while monitoring, (5) build a feedback loop to collect labels for online evaluation",
+        "Online evaluation: compare model predictions to eventual outcomes. For delayed labels (fraud detected weeks after transaction), implement a label pipeline that feeds back into model monitoring",
+        "The only reliable metric is online business performance — offline metrics are proxies"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "mle-08",
+      "question": "Compare MLflow and Weights & Biases for experiment tracking. When would you choose each?",
+      "type": "open",
+      "key_points": [
+        "MLflow: open-source, self-hostable, integrates deeply with Databricks. Excellent for: organizations that need on-premises deployment, teams on Databricks, those wanting no vendor lock-in. Weaknesses: UI is functional but not polished, sweep/HPO is not first-class",
+        "W&B (Weights & Biases): SaaS-only (no self-hosting), excellent collaboration features (comment on runs, share reports), first-class hyperparameter sweeps (Bayesian, grid, random), strong visualization. Weaknesses: cost at scale, data leaves your environment (compliance concern for regulated industries)",
+        "Choose MLflow when: self-hosting required, Databricks is your platform, existing team familiarity, minimal budget for tooling",
+        "Choose W&B when: team collaboration on experiments is important, hyperparameter search is a core workflow, non-regulated industry, willing to pay for polished experience",
+        "Both support: run tracking, artifact versioning, model registry, project reproducibility. DVC is a third option that focuses on data and pipeline versioning rather than experiment metrics"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "mle-09",
+      "question": "What is the PSI (Population Stability Index) threshold for flagging significant data drift?",
+      "type": "multiple_choice",
+      "options": [
+        "A) PSI > 0.01 indicates significant drift",
+        "B) PSI > 0.10 indicates moderate shift worth monitoring; PSI > 0.20 indicates significant shift requiring investigation or retraining",
+        "C) PSI > 0.50 indicates significant drift",
+        "D) PSI threshold depends on the model type and cannot be generalized"
+      ],
+      "answer": "B",
+      "explanation": "PSI industry conventions: PSI < 0.10 = no significant shift; 0.10-0.20 = moderate shift, investigate; > 0.20 = significant population shift, likely warrants retraining or model review. PSI is calculated by comparing the distribution of a feature in a reference dataset (training) to the current dataset, bucketed into bins. PSI is particularly common in financial services for credit model monitoring but applies broadly.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "mle-10",
+      "question": "You need to deploy a real-time fraud detection model that must respond in under 50ms p99. The model requires 15 features, 5 of which are aggregates over the user's transaction history (e.g., 7-day spend sum). Describe the serving architecture.",
+      "type": "open",
+      "key_points": [
+        "Online feature store: the 5 aggregate features must be pre-computed and stored in a low-latency online store (Redis, DynamoDB). Batch jobs compute these aggregates and write to the store. Serving path reads them in < 5ms",
+        "Request features: the 10 remaining features come from the transaction payload directly (amount, merchant, time, location)",
+        "Inference path: request arrives → fetch 5 features from online store → combine with 10 request features → call model for prediction → return in < 50ms total",
+        "Latency budget breakdown: online store lookup 5-10ms, feature assembly 1-2ms, model inference 20-30ms, network overhead 5-10ms = ~50ms achievable",
+        "Model serving: pre-loaded into memory (not loaded per request), ONNX runtime or TensorFlow Serving for optimized inference, 2+ replicas for availability",
+        "Consistency: online feature store must be updated near-real-time (Kafka → Flink → Redis) to avoid stale features causing fraud misses for rapidly evolving patterns"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "mle-11",
+      "question": "What is shadow mode deployment for ML models and how does it differ from A/B testing?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Shadow mode shows the new model to some users; A/B testing shows both models to all users",
+        "B) In shadow mode, the new model receives production traffic and makes predictions, but those predictions are NOT returned to users — they are only logged for comparison. A/B testing routes actual users to different model versions and measures real user outcomes",
+        "C) Shadow mode is for dark web deployments; A/B testing is for consumer apps",
+        "D) Shadow mode tests model performance; A/B testing tests model safety"
+      ],
+      "answer": "B",
+      "explanation": "Shadow mode has zero user impact — the new model runs alongside production but its predictions are discarded. It lets you validate: does the new model behave as expected on real traffic? Are there errors or latency issues at production scale? Are predictions consistent with expectations? Once confident, proceed to A/B test (which has user impact). The progression: shadow mode → canary (small % of traffic) → A/B test (controlled experiment) → full rollout.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "mle-12",
+      "question": "What is the difference between online serving and batch serving for ML models, and what factors determine which to use?",
+      "type": "open",
+      "key_points": [
+        "Online serving: model responds to individual requests in real time (< 100ms), one prediction at a time. Required when: decisions must happen immediately (fraud detection, recommendation at click, ad bidding). Higher infrastructure cost, needs always-on GPU/CPU",
+        "Batch serving: model processes many examples offline on a schedule, results stored and later served from a database. Best when: latency tolerance is high (daily email personalization, batch risk scoring, next-day demand forecasts). Lower cost, simpler infrastructure",
+        "Factors to determine: (1) latency requirement — if users wait for the result, online; if precomputed results are acceptable, batch. (2) prediction frequency — if every user needs a fresh prediction for every action, online; if daily is enough, batch. (3) feature availability — if required features are only available at the time of prediction, must be online",
+        "Hybrid: compute expensive features in batch (store in feature store), serve model online but read precomputed features from low-latency store — best of both worlds",
+        "Cost comparison: batch inference on CPUs is orders of magnitude cheaper than online inference on GPUs"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "mle-13",
+      "question": "What does ONNX (Open Neural Network Exchange) solve and when would you use it?",
+      "type": "multiple_choice",
+      "options": [
+        "A) ONNX is a cloud storage format for large model files",
+        "B) ONNX is a vendor-neutral model format that allows models trained in one framework (PyTorch, TensorFlow) to be deployed using any ONNX Runtime — enabling deployment without the original training framework, with optimized cross-platform inference",
+        "C) ONNX is a distributed training protocol",
+        "D) ONNX is a model compression algorithm"
+      ],
+      "answer": "B",
+      "explanation": "Use case: train in PyTorch (best research ecosystem), export to ONNX, deploy with ONNX Runtime (lighter weight, no PyTorch dependency, hardware-optimized). ONNX Runtime applies graph optimizations and hardware-specific kernels (CUDA, TensorRT, CoreML, OpenVINO) that can speed inference 2-5× vs naive PyTorch inference. Key workflow: model.onnx is a deployable artifact independent of the training framework, making the production serving environment simpler and faster.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "mle-14",
+      "question": "Design the monitoring strategy for a credit scoring model deployed 6 months ago. What would you monitor and at what cadence?",
+      "type": "open",
+      "key_points": [
+        "Input monitoring (daily): feature distribution vs training reference using PSI and KS test for each input feature. Alert on PSI > 0.20. Catches data quality issues and covariate shift early",
+        "Prediction monitoring (daily): score distribution over time. A shift in the score distribution (more high-risk predictions, less variance) may indicate model degradation or population change",
+        "Model performance (monthly or when labels available): for credit, ground truth arrives with a lag (default/no-default may take 6-18 months). Track approval rate, default rate among approved loans by vintage and score band. Compare to expected rates from training",
+        "Business metrics (weekly): approval rate, portfolio risk metrics. These are the ultimate success metrics — model health should correlate with portfolio health",
+        "Infrastructure monitoring (real-time): prediction latency, error rate, model serving availability — standard service SLO monitoring",
+        "Retraining trigger: if PSI > 0.20 on key features, or if default rates in recent vintages deviate from model expectations, initiate retraining with updated data"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "mle-15",
+      "question": "What is 'feedback loop' in ML systems and how can it cause model degradation?",
+      "type": "open",
+      "key_points": [
+        "A feedback loop occurs when the model's predictions influence the data that the model will be trained on in the future",
+        "Example 1 (recommendation): a model recommends popular items → users only see those items → only those items get clicks → future training data is biased toward popular items → model becomes even more biased toward popular items (popularity bias amplification)",
+        "Example 2 (content moderation): a model hides flagged content → hidden content never gets human review → the model's training data has no examples of content that was incorrectly flagged → the model never learns to correct its mistakes",
+        "Example 3 (credit): a model denies credit to a demographic group → that group has less credit history → future models have less data on that group → model becomes more uncertain (or more biased) over time",
+        "Detection: compare training data distribution over time — if certain segments are shrinking, investigate whether the model's decisions are causing the shrinkage",
+        "Mitigation: exploration strategies (serve random predictions for a fraction of traffic to collect unbiased data), counterfactual logging, human-in-the-loop review for model-rejected cases"
+      ],
+      "difficulty": "hard"
+    }
+  ]
+}

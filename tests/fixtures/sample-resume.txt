@@ -1,0 +1,41 @@
+Jane Doe
+Senior Security Engineer
+jane.doe@example.com | +1-555-0123 | linkedin.com/in/janedoe
+
+SUMMARY
+Cloud security professional with 10+ years of experience in information security, cloud platforms, and DevSecOps. Currently leading security architecture for cloud infrastructure at a Fortune 500 enterprise.
+
+EXPERIENCE
+
+Senior Security Engineer — Acme Corp
+January 2020 - Present (6 years)
+- Architected cloud security controls across AWS and Azure
+- Led security reviews for 50+ cloud applications
+- Built automated compliance scanning pipelines
+- Managed team of 5 security engineers
+
+Security Engineer — TechCo Industries
+March 2016 - December 2019 (4 years)
+- Implemented IAM policies and access controls for AWS workloads
+- Conducted security assessments and penetration testing
+- Deployed SIEM solutions and incident response procedures
+
+Junior Security Analyst — StartupXYZ
+June 2013 - February 2016 (3 years)
+- Monitored security events and alerts
+- Performed vulnerability assessments
+- Assisted with compliance audits (SOC 2, PCI DSS)
+
+CERTIFICATIONS
+- AWS Certified Security - Specialty
+- AWS Certified Solutions Architect - Associate
+- CISSP
+
+EDUCATION
+Master of Science, Cybersecurity — State University
+Bachelor of Science, Computer Science — State University
+
+SKILLS
+AWS, Azure, Python, Terraform, Docker, Kubernetes, IAM, KMS, CloudTrail,
+Security Hub, GuardDuty, OWASP Top 10, CI/CD, Jenkins, GitHub Actions,
+Compliance (SOC 2, PCI DSS, HIPAA), Incident Response, Threat Modeling

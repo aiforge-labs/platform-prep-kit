@@ -1,0 +1,295 @@
+name: "Solutions Engineer"
+description: "Preparation plan for a Solutions Engineer (presales) role — technical discovery, solution design, demo engineering, proof-of-concept delivery, and customer onboarding in cloud, AI, or DevOps domains"
+version: 1
+suggested_timeline: "6-8 weeks"
+
+bridge_from:
+  software_engineering:
+    strengths:
+      - "Technical depth: architecture, APIs, code, and debugging"
+      - "Ability to quickly learn and demonstrate new technologies"
+      - "Credibility with engineering-side buyers"
+    gaps:
+      - "Presales process: qualification, discovery, proposal, negotiation"
+      - "Business value articulation and ROI framing"
+      - "Multi-stakeholder management: technical buyer vs economic buyer"
+      - "Commercial awareness: pricing models, deal cycles, quota"
+    recommended_start: "technical-discovery"
+  cloud_engineering:
+    strengths:
+      - "Cloud architecture knowledge across AWS, Azure, GCP"
+      - "Infrastructure design and managed service expertise"
+      - "Hands-on implementation and troubleshooting ability"
+    gaps:
+      - "Solution narrative: translating technical capability to business outcomes"
+      - "Demo environment design for sales contexts"
+      - "POC scoping and timebox management"
+      - "Competitive differentiation and objection handling"
+    recommended_start: "technical-discovery"
+  customer_success:
+    strengths:
+      - "Customer relationship management and communication"
+      - "Understanding customer goals and measuring adoption"
+      - "Escalation handling and cross-functional coordination"
+    gaps:
+      - "Deep technical architecture and implementation expertise"
+      - "Demo engineering and hands-on product knowledge"
+      - "Technical RFP and proposal writing"
+      - "Solution scoping and architecture design"
+    recommended_start: "solution-architecture-for-sales"
+  technical_support:
+    strengths:
+      - "Deep product knowledge and troubleshooting expertise"
+      - "Customer communication under pressure"
+      - "Diagnosing root causes and explaining solutions clearly"
+    gaps:
+      - "Proactive solution design vs reactive problem solving"
+      - "Sales cycle process and deal qualification"
+      - "Business case construction and executive communication"
+      - "POC design and delivery"
+    recommended_start: "technical-discovery"
+
+tracks:
+  - id: technical-discovery
+    name: "Technical Discovery"
+    description: "Understanding customer environments, pain points, and requirements before proposing solutions"
+    topics:
+      - id: discovery-methodology
+        name: "Discovery Methodology"
+        estimated_hours: 6
+        priority: high
+        description: "Technical discovery vs business discovery. MEDDPICC and SPIN frameworks applied to technical evaluation. Question types: situational (current state), problem (pain identification), implication (business impact), need-payoff (value realization). Mapping technical architecture to organizational pain. Identifying hidden requirements and integration constraints. Multi-stakeholder discovery: separate conversations for architects, developers, and operations. Discovery call structure: preparation, agenda, questioning, documentation"
+        resources:
+          - title: "MEDDPICC Framework Overview"
+            url: "https://www.salesforceben.com/meddpicc/"
+            type: article
+            free: true
+          - title: "SPIN Selling — Summary"
+            url: "https://www.hubspot.com/sales/spin-selling"
+            type: article
+            free: true
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: stakeholder-mapping
+        name: "Stakeholder Mapping & Navigation"
+        estimated_hours: 4
+        priority: high
+        description: "Org chart vs influence chart. Technical buyer (architect, engineering manager) vs economic buyer (CTO, VP Engineering) vs user buyer (developer). Champion identification and development. Mobilizer vs blocker patterns. Handling the 'single point of contact' restriction. Multi-threading for deal resilience. Adapting communication style for different personas: developer vs architect vs executive"
+        resources:
+          - title: "The Challenger Sale — Key Concepts"
+            url: "https://www.gartner.com/en/sales/insights/challenger-sale"
+            type: article
+            free: true
+
+      - id: technical-requirements
+        name: "Technical Requirements Gathering"
+        estimated_hours: 5
+        priority: high
+        description: "Functional vs non-functional requirements in a sales context. Integration requirements: APIs, authentication, data formats, network topology. Compliance and security requirements: data residency, certifications needed, audit requirements. Scale requirements: users, data volume, transaction rate, latency SLAs. Current state architecture documentation. Gap analysis between current state and target state. Prioritizing requirements by deal-criticality vs nice-to-have"
+        resources:
+          - title: "Solutions Engineering Handbook"
+            url: "file://knowledge_packs/solutions-engineering.md"
+            type: article
+            free: true
+
+  - id: solution-architecture-for-sales
+    name: "Solution Architecture for Sales"
+    description: "Designing and presenting compelling technical architectures in a sales context"
+    topics:
+      - id: reference-architectures
+        name: "Reference Architectures & Patterns"
+        estimated_hours: 7
+        priority: high
+        description: "Building a personal library of reference architectures for your domain (cloud governance, DevSecOps, AI platform, etc.). Adapting reference architectures to customer-specific contexts. Architecture diagramming for sales: balancing completeness with clarity. Whiteboarding techniques: live architecture design sessions with customers. Architecture trade-off discussion: always presenting 2-3 options with trade-offs, not one answer. Scope management in architecture: what is in-scope for the product vs what requires custom work"
+        resources:
+          - title: "AWS Architecture Center"
+            url: "https://aws.amazon.com/architecture/"
+            type: documentation
+            free: true
+          - title: "Google Cloud Architecture Center"
+            url: "https://cloud.google.com/architecture"
+            type: documentation
+            free: true
+          - title: "Azure Architecture Center"
+            url: "https://learn.microsoft.com/en-us/azure/architecture/"
+            type: documentation
+            free: true
+
+      - id: business-value-articulation
+        name: "Business Value Articulation"
+        estimated_hours: 5
+        priority: high
+        description: "Translating technical capabilities to business outcomes: time saved, risk reduced, revenue protected, cost avoided. ROI calculation frameworks for common use cases (cloud governance → compliance cost reduction, DevSecOps → mean time to detect/remediate, AI platform → developer productivity). Value framing by persona: engineer (capability), manager (productivity + reliability), executive (risk + cost + competitive advantage). Total Cost of Ownership analysis: build vs buy. Quantifying the cost of the current pain (cost of doing nothing)"
+        resources:
+          - title: "Value Proposition Canvas"
+            url: "https://www.strategyzer.com/library/the-value-proposition-canvas"
+            type: article
+            free: true
+
+      - id: competitive-positioning
+        name: "Competitive Positioning & Differentiation"
+        estimated_hours: 4
+        priority: medium
+        description: "Competitive landscape mapping: direct competitors, adjacent tools, and build-it-yourself options. Differentiation framework: what are the 3 things your solution does uniquely well? Handling competitive objections: acknowledge, reframe, differentiate. Avoid feature-for-feature comparisons (always a losing game). Competitive intelligence: staying current without obsessing. Win/loss analysis patterns"
+
+  - id: demo-engineering
+    name: "Demo Engineering"
+    description: "Building and delivering technical demonstrations that advance deals"
+    topics:
+      - id: demo-environment-design
+        name: "Demo Environment Design"
+        estimated_hours: 6
+        priority: high
+        description: "Principles of effective demo environments: realistic data, controlled narrative, no live dependencies. Scripted vs exploratory demos: when each is appropriate. Demo environment infrastructure: containerized, reproducible, version-controlled. Building demo datasets: realistic but safe (no real PII). Persona-based demo scripts: different flows for technical vs business audiences. Demo environment maintenance: keeping demos current with product releases. Handling live demos that go wrong: recovery techniques"
+        resources:
+          - title: "Solutions Engineering Handbook"
+            url: "file://knowledge_packs/solutions-engineering.md"
+            type: article
+            free: true
+
+      - id: demo-delivery
+        name: "Demo Delivery & Storytelling"
+        estimated_hours: 6
+        priority: high
+        description: "The demo story arc: problem → failed alternatives → solution → outcome. Day-in-the-life demos: show the workflow, not just the features. Leading with the value statement before diving into the UI. Handling questions during demos without losing the narrative thread. Building suspense: set up the problem before showing the solution. Asking for confirmation after key demo moments. Time management: 45-minute slot = 15 min discovery/setup + 20 min demo + 10 min discussion. Recording demos for async follow-up"
+
+      - id: technical-objection-handling
+        name: "Technical Objection Handling"
+        estimated_hours: 4
+        priority: high
+        description: "Common objection categories: architecture fit, integration complexity, security/compliance, performance at scale, vendor lock-in, build vs buy. Objection handling framework: acknowledge → clarify (is this a blocker or a concern?) → respond → confirm resolution. Objections you cannot answer: how to follow up credibly. When to involve product or engineering in objection handling. Converting objections into POC success criteria"
+
+  - id: poc-delivery
+    name: "Proof-of-Concept Delivery"
+    description: "Designing and executing POCs that lead to wins"
+    topics:
+      - id: poc-scoping
+        name: "POC Scoping & Success Criteria"
+        estimated_hours: 5
+        priority: high
+        description: "POC vs pilot vs benchmark distinction. Scoping a winnable POC: limit scope to 3-5 success criteria you are confident meeting. Mutual success plan: written document with timeline, criteria, and owner for each step. Avoiding scope creep during POC. Success criteria design: measurable, time-bound, tied to business value. Red flags: evaluation with no criteria, evaluation run by someone who wants to build it themselves. Technical vs business success criteria"
+        resources:
+          - title: "Solutions Engineering Handbook"
+            url: "file://knowledge_packs/solutions-engineering.md"
+            type: article
+            free: true
+
+      - id: poc-execution
+        name: "POC Execution & Delivery"
+        estimated_hours: 6
+        priority: high
+        description: "POC project management: daily/weekly standups, progress tracking, blocker escalation. Environment setup: getting product deployed in the customer's environment vs your environment. Data integration: working with customer data samples safely. Documenting POC results: evidence for each success criterion. POC retrospective: what worked, what to address before close. Converting POC success to next steps: building urgency around positive results. Handling a struggling POC: early escalation, scope reduction, extension"
+
+  - id: technical-communication
+    name: "Technical Communication"
+    description: "Writing and presenting technical content for sales and customer success"
+    topics:
+      - id: technical-writing-for-sales
+        name: "Technical Writing for Sales"
+        estimated_hours: 5
+        priority: medium
+        description: "RFP response writing: answering what was asked, not what you want to say. Security questionnaires: frameworks for efficient, accurate completion. Solution briefs: one-page and two-page formats. Architecture diagrams: tools (Lucidchart, draw.io, Miro), level of detail calibration, audience-appropriate notation. Technical email cadence: clarity, call-to-action, follow-up timing. Technical slide decks: structure, storytelling, limiting text"
+
+      - id: domain-depth
+        name: "Technical Domain Depth"
+        estimated_hours: 10
+        priority: high
+        description: "Deep fluency in your solution's domain is the foundation of SE credibility. Select one or more domain tracks to deepen: cloud governance and compliance (CIS, CSPM, policy-as-code), AI/ML platform engineering (RAG, LLMOps, model serving), DevSecOps (CI/CD security, container security, supply chain), or Platform Engineering (IDP, GitOps, Kubernetes). Pair with relevant templates in this repository for structured study"
+        resources:
+          - title: "Cloud Solutions Architect Template"
+            url: "file://templates/cloud-solutions-architect.yml"
+            type: article
+            free: true
+          - title: "AI Platform Engineer Template"
+            url: "file://templates/ai-platform-engineer.yml"
+            type: article
+            free: true
+          - title: "Cloud Compliance Engineer Template"
+            url: "file://templates/cloud-compliance-engineer.yml"
+            type: article
+            free: true
+
+  - id: interview-preparation
+    name: "Interview Preparation"
+    description: "Targeted preparation for Solutions Engineer interviews"
+    topics:
+      - id: se-interview-formats
+        name: "SE Interview Formats & Practice"
+        estimated_hours: 10
+        priority: high
+        description: "Common SE interview formats: mock discovery call, live demo/whiteboard session, technical deep dive Q&A, business case presentation, case study roleplay. Mock discovery call practice: handle an interviewer playing a skeptical technical buyer. Whiteboard architecture session: design a solution to a given customer problem under time pressure. Business case presentation: quantify the value of your solution for a given scenario"
+        quiz_bank: "solutions-engineer"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: se-domain-prep
+        name: "Domain & Product Knowledge Prep"
+        estimated_hours: 6
+        priority: high
+        description: "For SE roles, deep product knowledge matters. Before interviewing: get hands-on with the product (free trial, sandbox), understand the ICP (ideal customer profile), study 3-5 customer case studies, know the top 3 competitive differentiators, understand the pricing model and typical deal structure"
+
+certifications_suggested:
+  - name: "AWS Certified Solutions Architect – Professional"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-solutions-architect-professional/"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "Google Professional Cloud Architect"
+    provider: "Google Cloud"
+    url: "https://cloud.google.com/learn/certification/cloud-architect"
+    priority: high
+    estimated_prep_hours: 50
+  - name: "Azure Solutions Architect Expert (AZ-305)"
+    provider: "Microsoft"
+    url: "https://learn.microsoft.com/en-us/credentials/certifications/azure-solutions-architect/"
+    priority: medium
+    estimated_prep_hours: 50
+  - name: "Certified Kubernetes Administrator (CKA)"
+    provider: "CNCF / Linux Foundation"
+    url: "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/"
+    priority: low
+    estimated_prep_hours: 50
+  - name: "HashiCorp Terraform Associate"
+    provider: "HashiCorp"
+    url: "https://www.hashicorp.com/certification/terraform-associate"
+    priority: low
+    estimated_prep_hours: 25
+
+interview_questions:
+  technical:
+    - "A customer's architect says they already have an internal tool that does 80% of what your product does. How do you respond?"
+    - "Walk me through how you would run a discovery call for a customer evaluating a cloud governance platform. What questions would you ask and in what order?"
+    - "Design a 3-week POC for a customer evaluating whether your product can automate their SOC 2 evidence collection. What are the success criteria and what would you deliver?"
+    - "How would you explain the ROI of a cloud security posture management tool to a CFO who wants hard numbers?"
+    - "A customer says 'we evaluated your product six months ago and it couldn't do X.' How do you handle this without throwing your company under the bus?"
+    - "Walk me through how you build a demo environment. What decisions do you make and why?"
+    - "A customer asks a technical question you don't know the answer to during a demo. What do you do?"
+    - "How would you whiteboard a solution for a customer who needs to enforce compliance policies across 50 AWS accounts?"
+    - "What does a good POC mutual success plan look like? Walk me through the components."
+    - "A customer is 3 weeks into a 4-week POC and progress is behind schedule. What do you do?"
+  leadership:
+    - "Tell me about a deal where you lost to a competitor. What would you do differently?"
+    - "How do you manage your time when you have five active POCs, two RFPs due, and three discovery calls this week?"
+    - "How do you build a trusted advisor relationship with a customer's technical team during a sales cycle?"
+    - "A product manager wants to add a feature that customers keep asking for in POCs. How do you communicate this feedback constructively?"
+    - "How do you stay technically current in a rapidly evolving domain while spending most of your time in customer-facing activities?"
+
+content_suggestions:
+  - type: blog_post
+    title: "The Art of the POC: Scoping for a Win"
+    description: "Honest guide to designing POCs that prove value without becoming open-ended consulting engagements. Cover mutual success plans, success criteria design, scope control techniques, and how to convert a positive POC into momentum. Include templates for a 2-week and 4-week POC mutual success plan."
+    audience: "Solutions engineers and presales professionals"
+  - type: blog_post
+    title: "Technical Discovery: Questions That Actually Uncover Pain"
+    description: "Collection of discovery questions organized by category: current state architecture, operational pain, compliance requirements, scale requirements, and team structure. For each question, explain what you're really trying to find out and how to follow up on the answer."
+    audience: "Solutions engineers preparing for discovery calls"
+  - type: project
+    title: "Demo Environment Starter Kit"
+    description: "Build and publish a Docker Compose or Kubernetes-based demo environment template for a chosen domain (e.g., cloud governance, DevSecOps pipeline). Include realistic synthetic data, a demo script with talking points, and a walkthrough video. Demonstrates SE-specific skills: not just technical depth but demo craft."
+    audience: "Solutions engineers building demo environments for their product domain"

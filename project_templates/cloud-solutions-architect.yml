@@ -1,0 +1,100 @@
+role: cloud-solutions-architect
+version: 1
+
+projects:
+  - id: iac-multi-env-pipeline
+    title: "IaC Multi-Environment Deployment Pipeline"
+    description: >
+      Build a Terraform (or Pulumi/CDK) project that provisions a realistic
+      multi-environment setup (dev/staging/prod) with a CI/CD pipeline.
+      Demonstrate environment isolation, state management, module reuse,
+      and automated drift detection.
+    track_id: infrastructure-as-code
+    topics:
+      - terraform-fundamentals
+      - cicd-for-infrastructure
+    difficulty: intermediate
+    estimated_hours: 10
+    skills_demonstrated:
+      - "IaC with Terraform/Pulumi/CDK"
+      - "Multi-environment architecture"
+      - "Remote state management and locking"
+      - "Module composition and reuse"
+      - "CI/CD pipeline for infrastructure"
+      - "Drift detection"
+    rubric:
+      - description: "Infrastructure defined entirely in code (no manual steps)"
+      - description: "At least 2 environments (dev + prod) with isolation"
+      - description: "Remote state backend configured (S3, GCS, etc.)"
+      - description: "At least 1 reusable module extracted"
+      - description: "CI pipeline runs plan on PR, apply on merge"
+      - description: "Drift detection mechanism documented or automated"
+      - description: "Costs estimated using infracost or similar"
+      - description: "README includes architecture diagram"
+    starter_files:
+      README.md: |
+        # IaC Multi-Environment Deployment Pipeline
+
+        ## Goal
+        Demonstrate production-grade IaC practices with multi-env support.
+
+        ## Architecture
+        <!-- Draw your environment topology and pipeline flow -->
+
+        ## Quick Start
+        ```bash
+        cd environments/dev
+        terraform init
+        terraform plan
+        ```
+      environments/dev/main.tf: |
+        # Dev environment entry point
+      environments/prod/main.tf: |
+        # Prod environment entry point
+      modules/.gitkeep: ""
+    resources:
+      - "Terraform best practices: https://www.terraform-best-practices.com/"
+      - "Infracost: https://www.infracost.io/"
+
+  - id: well-architected-review
+    title: "Well-Architected Review Tool"
+    description: >
+      Build a CLI tool that walks a user through an AWS/GCP/Azure
+      Well-Architected Framework review for a given workload. Generate
+      a structured report with findings, risk levels, and actionable
+      recommendations.
+    track_id: architecture-patterns
+    topics:
+      - well-architected-framework
+      - cost-optimization
+    difficulty: starter
+    estimated_hours: 8
+    skills_demonstrated:
+      - "Cloud Well-Architected Framework knowledge"
+      - "Structured assessment methodology"
+      - "Report generation"
+      - "CLI design"
+    rubric:
+      - description: "Covers at least 3 WAF pillars"
+      - description: "Interactive questionnaire per pillar"
+      - description: "Findings categorized by risk level (high/medium/low)"
+      - description: "Generates a markdown or HTML report"
+      - description: "Includes actionable recommendations per finding"
+      - description: "README explains the assessment methodology"
+    starter_files:
+      README.md: |
+        # Well-Architected Review Tool
+
+        ## Goal
+        CLI tool for structured cloud architecture reviews.
+
+        ## Usage
+        ```bash
+        python review.py --workload "my-api-service"
+        ```
+      review.py: |
+        """Well-Architected Framework review CLI."""
+      pillars/.gitkeep: ""
+    resources:
+      - "AWS Well-Architected: https://aws.amazon.com/architecture/well-architected/"
+      - "GCP Architecture Framework: https://cloud.google.com/architecture/framework"

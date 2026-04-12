@@ -1,0 +1,138 @@
+{
+  "topic_id": "interview-behavioral",
+  "topic_name": "Behavioral Interview Questions",
+  "version": 1,
+  "questions": [
+    {
+      "id": "b1",
+      "question": "Tell me about a time you had to make a difficult technical decision under pressure. What was the situation and outcome?",
+      "type": "open",
+      "key_points": [
+        "Specific situation with real stakes",
+        "Clear decision criteria you used",
+        "Action you took and why",
+        "Measurable outcome or result",
+        "What you learned from it"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "b2",
+      "question": "Describe a situation where you had to push back on a request from a senior leader. How did you handle it?",
+      "type": "open",
+      "key_points": [
+        "Context: what was being asked and why you disagreed",
+        "How you communicated your concerns respectfully",
+        "Data or evidence you used to support your position",
+        "Resolution: compromise, escalation, or outcome",
+        "Relationship impact: maintained trust despite disagreement"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "b3",
+      "question": "Tell me about a time you built a team or capability from scratch. What was your approach?",
+      "type": "open",
+      "key_points": [
+        "What needed to be built and why",
+        "Hiring or talent strategy",
+        "How you structured roles and responsibilities",
+        "Mentoring and skill development approach",
+        "Measurable outcomes (team size, delivery metrics, etc.)"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": "b4",
+      "question": "Describe a project that failed or didn't meet expectations. What happened and what did you learn?",
+      "type": "open",
+      "key_points": [
+        "Honest acknowledgment of what went wrong",
+        "Your role and responsibility in the failure",
+        "Root cause analysis (not blame-shifting)",
+        "Specific changes you made afterward",
+        "How it made you a better leader/engineer"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "b5",
+      "question": "How do you balance security requirements with innovation speed in your teams?",
+      "type": "open",
+      "key_points": [
+        "Make the secure path the easy path (shift left)",
+        "Automate compliance so it doesn't slow delivery",
+        "Risk-based approach: not everything needs the same rigor",
+        "Concrete examples of enabling velocity while maintaining security",
+        "Cultural approach: security as enabler, not blocker"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "b6",
+      "question": "Tell me about a time you had to learn a new technology or domain quickly. How did you approach it?",
+      "type": "open",
+      "key_points": [
+        "What you needed to learn and the timeline",
+        "Your learning strategy (structured study, hands-on, mentoring)",
+        "How you validated your understanding",
+        "How you applied the new knowledge in practice",
+        "Outcome and ongoing learning approach"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "b7",
+      "question": "Describe how you handle a situation where team members disagree on a technical approach.",
+      "type": "open",
+      "key_points": [
+        "Listen to all perspectives before deciding",
+        "Use objective criteria (data, benchmarks, constraints)",
+        "Make a clear decision and communicate reasoning",
+        "Ensure buy-in from the team after the decision",
+        "Follow up to validate the decision was correct"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "b8",
+      "question": "How do you ensure your team stays current with rapidly evolving technology?",
+      "type": "open",
+      "key_points": [
+        "Dedicated learning time or budget",
+        "Knowledge sharing sessions within the team",
+        "Conference attendance or community participation",
+        "Hands-on experimentation and PoCs",
+        "Mentoring and cross-training"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": "b9",
+      "question": "Tell me about a time you had to deliver results with limited resources or a tight deadline.",
+      "type": "open",
+      "key_points": [
+        "Specific constraints you faced",
+        "How you prioritized (what you did and didn't do)",
+        "How you communicated trade-offs to stakeholders",
+        "Creative solutions or efficiency improvements",
+        "Outcome and what you delivered"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": "b10",
+      "question": "How would you build a security culture in an organization that historically prioritizes speed over security?",
+      "type": "open",
+      "key_points": [
+        "Start with quick wins that show security doesn't slow things down",
+        "Automate security checks into existing workflows",
+        "Educate through real examples, not fear",
+        "Make security metrics visible to leadership",
+        "Champion security advocates within development teams",
+        "Celebrate security improvements alongside feature delivery"
+      ],
+      "difficulty": "hard"
+    }
+  ]
+}

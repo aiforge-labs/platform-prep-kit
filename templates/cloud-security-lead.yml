@@ -1,0 +1,361 @@
+name: "Cloud / AI Security Lead"
+description: "Preparation plan for a senior Cloud and AI Security leadership role combining cloud-native security, AI/ML threat modeling, and governance"
+version: 1
+suggested_timeline: "10-12 weeks"
+
+bridge_from:
+  cloud_security:
+    strengths:
+      - "IAM, network security, encryption fundamentals"
+      - "Compliance and audit experience"
+      - "Cloud-native architecture understanding"
+    gaps:
+      - "AI/ML-specific attack surfaces"
+      - "LLM prompt injection and model security"
+      - "AI governance frameworks (NIST AI RMF, EU AI Act)"
+    recommended_start: "ai-foundations-overview"
+  web_development:
+    strengths:
+      - "Application security awareness"
+      - "API design and authentication patterns"
+      - "CI/CD pipeline familiarity"
+    gaps:
+      - "Cloud infrastructure security"
+      - "AI/ML model lifecycle and risks"
+      - "Enterprise compliance frameworks"
+      - "Network segmentation and zero-trust architecture"
+    recommended_start: "cloud-security-baseline"
+  network_security:
+    strengths:
+      - "Network segmentation and firewalls"
+      - "IDS/IPS and traffic analysis"
+      - "Protocol-level security understanding"
+    gaps:
+      - "Cloud-native security controls (IAM policies, SGs, NACLs)"
+      - "AI/ML concepts and terminology"
+      - "API and application-layer security"
+      - "Infrastructure as Code security"
+    recommended_start: "cloud-security-baseline"
+
+tracks:
+  - id: ai-security-foundations
+    name: "AI Security Foundations"
+    description: "Core knowledge of AI/ML concepts and their security implications"
+    topics:
+      - id: ai-foundations-overview
+        name: "AI/ML Fundamentals for Security Professionals"
+        estimated_hours: 8
+        priority: high
+        description: "Understand ML pipelines, model types (supervised, unsupervised, generative), training data, inference, and where security boundaries exist"
+        resources:
+          - title: "Google Machine Learning Crash Course"
+            url: "https://developers.google.com/machine-learning/crash-course"
+            type: course
+            free: true
+          - title: "OWASP Machine Learning Security Top 10"
+            url: "https://owasp.org/www-project-machine-learning-security-top-10/"
+            type: documentation
+            free: true
+          - title: "AI Security 101 - SANS Whitepaper"
+            url: "https://www.sans.org/white-papers/"
+            type: article
+            free: true
+
+      - id: llm-security
+        name: "Large Language Model Security"
+        estimated_hours: 10
+        priority: high
+        description: "Prompt injection, jailbreaks, data leakage, output manipulation, and securing LLM-powered applications"
+        quiz_bank: "owasp-llm-top10"
+        resources:
+          - title: "OWASP Top 10 for LLM Applications"
+            url: "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+            type: documentation
+            free: true
+          - title: "Simon Willison - Prompt Injection Explained"
+            url: "https://simonwillison.net/2023/Apr/14/worst-that-can-happen/"
+            type: article
+            free: true
+          - title: "NIST AI 100-2e2023 - Adversarial ML Taxonomy"
+            url: "https://csrc.nist.gov/pubs/ai/100/2/e2023/final"
+            type: documentation
+            free: true
+
+      - id: adversarial-ml
+        name: "Adversarial Machine Learning"
+        estimated_hours: 6
+        priority: medium
+        description: "Data poisoning, model evasion, model stealing, and backdoor attacks"
+        resources:
+          - title: "Adversarial Robustness Toolbox (ART) Documentation"
+            url: "https://adversarial-robustness-toolbox.readthedocs.io/"
+            type: documentation
+            free: true
+          - title: "NIST AI 100-2 - Adversarial Machine Learning"
+            url: "https://csrc.nist.gov/pubs/ai/100/2/e2023/final"
+            type: documentation
+            free: true
+
+  - id: ai-governance-compliance
+    name: "AI Governance & Compliance"
+    description: "Regulatory landscape, frameworks, and organizational governance for AI systems"
+    topics:
+      - id: nist-ai-rmf
+        name: "NIST AI Risk Management Framework"
+        estimated_hours: 8
+        priority: high
+        description: "Deep dive into AI RMF 1.0 (GOVERN, MAP, MEASURE, MANAGE), Trustworthy AI characteristics, and the GenAI Profile"
+        quiz_bank: "nist-ai-rmf"
+        resources:
+          - title: "NIST AI RMF 1.0"
+            url: "https://www.nist.gov/artificial-intelligence/executive-order-safe-secure-and-trustworthy-artificial-intelligence"
+            type: documentation
+            free: true
+          - title: "NIST AI 600-1 GenAI Profile"
+            url: "https://airc.nist.gov/Docs/1"
+            type: documentation
+            free: true
+
+      - id: eu-ai-act
+        name: "EU AI Act and Global Regulation"
+        estimated_hours: 5
+        priority: medium
+        description: "Risk classification tiers, prohibited practices, high-risk system requirements, and compliance timelines"
+        resources:
+          - title: "EU AI Act Official Text"
+            url: "https://artificialintelligenceact.eu/"
+            type: documentation
+            free: true
+          - title: "Future of Life Institute - AI Act Explorer"
+            url: "https://artificialintelligenceact.eu/ai-act-explorer/"
+            type: documentation
+            free: true
+
+      - id: responsible-ai
+        name: "Responsible AI Practices"
+        estimated_hours: 4
+        priority: medium
+        description: "Bias detection, fairness metrics, transparency, explainability, and AI ethics in enterprise settings"
+        resources:
+          - title: "Microsoft Responsible AI Standard"
+            url: "https://www.microsoft.com/en-us/ai/responsible-ai"
+            type: documentation
+            free: true
+          - title: "Google Responsible AI Practices"
+            url: "https://ai.google/responsibility/responsible-ai-practices/"
+            type: documentation
+            free: true
+
+  - id: cloud-ai-ml-service-security
+    name: "Cloud AI/ML Service Security"
+    description: "Securing AI/ML services across major cloud platforms"
+    topics:
+      - id: aws-ai-security
+        name: "AWS AI/ML Security (SageMaker, Bedrock)"
+        estimated_hours: 8
+        priority: high
+        description: "SageMaker notebook security, VPC configurations, model endpoints, Bedrock guardrails, IAM for ML workloads"
+        resources:
+          - title: "AWS SageMaker Security Documentation"
+            url: "https://docs.aws.amazon.com/sagemaker/latest/dg/security.html"
+            type: documentation
+            free: true
+          - title: "AWS Bedrock Security Best Practices"
+            url: "https://docs.aws.amazon.com/bedrock/latest/userguide/security.html"
+            type: documentation
+            free: true
+
+      - id: azure-ai-security
+        name: "Azure AI Security (Azure OpenAI, ML Studio)"
+        estimated_hours: 6
+        priority: medium
+        description: "Azure OpenAI content filtering, Azure ML managed endpoints, network isolation, managed identities for ML"
+        resources:
+          - title: "Azure OpenAI Service Security"
+            url: "https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/security"
+            type: documentation
+            free: true
+          - title: "Azure Machine Learning Security"
+            url: "https://learn.microsoft.com/en-us/azure/machine-learning/concept-enterprise-security"
+            type: documentation
+            free: true
+
+      - id: gcp-ai-security
+        name: "GCP AI Security (Vertex AI)"
+        estimated_hours: 5
+        priority: low
+        description: "Vertex AI security controls, VPC-SC for ML, model monitoring, and data governance"
+        resources:
+          - title: "Vertex AI Security Overview"
+            url: "https://cloud.google.com/vertex-ai/docs/general/security"
+            type: documentation
+            free: true
+
+  - id: ai-threat-modeling
+    name: "AI Threat Modeling"
+    description: "Systematic identification of threats to AI/ML systems"
+    topics:
+      - id: mitre-atlas
+        name: "MITRE ATLAS Framework"
+        estimated_hours: 8
+        priority: high
+        description: "Adversarial Threat Landscape for AI Systems — tactics, techniques, and case studies for AI-specific threats"
+        quiz_bank: "mitre-atlas"
+        resources:
+          - title: "MITRE ATLAS Official Site"
+            url: "https://atlas.mitre.org/"
+            type: documentation
+            free: true
+          - title: "ATLAS Navigator"
+            url: "https://atlas.mitre.org/navigator"
+            type: documentation
+            free: true
+
+      - id: ai-threat-model-practice
+        name: "Hands-On AI Threat Modeling"
+        estimated_hours: 6
+        priority: high
+        description: "Apply STRIDE, LINDDUN, and ATLAS to real AI system architectures; build threat model documents for portfolio"
+        resources:
+          - title: "OWASP Threat Modeling Cheat Sheet"
+            url: "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html"
+            type: documentation
+            free: true
+          - title: "Microsoft Threat Modeling Tool"
+            url: "https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool"
+            type: documentation
+            free: true
+
+  - id: industry-specific-prep
+    name: "Industry-Specific Preparation"
+    description: "Domain knowledge for regulated industries that heavily adopt AI"
+    topics:
+      - id: financial-services-ai
+        name: "AI in Financial Services"
+        estimated_hours: 4
+        priority: medium
+        description: "Model risk management (SR 11-7), algorithmic trading safeguards, fraud detection, and regulatory expectations"
+        resources:
+          - title: "Federal Reserve SR 11-7 Model Risk Management"
+            url: "https://www.federalreserve.gov/supervisionreg/srletters/sr1107.htm"
+            type: documentation
+            free: true
+
+      - id: healthcare-ai
+        name: "AI in Healthcare"
+        estimated_hours: 4
+        priority: low
+        description: "HIPAA implications for AI, FDA SaMD guidance, clinical decision support, and patient data de-identification"
+        resources:
+          - title: "FDA - AI/ML-Based Software as Medical Device"
+            url: "https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-and-machine-learning-aiml-enabled-medical-devices"
+            type: documentation
+            free: true
+
+      - id: cloud-security-baseline
+        name: "Enterprise Cloud Security Baseline"
+        estimated_hours: 6
+        priority: high
+        description: "Refresh on cloud security fundamentals: IAM, networking, encryption, logging, and incident response across AWS/Azure/GCP"
+        resources:
+          - title: "AWS Well-Architected Security Pillar"
+            url: "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html"
+            type: documentation
+            free: true
+          - title: "CIS Cloud Benchmarks"
+            url: "https://www.cisecurity.org/benchmark"
+            type: documentation
+            free: true
+
+  - id: interview-preparation
+    name: "Interview Preparation"
+    description: "Structured practice for technical and leadership interviews"
+    topics:
+      - id: technical-interview-prep
+        name: "Technical Interview Practice"
+        estimated_hours: 10
+        priority: high
+        description: "Practice answering architecture, threat modeling, and incident response questions with STAR framework"
+        quiz_bank: "interview-behavioral"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: leadership-interview-prep
+        name: "Leadership Interview Practice"
+        estimated_hours: 6
+        priority: high
+        description: "Prepare stories for leadership principles: ownership, bias for action, stakeholder management, team building"
+        resources:
+          - title: "Interview Frameworks Knowledge Pack"
+            url: "file://knowledge_packs/interview-frameworks.md"
+            type: article
+            free: true
+
+      - id: portfolio-building
+        name: "Portfolio and Thought Leadership"
+        estimated_hours: 8
+        priority: medium
+        description: "Create tangible artifacts that demonstrate expertise: blog posts, threat models, open-source contributions"
+
+content_suggestions:
+  - type: blog_post
+    title: "Securing LLM-Powered Applications: A Practical Guide"
+    description: "Walk through the OWASP LLM Top 10 with real architectural patterns and mitigations. Include diagrams showing data flow through an LLM application and where security controls should be placed."
+    audience: "Security engineers and architects evaluating AI adoption"
+  - type: blog_post
+    title: "From Cloud Security to AI Security: What Transfers and What Doesn't"
+    description: "Map familiar cloud security concepts (IAM, encryption, network isolation) to their AI/ML equivalents. Cover what is genuinely new: prompt injection, model poisoning, training data attacks."
+    audience: "Cloud security professionals exploring AI security"
+  - type: threat_model
+    title: "Threat Model: Enterprise RAG (Retrieval-Augmented Generation) System"
+    description: "Complete threat model document for an enterprise RAG system including: system architecture diagram, trust boundaries, STRIDE analysis of each component, MITRE ATLAS mapping, and prioritized mitigations. This is a strong portfolio piece for interviews."
+    audience: "Hiring managers and interview panels"
+
+certifications_suggested:
+  - name: "AWS Certified Machine Learning - Specialty"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-machine-learning-specialty/"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "Certified Information Systems Security Professional (CISSP)"
+    provider: "ISC2"
+    url: "https://www.isc2.org/certifications/cissp"
+    priority: high
+    estimated_prep_hours: 80
+  - name: "Certified Cloud Security Professional (CCSP)"
+    provider: "ISC2"
+    url: "https://www.isc2.org/certifications/ccsp"
+    priority: medium
+    estimated_prep_hours: 60
+  - name: "Google Professional Machine Learning Engineer"
+    provider: "Google Cloud"
+    url: "https://cloud.google.com/learn/certification/machine-learning-engineer"
+    priority: medium
+    estimated_prep_hours: 50
+  - name: "GIAC Cloud Security Automation (GCSA)"
+    provider: "SANS/GIAC"
+    url: "https://www.giac.org/certifications/cloud-security-automation-gcsa/"
+    priority: low
+    estimated_prep_hours: 50
+
+interview_questions:
+  technical:
+    - "Walk me through how you would secure an enterprise deployment of a large language model that has access to internal company documents."
+    - "A data scientist wants to use a public dataset to fine-tune a model for production use. What security concerns would you raise and what controls would you recommend?"
+    - "Explain the difference between prompt injection and jailbreaking. How would you design defenses against each?"
+    - "How would you implement a security review process for AI/ML models before they go to production? What would your checklist include?"
+    - "Describe how you would set up network isolation for a SageMaker training job that needs access to data in S3 but should not have internet access."
+    - "An AI model in production starts returning unexpected outputs. Walk me through your incident response process."
+    - "How do you evaluate the security of a third-party AI API before integrating it into your application?"
+    - "Explain the MITRE ATLAS framework. How does it compare to ATT&CK, and when would you use each?"
+    - "What are the key security differences between hosting your own LLM versus using a managed API service like Azure OpenAI?"
+    - "How would you design a data loss prevention strategy for an organization that uses AI assistants across multiple departments?"
+  leadership:
+    - "How would you build a business case for an AI security program when the organization is just starting its AI journey?"
+    - "Tell me about a time you had to influence engineering teams to adopt security practices without having direct authority over them."
+    - "How do you balance enabling AI innovation with maintaining security standards? Give a specific example."
+    - "Describe how you would structure an AI security team. What roles and skills would you prioritize in your first three hires?"
+    - "How do you stay current with the rapidly evolving AI threat landscape? How do you translate that into actionable guidance for your organization?"

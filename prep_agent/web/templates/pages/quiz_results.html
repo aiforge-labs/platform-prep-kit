@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% set active_page = "quiz" %}
+{% block title %}Quiz Results - Career Prep Agent{% endblock %}
+
+{% block content %}
+<h2>Quiz Results: {{ topic }}</h2>
+
+<div class="results-summary">
+    <div class="stat-card big">
+        <div class="stat-value {% if percentage >= 70 %}stat-success{% elif percentage >= 50 %}stat-warning{% else %}stat-error{% endif %}">
+            {{ score }}/{{ total }}
+        </div>
+        <div class="stat-label">{{ "%.0f"|format(percentage) }}%</div>
+    </div>
+</div>
+
+<div class="section">
+    <h3>Question Breakdown</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Question</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(answers|length) %}
+            <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ questions[i].question[:80] }}{% if questions[i].question|length > 80 %}...{% endif %}</td>
+                <td>
+                    {% if answers[i].correct %}
+                    <span class="badge badge-done">Correct</span>
+                    {% else %}
+                    <span class="badge badge-pending">Incorrect</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="results-actions">
+    <a href="/quiz/start?topic={{ topic }}" class="btn btn-accent">Retry</a>
+    <a href="/quiz" class="btn btn-outline">Back to Quizzes</a>
+</div>
+{% endblock %}

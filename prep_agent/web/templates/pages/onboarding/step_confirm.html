@@ -1,0 +1,55 @@
+<h3>Confirm Your Plan</h3>
+
+<div class="confirm-summary">
+    {% if state.profile %}
+    <div class="confirm-section">
+        <h4>Profile</h4>
+        {% if state.profile.name %}<p>Name: {{ state.profile.name }}</p>{% endif %}
+        {% if state.profile.current_role %}<p>Current Role: {{ state.profile.current_role }}</p>{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="confirm-section">
+        <h4>Target Role</h4>
+        <p>Template: <strong>{{ state.template_name|default(state.template_id) }}</strong></p>
+    </div>
+
+    {% if state.job_url or state.job %}
+    <div class="confirm-section">
+        <h4>Job Posting</h4>
+        {% if state.job_url %}<p>URL: {{ state.job_url }}</p>{% endif %}
+        {% if state.job and state.job.title %}<p>Title: {{ state.job.title }}</p>{% endif %}
+    </div>
+    {% endif %}
+
+    {% if state.resume %}
+    <div class="confirm-section">
+        <h4>Resume</h4>
+        <p>Parsed successfully</p>
+        {% if state.resume.skills %}<p>Skills found: {{ state.resume.skills|length }}</p>{% endif %}
+        {% if state.resume.experience_years %}<p>Experience: {{ state.resume.experience_years }} years</p>{% endif %}
+    </div>
+    {% endif %}
+
+    {% if state.fitment %}
+    <div class="confirm-section">
+        <h4>Fitment Score</h4>
+        <p><strong>{{ state.fitment.overall_score|round|int }}%</strong> match</p>
+        {% if state.fitment.gaps %}<p>{{ state.fitment.gaps|length }} gaps identified</p>{% endif %}
+    </div>
+    {% endif %}
+
+    {% if state.timeline %}
+    <div class="confirm-section">
+        <h4>Timeline</h4>
+        <p>Duration: {{ state.timeline.weeks }} weeks</p>
+        <p>Hours/day: {{ state.timeline.hours_per_day }}</p>
+        <p>Study days: {{ state.timeline.study_days|join(', ') }}</p>
+    </div>
+    {% endif %}
+</div>
+
+<form hx-post="/onboarding/create" hx-target="body">
+    <input type="hidden" name="session_id" value="{{ session_id }}">
+    <button type="submit" class="btn btn-success btn-large">Create My Plan</button>
+</form>

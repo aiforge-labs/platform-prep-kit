@@ -1,0 +1,17 @@
+{% macro sidebar(active_page="") %}
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <h1 class="logo">Career Prep</h1>
+        <span class="version">v0.1.0</span>
+    </div>
+    <ul class="nav-links">
+        <li><a href="/" class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" hx-boost="true">Dashboard</a></li>
+        <li><a href="/today" class="nav-link {% if active_page == 'today' %}active{% endif %}" hx-boost="true">Today</a></li>
+        <li><a href="/study" class="nav-link {% if active_page == 'study' %}active{% endif %}" hx-boost="true">Study Plan</a></li>
+        <li><a href="/quiz" class="nav-link {% if active_page == 'quiz' %}active{% endif %}" hx-boost="true">Quizzes</a></li>
+        <li><a href="/knowledge" class="nav-link {% if active_page == 'knowledge' %}active{% endif %}" hx-boost="true">Knowledge</a></li>
+        <li><a href="/portfolio" class="nav-link {% if active_page == 'portfolio' %}active{% endif %}" hx-boost="true">Portfolio</a></li>
+        <li><a href="/settings" class="nav-link {% if active_page == 'settings' %}active{% endif %}" hx-boost="true">Settings</a></li>
+    </ul>
+</nav>
+{% endmacro %}

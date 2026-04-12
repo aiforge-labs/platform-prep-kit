@@ -1,0 +1,300 @@
+name: "DevSecOps Engineer"
+description: "Preparation plan for a DevSecOps Engineer role integrating security into CI/CD pipelines, container platforms, and cloud infrastructure"
+version: 1
+suggested_timeline: "8-10 weeks"
+
+bridge_from:
+  software_engineering:
+    strengths:
+      - "CI/CD pipeline design and maintenance"
+      - "Application development and debugging"
+      - "Version control and code review workflows"
+    gaps:
+      - "Security scanning tools (SAST, DAST, SCA)"
+      - "Container and Kubernetes security hardening"
+      - "Cloud security posture management"
+    recommended_start: "owasp-top-10"
+  security_operations:
+    strengths:
+      - "Vulnerability management processes"
+      - "Incident response and triage"
+      - "Security monitoring and SIEM"
+    gaps:
+      - "CI/CD pipeline internals and automation"
+      - "Infrastructure as Code and GitOps"
+      - "Container orchestration and microservice architecture"
+    recommended_start: "cicd-security-fundamentals"
+  cloud_engineering:
+    strengths:
+      - "Cloud infrastructure provisioning"
+      - "IAM and network security controls"
+      - "Monitoring and logging setup"
+    gaps:
+      - "Application security testing tools"
+      - "Secure coding practices and code review"
+      - "Supply chain security and SBOM"
+    recommended_start: "owasp-top-10"
+
+tracks:
+  - id: application-security
+    name: "Application Security"
+    description: "Foundational application security knowledge and secure development practices"
+    topics:
+      - id: owasp-top-10
+        name: "OWASP Top 10 (Web and API)"
+        estimated_hours: 8
+        priority: high
+        description: "OWASP Top 10 web vulnerabilities and API Security Top 10. Understand each vulnerability, how to detect it, and how to prevent it in code and infrastructure."
+        resources:
+          - title: "OWASP Top 10 (2021)"
+            url: "https://owasp.org/Top10/"
+            type: documentation
+            free: true
+          - title: "OWASP API Security Top 10 (2023)"
+            url: "https://owasp.org/API-Security/"
+            type: documentation
+            free: true
+          - title: "PortSwigger Web Security Academy"
+            url: "https://portswigger.net/web-security"
+            type: course
+            free: true
+
+      - id: sast-dast-tools
+        name: "SAST, DAST, and SCA Tools"
+        estimated_hours: 8
+        priority: high
+        description: "Static analysis (Semgrep, CodeQL, SonarQube), dynamic analysis (OWASP ZAP, Burp Suite), and software composition analysis (Dependabot, Snyk, Trivy)"
+        resources:
+          - title: "Semgrep Documentation"
+            url: "https://semgrep.dev/docs/"
+            type: documentation
+            free: true
+          - title: "CodeQL Documentation"
+            url: "https://codeql.github.com/docs/"
+            type: documentation
+            free: true
+          - title: "OWASP ZAP Getting Started"
+            url: "https://www.zaproxy.org/getting-started/"
+            type: documentation
+            free: true
+
+      - id: secure-coding
+        name: "Secure Coding Practices"
+        estimated_hours: 6
+        priority: medium
+        description: "Input validation, output encoding, authentication/authorization patterns, secrets management, and secure error handling"
+        resources:
+          - title: "OWASP Secure Coding Practices Quick Reference"
+            url: "https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/"
+            type: documentation
+            free: true
+          - title: "OWASP Cheat Sheet Series"
+            url: "https://cheatsheetseries.owasp.org/"
+            type: documentation
+            free: true
+
+  - id: container-k8s-security
+    name: "Container & Kubernetes Security"
+    description: "Securing containerized workloads from image build to runtime"
+    topics:
+      - id: container-image-security
+        name: "Container Image Security"
+        estimated_hours: 6
+        priority: high
+        description: "Minimal base images, multi-stage builds, image scanning (Trivy, Grype), signing (Cosign, Notation), and registry security"
+        resources:
+          - title: "Docker Security Best Practices"
+            url: "https://docs.docker.com/build/building/best-practices/"
+            type: documentation
+            free: true
+          - title: "Trivy Documentation"
+            url: "https://aquasecurity.github.io/trivy/"
+            type: documentation
+            free: true
+          - title: "Cosign (Sigstore) Documentation"
+            url: "https://docs.sigstore.dev/cosign/signing/overview/"
+            type: documentation
+            free: true
+
+      - id: kubernetes-security
+        name: "Kubernetes Security Hardening"
+        estimated_hours: 10
+        priority: high
+        description: "Pod security standards, RBAC, network policies, admission controllers (OPA Gatekeeper, Kyverno), secrets management, and runtime security (Falco)"
+        resources:
+          - title: "NSA/CISA Kubernetes Hardening Guide"
+            url: "https://media.defense.gov/2022/Aug/29/2003066362/-1/-1/0/CTR_KUBERNETES_HARDENING_GUIDANCE_1.2_20220829.PDF"
+            type: documentation
+            free: true
+          - title: "CIS Kubernetes Benchmark"
+            url: "https://www.cisecurity.org/benchmark/kubernetes"
+            type: documentation
+            free: true
+          - title: "Kubernetes Security Documentation"
+            url: "https://kubernetes.io/docs/concepts/security/"
+            type: documentation
+            free: true
+
+      - id: service-mesh-security
+        name: "Service Mesh and mTLS"
+        estimated_hours: 4
+        priority: medium
+        description: "Istio/Linkerd security features, mutual TLS, authorization policies, and observability for security"
+        resources:
+          - title: "Istio Security Documentation"
+            url: "https://istio.io/latest/docs/concepts/security/"
+            type: documentation
+            free: true
+
+  - id: cicd-security
+    name: "CI/CD Pipeline Security"
+    description: "Securing the software delivery pipeline from code commit to production"
+    topics:
+      - id: cicd-security-fundamentals
+        name: "CI/CD Security Fundamentals"
+        estimated_hours: 6
+        priority: high
+        description: "Pipeline-as-code security, secrets in CI/CD, branch protection, artifact integrity, and deployment approval workflows"
+        resources:
+          - title: "OWASP CI/CD Security Risks"
+            url: "https://owasp.org/www-project-top-10-ci-cd-security-risks/"
+            type: documentation
+            free: true
+          - title: "GitHub Actions Security Hardening"
+            url: "https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions"
+            type: documentation
+            free: true
+
+      - id: supply-chain-security
+        name: "Software Supply Chain Security"
+        estimated_hours: 8
+        priority: high
+        description: "SBOM generation (CycloneDX, SPDX), dependency management, SLSA framework, reproducible builds, and VEX advisories"
+        resources:
+          - title: "SLSA Framework"
+            url: "https://slsa.dev/"
+            type: documentation
+            free: true
+          - title: "CISA SBOM Resources"
+            url: "https://www.cisa.gov/sbom"
+            type: documentation
+            free: true
+          - title: "in-toto Supply Chain Framework"
+            url: "https://in-toto.io/"
+            type: documentation
+            free: true
+
+      - id: gitops-security
+        name: "GitOps and IaC Security"
+        estimated_hours: 6
+        priority: medium
+        description: "Securing GitOps workflows (ArgoCD, Flux), IaC scanning (Checkov, tfsec, KICS), and policy-as-code enforcement"
+        resources:
+          - title: "Checkov Documentation"
+            url: "https://www.checkov.io/1.Welcome/What%20is%20Checkov.html"
+            type: documentation
+            free: true
+          - title: "ArgoCD Security Considerations"
+            url: "https://argo-cd.readthedocs.io/en/stable/operator-manual/security/"
+            type: documentation
+            free: true
+
+  - id: cloud-security-posture
+    name: "Cloud Security Posture Management"
+    description: "Automated security assessment and compliance for cloud infrastructure"
+    topics:
+      - id: cspm-fundamentals
+        name: "CSPM Fundamentals"
+        estimated_hours: 6
+        priority: high
+        description: "Cloud security posture management concepts, CIS benchmarks, automated remediation, and continuous compliance monitoring"
+        resources:
+          - title: "CIS Amazon Web Services Foundations Benchmark"
+            url: "https://www.cisecurity.org/benchmark/amazon_web_services"
+            type: documentation
+            free: true
+          - title: "AWS Security Hub"
+            url: "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+            type: documentation
+            free: true
+
+      - id: iam-deep-dive
+        name: "IAM Deep Dive"
+        estimated_hours: 8
+        priority: high
+        description: "Least privilege design, IAM Access Analyzer, permission boundaries, cross-account access, service control policies, and identity federation"
+        resources:
+          - title: "AWS IAM Best Practices"
+            url: "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+            type: documentation
+            free: true
+          - title: "Azure RBAC Documentation"
+            url: "https://learn.microsoft.com/en-us/azure/role-based-access-control/"
+            type: documentation
+            free: true
+
+      - id: detection-response
+        name: "Cloud Detection and Response"
+        estimated_hours: 6
+        priority: medium
+        description: "CloudTrail/Activity Log analysis, GuardDuty/Defender, automated incident response, and threat detection patterns"
+        resources:
+          - title: "AWS GuardDuty Documentation"
+            url: "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+            type: documentation
+            free: true
+
+  - id: interview-prep
+    name: "Interview Preparation"
+    description: "Targeted preparation for DevSecOps interviews"
+    topics:
+      - id: devsecops-technical-prep
+        name: "Technical Interview Practice"
+        estimated_hours: 10
+        priority: high
+        description: "Practice explaining security architecture decisions, pipeline designs, and incident response scenarios"
+        quiz_bank: "interview-behavioral"
+
+      - id: devsecops-scenario-prep
+        name: "Scenario-Based Questions"
+        estimated_hours: 6
+        priority: high
+        description: "Practice responding to 'how would you handle' scenarios: security incidents, vulnerable dependencies, compliance gaps, team resistance to security"
+
+certifications_suggested:
+  - name: "Certified Kubernetes Security Specialist (CKS)"
+    provider: "CNCF/Linux Foundation"
+    url: "https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "AWS Certified Security - Specialty"
+    provider: "Amazon Web Services"
+    url: "https://aws.amazon.com/certification/certified-security-specialty/"
+    priority: high
+    estimated_prep_hours: 60
+  - name: "Certified DevSecOps Professional (CDP)"
+    provider: "Practical DevSecOps"
+    url: "https://www.practical-devsecops.com/certified-devsecops-professional/"
+    priority: medium
+    estimated_prep_hours: 40
+  - name: "CompTIA Security+"
+    provider: "CompTIA"
+    url: "https://www.comptia.org/certifications/security"
+    priority: low
+    estimated_prep_hours: 50
+
+interview_questions:
+  technical:
+    - "Walk me through how you would design a CI/CD pipeline with security gates. What tools would you use at each stage and why?"
+    - "A critical vulnerability is discovered in a base image used by 50 production services. How do you handle the remediation across all services?"
+    - "Explain the SLSA framework and how you would implement SLSA Level 3 in a GitHub Actions pipeline."
+    - "How would you implement secrets management for a microservices architecture running on Kubernetes? Compare at least two approaches."
+    - "A developer pushes code that bypasses the SAST scanner by marking findings as false positives. How would you design controls to prevent this?"
+    - "Walk me through your approach to implementing network policies in a Kubernetes cluster with 200 microservices."
+    - "How do you balance security scanning thoroughness with developer experience and deployment velocity?"
+    - "Explain how you would implement and enforce an SBOM requirement across an organization with 30 development teams."
+  leadership:
+    - "How do you build a culture of security ownership among developers who see security as someone else's job?"
+    - "Tell me about a time you had to push back on a release because of security concerns. How did you handle the business pressure?"
+    - "How do you prioritize which security controls to implement first when everything seems urgent?"
+    - "Describe how you would measure the success of a DevSecOps program. What metrics would you track?"
