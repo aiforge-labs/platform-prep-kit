@@ -29,10 +29,21 @@ It's built for engineers, by engineers. No web app, no login, no subscription re
 
 ## Quick Start
 
-### Option A: Web UI (recommended)
+### 1. Clone and install
 
 ```bash
-pip install career-prep-agent[ui]
+git clone https://github.com/aiforge-labs/career-prep-agent.git
+cd career-prep-agent
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[ui]"
+```
+
+> **Requirements:** Python 3.10+ and that's it. The `[ui]` extra includes the web dashboard (FastAPI, HTMX). Use `pip install -e ".[all]"` for everything (PDF parsing, job URL fetching, etc.).
+
+### 2a. Web UI (recommended)
+
+```bash
 prep serve
 ```
 
@@ -43,11 +54,9 @@ Opens `http://localhost:8080` with a step-by-step onboarding wizard:
 4. Set your timeline (weeks, hours/day, study days)
 5. Review and create your plan
 
-### Option B: CLI
+### 2b. CLI
 
 ```bash
-pip install career-prep-agent
-
 # Analyze a job posting + your resume
 prep init --job-url "https://careers.example.com/jobs/12345" --resume ~/resume.pdf
 
@@ -370,24 +379,15 @@ See [docs/architecture.md](docs/architecture.md) for the full architecture guide
 
 ## Installation
 
+See [Quick Start](#quick-start) for the recommended setup. Below are the available extras you can mix and match:
+
 ```bash
-# Core only (4 dependencies: click, pyyaml, rich, pydantic)
-pip install career-prep-agent
-
-# With PDF resume parsing
-pip install career-prep-agent[pdf]
-
-# With job URL fetching
-pip install career-prep-agent[web]
-
-# With interactive web UI (recommended)
-pip install career-prep-agent[ui]
-
-# With legacy Streamlit dashboard
-pip install career-prep-agent[dashboard]
-
-# Everything
-pip install career-prep-agent[all]
+pip install -e "."              # Core only (click, pyyaml, rich, pydantic)
+pip install -e ".[ui]"          # + Web UI (FastAPI, HTMX, SQLite) — recommended
+pip install -e ".[pdf]"         # + PDF resume parsing
+pip install -e ".[web]"         # + Job URL fetching
+pip install -e ".[dashboard]"   # + Legacy Streamlit dashboard
+pip install -e ".[all]"         # Everything
 ```
 
 **Requirements:** Python 3.10+ and that's it.
@@ -486,11 +486,9 @@ This mapping makes the project a **learning resource for agentic AI development*
 
 ## Development Setup
 
-```bash
-# Clone and set up
-git clone https://github.com/aiforge-labs/career-prep-agent.git
-cd career-prep-agent
+Follow the [Quick Start](#quick-start) clone steps, then install all extras including dev tools:
 
+```bash
 # Option A: Makefile (recommended)
 make init-dev
 source .venv/bin/activate
@@ -534,6 +532,7 @@ We welcome contributions! The easiest ways to help:
 
 | Guide | Description |
 |-------|-------------|
+| [Architecture Site](https://aiforge-labs.github.io/career-prep-agent/) | Interactive architecture overview with click-to-explore components |
 | [Getting Started](docs/getting-started.md) | Installation and first steps |
 | [Architecture](docs/architecture.md) | System design, data flow, key decisions |
 | [AI Integration](docs/ai-integration.md) | Setting up AI providers |
@@ -546,12 +545,14 @@ We welcome contributions! The easiest ways to help:
 ### Setup Issues
 
 **`zsh: command not found: prep`**
-You need to activate the virtual environment first:
+You need to install the package and activate the virtual environment first:
 ```bash
+python3 -m venv .venv
 source .venv/bin/activate
+pip install -e ".[ui]"
 prep --version
 ```
-If you installed globally (not in a venv), ensure `~/.local/bin` is in your PATH.
+The `prep` command is only available inside the activated venv. Each new terminal needs `source .venv/bin/activate`.
 
 **`ERROR: Package 'career-prep-agent' requires a different Python`**
 The project requires Python 3.10+. Check your version and install a newer one:
