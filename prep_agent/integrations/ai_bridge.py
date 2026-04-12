@@ -212,6 +212,10 @@ Start with the TEACH phase now."""
         try:
             import urllib.request
 
+            ai_cfg = self.config.get("ai_integration", {})
+            model = ai_cfg.get("ollama_model", "llama3")
+            base_url = ai_cfg.get("ollama_url", "http://localhost:11434").rstrip("/")
+
             prompt = (
                 f"You are a study coach. Help me learn about: {topic}\n\n"
                 f"Start with a brief overview of key concepts, then ask me "
@@ -221,13 +225,13 @@ Start with the TEACH phase now."""
                 prompt += f"\n\nContext from my notes:\n{notes[:2000]}"
 
             payload = json.dumps({
-                "model": "llama3",
+                "model": model,
                 "prompt": prompt,
                 "stream": False,
             }).encode()
 
             req = urllib.request.Request(
-                "http://localhost:11434/api/generate",
+                f"{base_url}/api/generate",
                 data=payload,
                 headers={"Content-Type": "application/json"},
                 method="POST",
@@ -240,7 +244,7 @@ Start with the TEACH phase now."""
         except Exception:
             # Ollama not available -- fall back to prompt
             return (
-                f"Could not connect to Ollama (is it running on localhost:11434?).\n\n"
+                f"Could not connect to Ollama at {base_url} (is it running?).\n\n"
                 f"Here is a prompt you can use with any AI instead:\n\n"
                 f"{self._build_study_prompt(topic, {}, notes)}"
             )

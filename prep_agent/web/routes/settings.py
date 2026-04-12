@@ -30,13 +30,28 @@ async def update_config(
     ai_provider: str = Form("none"),
     morning_time: str = Form("08:00"),
     evening_time: str = Form("20:00"),
+    ollama_model: str = Form("llama3"),
+    ollama_url: str = Form("http://localhost:11434"),
+    openai_api_key: str = Form(""),
+    openai_model: str = Form("gpt-4o-mini"),
 ):
     """Update config settings."""
     from prep_agent.core.config import load_config, save_config
     from prep_agent.web.migrate import run_migration, snapshot_tracker_mtime
 
     cfg = load_config()
-    cfg.setdefault("ai_integration", {})["provider"] = ai_provider
+    ai = cfg.setdefault("ai_integration", {})
+    ai["provider"] = ai_provider
+
+    # Provider-specific settings
+    if ai_provider == "ollama":
+        ai["ollama_model"] = ollama_model.strip() or "llama3"
+        ai["ollama_url"] = ollama_url.strip() or "http://localhost:11434"
+    elif ai_provider == "openai-api":
+        if openai_api_key.strip():
+            ai["api_key"] = openai_api_key.strip()
+        ai["openai_model"] = openai_model.strip() or "gpt-4o-mini"
+
     cfg.setdefault("reminders", {})["morning_time"] = morning_time
     cfg.setdefault("reminders", {})["evening_time"] = evening_time
     save_config(cfg)

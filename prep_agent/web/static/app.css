@@ -530,6 +530,37 @@ h3 {
     color: var(--text-primary);
     font-size: 0.9rem;
 }
+.provider-hint {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+.provider-hint a { color: var(--accent); }
+.provider-hint code {
+    background: rgba(59, 130, 246, 0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+.provider-fields input[type="text"],
+.provider-fields input[type="password"] {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+.provider-fields input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
 
 /* Responsive */
 @media (max-width: 768px) {

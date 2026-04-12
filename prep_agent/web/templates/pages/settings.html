@@ -24,13 +24,53 @@
     <form hx-post="/settings/config" hx-target="body" class="settings-form">
         <div class="form-row">
             <label>AI Provider</label>
-            <select name="ai_provider">
+            <select name="ai_provider" id="ai-provider-select" onchange="toggleProviderFields()">
                 <option value="none" {% if ai_provider == 'none' %}selected{% endif %}>None (standalone)</option>
                 <option value="claude-code" {% if ai_provider == 'claude-code' %}selected{% endif %}>Claude Code</option>
                 <option value="ollama" {% if ai_provider == 'ollama' %}selected{% endif %}>Ollama (local)</option>
                 <option value="chatgpt-paste" {% if ai_provider == 'chatgpt-paste' %}selected{% endif %}>ChatGPT (paste)</option>
                 <option value="openai-api" {% if ai_provider == 'openai-api' %}selected{% endif %}>OpenAI API</option>
             </select>
+            <p class="form-help">See the <a href="https://github.com/aiforge-labs/career-prep-agent/blob/main/docs/ai-integration.md" target="_blank">AI Integration Guide</a> for full setup details.</p>
+        </div>
+
+        <!-- Provider-specific hints and fields -->
+        <div id="provider-none" class="provider-fields" style="display:none">
+            <div class="provider-hint">All features work without AI — 11 quiz banks, 13 knowledge packs, study plans, and the full web UI. No configuration needed.</div>
+        </div>
+
+        <div id="provider-ollama" class="provider-fields" style="display:none">
+            <div class="provider-hint">Runs AI locally on your machine. Requires <a href="https://ollama.ai" target="_blank">Ollama</a> installed and running.</div>
+            <div class="form-row">
+                <label>Model Name</label>
+                <input type="text" name="ollama_model" value="{{ config.get('ai_integration', {}).get('ollama_model', 'llama3') }}" placeholder="llama3">
+                <p class="form-help">Run <code>ollama list</code> to see available models. Pull one with <code>ollama pull llama3</code>.</p>
+            </div>
+            <div class="form-row">
+                <label>Ollama URL</label>
+                <input type="text" name="ollama_url" value="{{ config.get('ai_integration', {}).get('ollama_url', 'http://localhost:11434') }}" placeholder="http://localhost:11434">
+            </div>
+        </div>
+
+        <div id="provider-openai-api" class="provider-fields" style="display:none">
+            <div class="provider-hint">Direct API calls to OpenAI. Requires an API key from <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a>.</div>
+            <div class="form-row">
+                <label>API Key</label>
+                <input type="password" name="openai_api_key" value="{{ config.get('ai_integration', {}).get('api_key', '') }}" placeholder="sk-...">
+                <p class="form-help">Stored locally in <code>~/.prep/config.yml</code>. Never transmitted except to OpenAI. You can also set <code>OPENAI_API_KEY</code> as an environment variable instead.</p>
+            </div>
+            <div class="form-row">
+                <label>Model</label>
+                <input type="text" name="openai_model" value="{{ config.get('ai_integration', {}).get('openai_model', 'gpt-4o-mini') }}" placeholder="gpt-4o-mini">
+            </div>
+        </div>
+
+        <div id="provider-claude-code" class="provider-fields" style="display:none">
+            <div class="provider-hint">Auto-generates a <code>CLAUDE.md</code> file so Claude Code can resume your study sessions. No API key needed — just run <code>claude</code> in your terminal and say "continue my prep".</div>
+        </div>
+
+        <div id="provider-chatgpt-paste" class="provider-fields" style="display:none">
+            <div class="provider-hint">Generates study prompts and copies them to your clipboard. Paste into ChatGPT, Claude.ai, Gemini, or any AI chat. No API key needed.</div>
         </div>
 
         <div class="form-row-inline">
@@ -46,6 +86,16 @@
 
         <button type="submit" class="btn btn-accent">Save Settings</button>
     </form>
+
+    <script>
+    function toggleProviderFields() {
+        document.querySelectorAll('.provider-fields').forEach(el => el.style.display = 'none');
+        const provider = document.getElementById('ai-provider-select').value;
+        const target = document.getElementById('provider-' + provider);
+        if (target) target.style.display = 'block';
+    }
+    toggleProviderFields();
+    </script>
 </div>
 
 <div class="section">
