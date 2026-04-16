@@ -24,7 +24,7 @@ This Code of Conduct applies to all project spaces — GitHub issues, pull reque
 
 ## Enforcement
 
-Instances of unacceptable behavior may be reported to the project maintainers at **raaj.cloud@gmail.com**. All reports will be reviewed and investigated promptly and fairly.
+Instances of unacceptable behavior may be reported to the project maintainers at **gitaiforgelabs@gmail.com**. All reports will be reviewed and investigated promptly and fairly.
 
 Project maintainers have the right to remove, edit, or reject contributions that do not align with this Code of Conduct, and to temporarily or permanently ban contributors for repeated violations.
 

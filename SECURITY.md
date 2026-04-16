@@ -6,7 +6,7 @@
 
 Please report security issues responsibly by emailing:
 
-**raaj.cloud@gmail.com**
+**gitaiforgelabs@gmail.com**
 
 Include:
 - Description of the vulnerability
