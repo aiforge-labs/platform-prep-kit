@@ -1,6 +1,6 @@
 # AI Integration Guide
 
-Career Prep Agent works **100% without AI**. AI is an optional enhancer for interactive study sessions, quizzes, and content creation.
+Platform Prep Kit works **100% without AI**. AI is an optional enhancer for interactive study sessions, quizzes, and content creation.
 
 ## Supported Providers
 

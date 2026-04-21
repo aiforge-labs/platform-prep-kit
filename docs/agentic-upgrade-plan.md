@@ -1,7 +1,7 @@
 # Agentic AI Upgrade Plan
 
 ## Goal
-Transform career-prep-agent from a CLI tool into a proper AI agent — following the 10-step "How to Build AI Agents from Scratch" framework. Each step is both a code upgrade AND a learning module for agentic AI development.
+Transform platform-prep-kit from a CLI tool into a proper AI agent — following the 10-step "How to Build AI Agents from Scratch" framework. Each step is both a code upgrade AND a learning module for agentic AI development.
 
 ## What You'll Learn (and be able to explain in interviews)
 

@@ -1,5 +1,5 @@
 """
-File-system operations for the career-prep-agent.
+File-system operations for the platform-prep-kit.
 
 The canonical data directory is ``~/.prep/``.  All read/write helpers
 handle missing parents gracefully and use UTF-8 encoding.

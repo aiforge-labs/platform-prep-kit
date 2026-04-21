@@ -1,1 +1,1 @@
-"""Career Prep Agent — self-hosted web UI (FastAPI + HTMX)."""
+"""Platform Prep Kit — self-hosted web UI (FastAPI + HTMX)."""

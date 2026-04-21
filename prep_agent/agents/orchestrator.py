@@ -1,6 +1,6 @@
 """Orchestrator -- coordinates all agents using a ReAct meta-loop.
 
-This is the brain of the career prep agent. It:
+This is the brain of the platform prep kit. It:
 1. Observes the user's overall state
 2. Reasons about which agent(s) to invoke
 3. Delegates to specialized agents
@@ -21,7 +21,7 @@ from prep_agent.agents.tutor import TutorAgent
 
 
 class Orchestrator:
-    """Central coordinator for all career prep agents.
+    """Central coordinator for all platform prep kits.
 
     Usage::
 

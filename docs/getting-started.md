@@ -3,12 +3,12 @@
 ## Installation
 
 ```bash
-pip install career-prep-agent
+pip install platform-prep-kit
 ```
 
 For full features:
 ```bash
-pip install career-prep-agent[all]
+pip install platform-prep-kit[all]
 ```
 
 ## Quick Start: From a Job Posting

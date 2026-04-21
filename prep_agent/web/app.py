@@ -1,4 +1,4 @@
-"""FastAPI application factory for the Career Prep Agent web UI."""
+"""FastAPI application factory for the Platform Prep Kit web UI."""
 
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ def create_app() -> FastAPI:
     """Build and return the configured FastAPI application."""
 
     app = FastAPI(
-        title="Career Prep Agent",
+        title="Platform Prep Kit",
         version="0.1.0",
         docs_url=None,
         redoc_url=None,

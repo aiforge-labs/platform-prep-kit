@@ -1,4 +1,4 @@
-"""Fitment analyzer for career prep agent.
+"""Fitment analyzer for platform prep kit.
 
 Keyword-based analysis comparing job requirements against resume data.
 No AI/LLM dependency required.

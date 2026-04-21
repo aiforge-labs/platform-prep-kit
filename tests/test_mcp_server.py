@@ -9,7 +9,7 @@ class TestMCPToolRegistration:
     def test_mcp_instance_exists(self):
         from prep_agent.mcp_server import mcp
         assert mcp is not None
-        assert mcp.name == "career-prep-agent"
+        assert mcp.name == "platform-prep-kit"
 
     def test_expected_tools_registered(self):
         from prep_agent.mcp_server import mcp

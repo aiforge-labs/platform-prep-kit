@@ -1,4 +1,4 @@
-# Career Prep Agent
+# Platform Prep Kit
 
 > A privacy-first CLI that turns any job posting into a personalized study plan — with daily reminders, built-in quizzes, a growing knowledge base, and optional AI-powered study sessions.
 
@@ -14,7 +14,7 @@
 
 Career transitions are hard. There's always too much to learn, no structure, and no accountability. Most people start strong and fade after a week.
 
-Career Prep Agent solves this by:
+Platform Prep Kit solves this by:
 - **Analyzing the gap** between where you are (resume) and where you want to be (job posting)
 - **Generating a day-by-day study plan** that adapts based on your quiz performance
 - **Nudging you daily** with desktop notifications so you never miss a session
@@ -32,8 +32,8 @@ It's built for engineers, by engineers. No web app, no login, no subscription re
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/aiforge-labs/career-prep-agent.git
-cd career-prep-agent
+git clone https://github.com/aiforge-labs/platform-prep-kit.git
+cd platform-prep-kit
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[ui]"
@@ -72,7 +72,7 @@ The agent analyzes your profile against the job requirements, identifies gaps, a
 ```
 $ prep init --job-url "https://..." --resume ~/resume.pdf
 
-Career Prep Agent v0.1.0
+Platform Prep Kit v0.1.0
   Job analyzed: Cloud Security Lead
   Resume parsed: 15 years experience, 4 certs
   Fitment score: 74/100
@@ -92,9 +92,9 @@ If your workspace already exists and you want to start over — for example, swi
 rm -rf ~/.prep
 
 # 2. (macOS only) Unload and remove any launchd reminder agents
-launchctl unload ~/Library/LaunchAgents/com.career-prep-agent.morning.plist 2>/dev/null
-launchctl unload ~/Library/LaunchAgents/com.career-prep-agent.evening.plist 2>/dev/null
-rm -f ~/Library/LaunchAgents/com.career-prep-agent.{morning,evening}.plist
+launchctl unload ~/Library/LaunchAgents/com.platform-prep-kit.morning.plist 2>/dev/null
+launchctl unload ~/Library/LaunchAgents/com.platform-prep-kit.evening.plist 2>/dev/null
+rm -f ~/Library/LaunchAgents/com.platform-prep-kit.{morning,evening}.plist
 
 # 3. Reinitialize
 prep init --template ai-security-engineer
@@ -187,7 +187,7 @@ prep quiz --list                   # See all available quiz banks
 A full self-hosted web application running on localhost. Study in the browser, take interactive quizzes, track section-level progress, and pick up where you left off.
 
 ```bash
-pip install career-prep-agent[ui]
+pip install platform-prep-kit[ui]
 prep serve
 ```
 
@@ -214,7 +214,7 @@ Everything happens locally. No data leaves your machine.
 ### Legacy Dashboard (Streamlit)
 
 ```bash
-pip install career-prep-agent[dashboard]
+pip install platform-prep-kit[dashboard]
 prep dashboard
 ```
 
@@ -532,7 +532,7 @@ We welcome contributions! The easiest ways to help:
 
 | Guide | Description |
 |-------|-------------|
-| [Architecture Site](https://aiforge-labs.github.io/career-prep-agent/) | Interactive architecture overview with click-to-explore components |
+| [Architecture Site](https://aiforge-labs.github.io/platform-prep-kit/) | Interactive architecture overview with click-to-explore components |
 | [Getting Started](docs/getting-started.md) | Installation and first steps |
 | [Architecture](docs/architecture.md) | System design, data flow, key decisions |
 | [AI Integration](docs/ai-integration.md) | Setting up AI providers |
@@ -554,7 +554,7 @@ prep --version
 ```
 The `prep` command is only available inside the activated venv. Each new terminal needs `source .venv/bin/activate`.
 
-**`ERROR: Package 'career-prep-agent' requires a different Python`**
+**`ERROR: Package 'platform-prep-kit' requires a different Python`**
 The project requires Python 3.10+. Check your version and install a newer one:
 ```bash
 python3 --version          # Must be 3.10+
@@ -569,7 +569,7 @@ pip install -e ".[all,ui,dev]"
 **`ModuleNotFoundError: No module named 'fastapi'` when running `prep serve`**
 Install the web UI dependencies:
 ```bash
-pip install career-prep-agent[ui]
+pip install platform-prep-kit[ui]
 # Or if developing:
 pip install -e ".[ui]"
 ```

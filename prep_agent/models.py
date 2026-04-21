@@ -1,4 +1,4 @@
-"""Pydantic models -- structured I/O contracts for the career prep agent.
+"""Pydantic models -- structured I/O contracts for the platform prep kit.
 
 These models define the data flowing between agent components:
 Planner, Tutor, Quiz, Reviewer, and the Orchestrator.

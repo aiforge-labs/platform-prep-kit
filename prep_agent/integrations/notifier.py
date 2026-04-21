@@ -69,7 +69,7 @@ class Notifier:
             f"$textNodes.Item(1).AppendChild($template.CreateTextNode('{escaped_message}')) > $null; "
             "$toast = [Windows.UI.Notifications.ToastNotification]::new($template); "
             "[Windows.UI.Notifications.ToastNotificationManager]::"
-            "CreateToastNotifier('career-prep-agent').Show($toast)"
+            "CreateToastNotifier('platform-prep-kit').Show($toast)"
         )
         try:
             result = subprocess.run(

@@ -1,6 +1,6 @@
 # Template Schema Reference
 # ========================
-# All career-prep-agent role templates must follow this structure.
+# All platform-prep-kit role templates must follow this structure.
 # Use this file as a validation reference when authoring custom templates.
 
 required_fields:

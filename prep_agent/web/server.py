@@ -1,4 +1,4 @@
-"""Uvicorn server launcher for the Career Prep Agent web UI.
+"""Uvicorn server launcher for the Platform Prep Kit web UI.
 
 Called by ``prep serve`` — binds to localhost:8080 by default.
 """
