@@ -298,7 +298,7 @@ Start with the TEACH phase now."""
                 + "\n".join(f"- {t}" for t in completed[-10:])
             )
 
-        return f"""# Career Prep Session
+        return f"""# Platform Prep Kit Session
 
 ## Context
 - **Target Role:** {target_role}
