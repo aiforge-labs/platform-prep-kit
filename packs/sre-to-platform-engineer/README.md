@@ -4,9 +4,32 @@ A structured 12-week transition pack for senior SREs moving into Platform Engine
 
 ---
 
+## What we mean by "SRE"
+
+Site Reliability Engineering — an engineering discipline that treats operations as a software problem. Originated at Google in the early 2000s, now a common role across mid-to-large tech orgs.
+
+Day-to-day, an SRE typically: carries production on-call, owns Service Level Objectives (SLOs) and error budgets, runs incident response and post-mortems, automates operational toil, and negotiates trade-offs between feature velocity and reliability.
+
+**Titles vary — the work is what matters.** You might qualify as an SRE under a different title:
+
+- SRE / Site Reliability Engineer
+- DevOps Engineer (if your role includes on-call and reliability, not just CI/CD)
+- Infrastructure Engineer (with a reliability focus)
+- Production Engineer
+- Reliability Engineer
+- Systems Engineer (at some orgs)
+
+If you own production systems, carry a pager, and spend meaningful time on reliability engineering (not just ad-hoc ops), this pack is for you regardless of title.
+
+## What we mean by "Platform Engineer"
+
+A Platform Engineer builds and operates an **Internal Developer Platform (IDP)** — the self-service tooling, abstractions, and golden paths that product engineers use to ship software. Think: the team that builds the deploy pipeline everyone uses, the service catalog / scaffolding tool, the observability stack teams plug into, the policy guardrails in CI.
+
+The role is distinct from SRE, DevOps, and Infrastructure Engineer — covered in detail in Week 1 of the plan.
+
 ## Who this is for
 
-You've been an SRE for 5+ years. You know on-call, SLOs, incident response, automation, and what it feels like to carry a pager for a business-critical system. You're considering — or already interviewing for — a Platform Engineer role at a team that's building an Internal Developer Platform (IDP), a golden-path toolchain, or a self-service infrastructure abstraction.
+You've been an SRE (by any of the titles above) for 5+ years. You know on-call, SLOs, incident response, automation, and what it feels like to carry a pager for a business-critical system. You're considering — or already interviewing for — a Platform Engineer role at a team that's building an Internal Developer Platform, a golden-path toolchain, or a self-service infrastructure abstraction.
 
 You are *not* a junior on-ramp. This pack assumes working familiarity with Linux, Kubernetes, Terraform/IaC, at least one cloud provider, and incident response fundamentals. We don't re-cover those.
 
