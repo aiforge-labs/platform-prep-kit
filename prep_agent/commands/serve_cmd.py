@@ -1,4 +1,4 @@
-"""Launch the Career Prep Agent web UI server."""
+"""Launch the Platform Prep Kit web UI server."""
 
 import click
 import sys
@@ -17,7 +17,7 @@ def serve_cmd(port: int, host: str, no_open: bool, reload: bool) -> None:
         click.echo(
             click.style(
                 f"Error: Web UI dependencies not installed. "
-                f"Run: pip install career-prep-agent[ui]\n"
+                f"Run: pip install platform-prep-kit[ui]\n"
                 f"  Missing: {exc}",
                 fg="red",
             ),
@@ -27,7 +27,7 @@ def serve_cmd(port: int, host: str, no_open: bool, reload: bool) -> None:
 
     click.echo(
         click.style(
-            f"Starting Career Prep Agent web UI at http://{host}:{port}",
+            f"Starting Platform Prep Kit web UI at http://{host}:{port}",
             fg="green",
         )
     )

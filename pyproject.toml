@@ -3,14 +3,14 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "career-prep-agent"
+name = "platform-prep-kit"
 version = "0.1.0"
 description = "Your personal career coaching CLI — systematically prepare for any role with study plans, reminders, and optional AI integration."
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [
-    {name = "Career Prep Agent Contributors"},
+    {name = "Platform Prep Kit Contributors"},
 ]
 keywords = ["career", "interview", "preparation", "study", "cli", "ai"]
 classifiers = [
@@ -71,9 +71,9 @@ dev = [
 prep = "prep_agent.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/aiforge-labs/career-prep-agent"
-Repository = "https://github.com/aiforge-labs/career-prep-agent"
-Issues = "https://github.com/aiforge-labs/career-prep-agent/issues"
+Homepage = "https://github.com/aiforge-labs/platform-prep-kit"
+Repository = "https://github.com/aiforge-labs/platform-prep-kit"
+Issues = "https://github.com/aiforge-labs/platform-prep-kit/issues"
 
 [tool.setuptools.packages.find]
 include = ["prep_agent*"]

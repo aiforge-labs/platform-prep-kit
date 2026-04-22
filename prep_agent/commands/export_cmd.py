@@ -108,7 +108,7 @@ def _render_markdown(data):
     lines = []
     s = data["summary"]
 
-    lines.append("# Career Prep Progress Report")
+    lines.append("# Platform Prep Kit Progress Report")
     lines.append("")
     lines.append(f"Generated: {data['generated_at']}")
     lines.append("")

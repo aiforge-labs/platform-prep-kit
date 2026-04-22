@@ -23,7 +23,7 @@ What actually happened. Include the full error message if applicable.
 ## Environment
 - OS: [e.g., macOS 14, Ubuntu 22.04]
 - Python version: [e.g., 3.12.1]
-- Career Prep Agent version: [e.g., 0.1.0]
+- Platform Prep Kit version: [e.g., 0.1.0]
 - Installation method: [pip / git clone]
 - Template used: [e.g., ai-security-engineer]
 

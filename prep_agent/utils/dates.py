@@ -1,5 +1,5 @@
 """
-Date utilities for the career-prep-agent.
+Date utilities for the platform-prep-kit.
 
 All functions work with :class:`datetime.date` objects unless stated
 otherwise.  The module is intentionally free of side-effects.

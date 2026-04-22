@@ -2,7 +2,7 @@
 
 ## Design Philosophy
 
-Career Prep Agent follows four core principles:
+Platform Prep Kit follows four core principles:
 
 1. **Privacy-first** — All data stays local. No telemetry, no cloud sync, no accounts.
 2. **AI-optional** — The tool works fully without any AI subscription. AI enhances, never gates.
@@ -168,7 +168,7 @@ def _parse_pdf(self, path):
     except ImportError:
         raise ImportError(
             "PDF parsing requires pdfplumber. "
-            "Install with: pip install career-prep-agent[pdf]"
+            "Install with: pip install platform-prep-kit[pdf]"
         )
 ```
 

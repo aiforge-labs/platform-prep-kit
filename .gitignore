@@ -34,6 +34,9 @@ coverage.xml
 docs/drafts/
 docs/web-ui-plan.md
 
+# Claude Code working files (local workflow notes, drafts, plans)
+.claude/wip/
+
 # Secrets and environment
 .env
 .env.local

@@ -2,7 +2,7 @@
 Start the MCP server for IDE integration.
 
 Allows any MCP-compatible client (Claude Code, Cursor, VS Code, etc.)
-to interact with the career prep agent through standard MCP tools.
+to interact with the platform prep kit through standard MCP tools.
 """
 
 import click
@@ -23,10 +23,10 @@ def mcp_cmd(transport):
     except ImportError as exc:
         click.echo(
             f"Error: MCP dependencies not installed. "
-            f"Run: pip install career-prep-agent[mcp]\n({exc})",
+            f"Run: pip install platform-prep-kit[mcp]\n({exc})",
             err=True,
         )
         sys.exit(1)
 
-    click.echo(f"Starting Career Prep Agent MCP server ({transport})...", err=True)
+    click.echo(f"Starting Platform Prep Kit MCP server ({transport})...", err=True)
     mcp.run(transport=transport)

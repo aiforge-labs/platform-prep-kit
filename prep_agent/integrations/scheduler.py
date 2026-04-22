@@ -13,9 +13,9 @@ from pathlib import Path
 class Scheduler:
     """Cross-platform scheduler for prep reminders using OS-native mechanisms."""
 
-    PLIST_PREFIX = "com.career-prep-agent"
-    CRON_MARKER = "# career-prep-agent reminder"
-    TASK_PREFIX = "CareerPrepAgent"
+    PLIST_PREFIX = "com.platform-prep-kit"
+    CRON_MARKER = "# platform-prep-kit reminder"
+    TASK_PREFIX = "PlatformPrepKit"
 
     def __init__(self, prep_dir: str | None = None):
         self.prep_dir = prep_dir or os.path.expanduser("~/.prep")
@@ -248,7 +248,7 @@ class Scheduler:
         return self._load_macos_agents()
 
     def _load_macos_agents(self) -> bool:
-        """Load all career-prep-agent launchd agents."""
+        """Load all platform-prep-kit launchd agents."""
         ok = True
         for notify_type in ("morning", "evening"):
             plist_path = self._plist_path(notify_type)
@@ -267,7 +267,7 @@ class Scheduler:
         return ok
 
     def _unload_macos_agents(self) -> bool:
-        """Unload all career-prep-agent launchd agents."""
+        """Unload all platform-prep-kit launchd agents."""
         ok = True
         for notify_type in ("morning", "evening"):
             plist_path = self._plist_path(notify_type)
@@ -343,7 +343,7 @@ class Scheduler:
             return False
 
     def _strip_cron_entries(self, crontab: str) -> list[str]:
-        """Return crontab lines with career-prep-agent entries removed."""
+        """Return crontab lines with platform-prep-kit entries removed."""
         return [
             line
             for line in crontab.splitlines()
@@ -367,14 +367,14 @@ class Scheduler:
         return self._set_crontab(content)
 
     def _uninstall_linux(self) -> bool:
-        """Remove career-prep-agent entries from crontab."""
+        """Remove platform-prep-kit entries from crontab."""
         existing = self._get_crontab()
         lines = self._strip_cron_entries(existing)
         content = "\n".join(lines).rstrip("\n") + "\n" if lines else ""
         return self._set_crontab(content)
 
     def _comment_cron_entries(self) -> bool:
-        """Comment out career-prep-agent cron entries (for pause)."""
+        """Comment out platform-prep-kit cron entries (for pause)."""
         existing = self._get_crontab()
         lines: list[str] = []
         for line in existing.splitlines():
@@ -386,7 +386,7 @@ class Scheduler:
         return self._set_crontab(content)
 
     def _uncomment_cron_entries(self) -> bool:
-        """Uncomment paused career-prep-agent cron entries (for resume)."""
+        """Uncomment paused platform-prep-kit cron entries (for resume)."""
         existing = self._get_crontab()
         lines: list[str] = []
         for line in existing.splitlines():

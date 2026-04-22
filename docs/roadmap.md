@@ -1,4 +1,4 @@
-# Career Prep Agent — Roadmap
+# Platform Prep Kit — Roadmap
 
 **Created:** 2026-03-31
 **Status:** ALL PHASES COMPLETE (1-6).

@@ -1,4 +1,4 @@
-"""MCP Server — exposes career prep agent capabilities as MCP tools.
+"""MCP Server — exposes platform prep kit capabilities as MCP tools.
 
 Any MCP-compatible client (Claude Code, Cursor, VS Code, etc.) can
 discover and invoke these tools to interact with the agent system.
@@ -11,9 +11,9 @@ from __future__ import annotations
 from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP(
-    "career-prep-agent",
+    "platform-prep-kit",
     instructions=(
-        "Career Prep Agent — a privacy-first CLI that turns job postings "
+        "Platform Prep Kit — a privacy-first CLI that turns job postings "
         "into personalized study plans.  Use these tools to check today's "
         "plan, start study sessions, take quizzes, manage notes, and "
         "review progress."

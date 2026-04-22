@@ -1,4 +1,4 @@
-"""Configuration management for career prep agent."""
+"""Configuration management for platform prep kit."""
 
 import os
 from datetime import date, datetime, timedelta

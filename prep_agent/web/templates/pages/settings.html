@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% set active_page = "settings" %}
-{% block title %}Settings - Career Prep Agent{% endblock %}
+{% block title %}Settings - Platform Prep Kit{% endblock %}
 
 {% block flash %}
 {% if flash %}<div class="flash flash-{{ flash_type|default('info') }}" data-auto-dismiss>{{ flash }}</div>{% endif %}
@@ -31,7 +31,7 @@
                 <option value="chatgpt-paste" {% if ai_provider == 'chatgpt-paste' %}selected{% endif %}>ChatGPT (paste)</option>
                 <option value="openai-api" {% if ai_provider == 'openai-api' %}selected{% endif %}>OpenAI API</option>
             </select>
-            <p class="form-help">See the <a href="https://github.com/aiforge-labs/career-prep-agent/blob/main/docs/ai-integration.md" target="_blank">AI Integration Guide</a> for full setup details.</p>
+            <p class="form-help">See the <a href="https://github.com/aiforge-labs/platform-prep-kit/blob/main/docs/ai-integration.md" target="_blank">AI Integration Guide</a> for full setup details.</p>
         </div>
 
         <!-- Provider-specific hints and fields -->

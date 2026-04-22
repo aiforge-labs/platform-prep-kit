@@ -1,5 +1,5 @@
 """
-career-prep-agent CLI — Main entry point.
+platform-prep-kit CLI — Main entry point.
 
 A terminal-based career preparation assistant that helps you
 plan, track, and execute a structured study schedule.
@@ -41,10 +41,10 @@ def _lazy_command(module_path: str, attr: str) -> click.BaseCommand | None:
 # ---------------------------------------------------------------------------
 
 @click.group()
-@click.version_option(version=__version__, prog_name="career-prep-agent")
+@click.version_option(version=__version__, prog_name="platform-prep-kit")
 @click.pass_context
 def prep(ctx: click.Context) -> None:
-    """Career Prep Agent — your terminal study-buddy.
+    """Platform Prep Kit — your terminal study-buddy.
 
     Plan a preparation schedule, track daily progress, take quizzes,
     and measure fitment against a target role.

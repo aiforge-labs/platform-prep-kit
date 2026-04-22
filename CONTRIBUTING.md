@@ -1,4 +1,4 @@
-# Contributing to Career Prep Agent
+# Contributing to Platform Prep Kit
 
 Thank you for your interest in contributing! This guide will help you get started.
 
@@ -6,8 +6,8 @@ Thank you for your interest in contributing! This guide will help you get starte
 
 ```bash
 # Clone the repo
-git clone https://github.com/aiforge-labs/career-prep-agent.git
-cd career-prep-agent
+git clone https://github.com/aiforge-labs/platform-prep-kit.git
+cd platform-prep-kit
 
 # Create virtual environment
 python3 -m venv .venv

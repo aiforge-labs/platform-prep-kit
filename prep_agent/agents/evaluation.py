@@ -16,7 +16,7 @@ from datetime import datetime
 
 
 class AgentEvaluator:
-    """Evaluates the career prep agent system's effectiveness.
+    """Evaluates the platform prep kit system's effectiveness.
 
     Tracks three categories of metrics:
     1. Agent behavior: Are decisions reasonable? (reasoning quality)

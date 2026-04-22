@@ -18,7 +18,7 @@ from rich.text import Text
 
 console = Console()
 
-APP_NAME = "Career Prep Agent"
+APP_NAME = "Platform Prep Kit"
 APP_VERSION = "0.1.0"
 
 # ------------------------------------------------------------------

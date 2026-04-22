@@ -12,7 +12,7 @@ import sys
 import urllib.request
 import urllib.error
 
-_REPO = "aiforge-labs/career-prep-agent"
+_REPO = "aiforge-labs/platform-prep-kit"
 _API_BASE = f"https://api.github.com/repos/{_REPO}/contents"
 _TIMEOUT = 15
 
@@ -92,7 +92,7 @@ def _update_content(
 
     url = f"{_API_BASE}/{remote_path}"
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "career-prep-agent"})
+        req = urllib.request.Request(url, headers={"User-Agent": "platform-prep-kit"})
         with urllib.request.urlopen(req, timeout=_TIMEOUT) as resp:
             listing = json.loads(resp.read())
     except (urllib.error.URLError, OSError) as exc:
@@ -119,7 +119,7 @@ def _update_content(
 
         # Download remote file
         try:
-            req = urllib.request.Request(download_url, headers={"User-Agent": "career-prep-agent"})
+            req = urllib.request.Request(download_url, headers={"User-Agent": "platform-prep-kit"})
             with urllib.request.urlopen(req, timeout=_TIMEOUT) as resp:
                 raw = resp.read().decode("utf-8")
         except (urllib.error.URLError, OSError):

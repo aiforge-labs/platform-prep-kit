@@ -1,5 +1,5 @@
 /**
- * Career Prep Agent — minimal client-side JS.
+ * Platform Prep Kit — minimal client-side JS.
  *
  * Responsibilities:
  * 1. Inject the CSRF token into every HTMX request.

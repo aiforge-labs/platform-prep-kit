@@ -30,7 +30,7 @@ def dashboard_cmd(port):
         click.echo(
             click.style("Error: ", fg="red", bold=True)
             + "Streamlit is not installed. Install it with:\n\n"
-            + "  pip install career-prep-agent[dashboard]\n\n"
+            + "  pip install platform-prep-kit[dashboard]\n\n"
             + "Or:  pip install streamlit"
         )
         sys.exit(1)

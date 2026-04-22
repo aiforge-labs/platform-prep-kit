@@ -1,5 +1,5 @@
 """
-Streamlit-based local web dashboard for Career Prep Agent.
+Streamlit-based local web dashboard for Platform Prep Kit.
 
 Launch via: prep dashboard
 Runs on localhost:8501 — fully local, no data leaves your machine.
@@ -22,7 +22,7 @@ from prep_agent.core.quiz_engine import QuizEngine
 # ---------------------------------------------------------------------------
 
 st.set_page_config(
-    page_title="Career Prep Agent",
+    page_title="Platform Prep Kit",
     page_icon="📚",
     layout="wide",
 )
@@ -85,7 +85,7 @@ page = st.sidebar.radio(
 )
 
 st.sidebar.divider()
-st.sidebar.caption("Career Prep Agent v0.1.0")
+st.sidebar.caption("Platform Prep Kit v0.1.0")
 st.sidebar.caption("All data stays local in ~/.prep/")
 
 # ---------------------------------------------------------------------------

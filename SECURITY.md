@@ -24,7 +24,7 @@ We will acknowledge your report within **48 hours** and aim to provide a fix or 
 
 ## Security Design
 
-Career Prep Agent is designed as a **local-only, single-user tool**. Security decisions reflect this scope:
+Platform Prep Kit is designed as a **local-only, single-user tool**. Security decisions reflect this scope:
 
 ### Data Storage
 
