@@ -17,7 +17,7 @@ The point of Phase 1 is not to learn new tools. It's to rewire how you think abo
 - Explain the product-thinking shift that distinguishes Platform Eng from DevOps/SRE
 - Identify the internal customer (your platform's users = product engineers)
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.2*
+**Full week content:** [`weeks/week-01-platform-as-product.md`](weeks/week-01-platform-as-product.md)
 
 ### Week 2: Team Topologies
 
@@ -26,7 +26,7 @@ The point of Phase 1 is not to learn new tools. It's to rewire how you think abo
 - Diagnose interaction modes: X-as-a-service, Collaboration, Facilitating
 - Map your org's current shape and identify friction points
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.2*
+**Full week content:** [`weeks/week-02-team-topologies.md`](weeks/week-02-team-topologies.md)
 
 ### Week 3: Developer Experience (DevEx)
 
@@ -35,7 +35,7 @@ The point of Phase 1 is not to learn new tools. It's to rewire how you think abo
 - Identify common DevEx antipatterns in SRE-built tooling
 - Propose DevEx improvements as a platform engineer would, not as an SRE would
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.2*
+**Full week content:** [`weeks/week-03-developer-experience.md`](weeks/week-03-developer-experience.md)
 
 ---
 
@@ -50,7 +50,7 @@ Phase 2 covers the building blocks most platform teams work with today. If you'r
 - Compare reference architectures (Backstage-centric, Humanitec-style, custom)
 - Position a "minimum viable platform" vs a mature IDP
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.2*
+**Read / Apply / Articulate / Self-assess** — *content pending*
 
 ### Week 5: GitOps at Scale
 
@@ -59,7 +59,7 @@ Phase 2 covers the building blocks most platform teams work with today. If you'r
 - Compare Flux and ArgoCD for platform-team use cases
 - Understand infrastructure GitOps (Crossplane, cluster API) vs application GitOps
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.2*
+**Read / Apply / Articulate / Self-assess** — *content pending*
 
 ### Week 6: Policy-as-Code and Guardrails
 
