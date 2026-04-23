@@ -36,6 +36,7 @@ docs/web-ui-plan.md
 
 # Claude Code working files (local workflow notes, drafts, plans)
 .claude/wip/
+CLAUDE.md
 
 # Secrets and environment
 .env
