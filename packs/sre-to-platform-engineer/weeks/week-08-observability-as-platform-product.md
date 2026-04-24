@@ -240,7 +240,7 @@ Target: 3+ on both.
 ### From the repo
 
 ```bash
-prep quiz --bank platform-engineer --topic observability
+prep quiz --topic platform-engineer
 ```
 
 Alternatively, review `quiz_banks/platform-engineer.json` and `quiz_banks/sre-fundamentals.json` for questions tagged `observability`, `slo`, `cardinality`, `opentelemetry`, or `grafana`.

@@ -1,7 +1,7 @@
 {
   "topic_id": "iac-gitops",
   "title": "Infrastructure as Code & GitOps",
-  "version": 1,
+  "version": 2,
   "questions": [
     {
       "id": "iac-01",
@@ -15,7 +15,8 @@
       ],
       "answer": "B",
       "explanation": "The state file is Terraform's database. Without it, Terraform cannot know which cloud resources it manages or detect drift. Stored locally: only one person can work with it, no locking, risky. Remote backends (S3+DynamoDB, GCS, Terraform Cloud) provide: (1) shared access for teams, (2) state locking to prevent concurrent applies that could corrupt state, (3) encryption at rest for sensitive values (passwords, keys) stored in outputs, (4) versioning for recovery. Treat state files as sensitive — they often contain secrets.",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "tags": ["terraform", "state", "iac"]
     },
     {
       "id": "iac-02",
@@ -29,7 +30,8 @@
       ],
       "answer": "B",
       "explanation": "The key practical difference: count uses integer indices. If you have count=3 and remove the second instance, Terraform renumbers [2] to [1] and tries to destroy and recreate it. With for_each using a map key, removing one entry only affects that specific resource. For almost all real infrastructure (S3 buckets per environment, security groups per service), for_each with meaningful string keys is safer and produces clearer plans.",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["terraform", "iac"]
     },
     {
       "id": "iac-03",
@@ -43,7 +45,8 @@
       ],
       "answer": "B",
       "explanation": "Terraform apply is idempotent: resources already created are in the state file. Re-running plan shows only the remaining undeployed resources. Fix the error that caused the failure, run plan to verify the delta is what you expect, then apply. The state file accurately reflects partial success. Running destroy would delete already-created production resources unnecessarily. This is one of the key benefits of Terraform's declarative model vs scripting.",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "tags": ["terraform", "idempotency", "iac"]
     },
     {
       "id": "iac-04",
@@ -57,7 +60,8 @@
       ],
       "answer": "B",
       "explanation": "Terraform workspaces: switch between workspaces to isolate state within the SAME backend. All workspaces share the same backend config — they are not designed for complete environment isolation with different backends, providers, or configs. Terragrunt: a wrapper that finds and merges terragrunt.hcl files from parent directories. Define backend config once at the root; each environment inherits and overrides only what differs. Eliminates copy-pasted backend blocks across 20 environments. Also provides dependency management between modules.",
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["terraform", "terragrunt", "environments"]
     },
     {
       "id": "iac-05",
@@ -70,7 +74,8 @@
         "Example: deny S3 buckets without encryption: resource := input.resource_changes[_] / resource.type == 'aws_s3_bucket' / resource.change.actions[_] == 'create' / not resource.change.after.server_side_encryption_configuration / msg := sprintf(\"unencrypted bucket: %v\", [resource.address])",
         "Important: only check resources with action 'create' or 'update', not 'delete' or 'no-op' — checking 'no-op' resources would block applies unnecessarily"
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["opa", "rego", "conftest", "terraform", "policy-as-code"]
     },
     {
       "id": "iac-06",
@@ -84,7 +89,8 @@
       ],
       "answer": "B",
       "explanation": "Drift = divergence between the Terraform-declared desired state and the actual cloud state. Causes: manual changes via console/CLI, other tools modifying resources, cloud services making automatic changes. Implementation: run terraform plan in a read-only pipeline on a schedule (e.g., daily cron). If the plan is non-empty (changes would be made), alert the team. CI systems like Atlantis and Terraform Cloud have built-in drift detection. Drifted resources should be either: (1) updated in Terraform config to match reality, or (2) restored to declared state via apply.",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["terraform", "drift", "reconciliation"]
     },
     {
       "id": "iac-07",
@@ -98,7 +104,8 @@
       ],
       "answer": "B",
       "explanation": "SCPs are organizational guardrails — even the root account of a member account cannot exceed SCP boundaries. Example: an SCP denying 'ec2:RunInstances' in regions outside us-east-1 cannot be overridden by any IAM policy in that account, even for the root user. IAM policies grant permissions within SCP bounds. The effective permissions for any action = intersection of (SCP allows AND IAM allows). SCPs do NOT grant permissions — they only restrict.",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["aws", "iam", "guardrails"]
     },
     {
       "id": "iac-08",
@@ -112,7 +119,8 @@
         "Apply output posted as PR comment; PR is closed",
         "Key security properties: (1) developers don't need direct cloud credentials — Atlantis runs apply with its own service account, (2) all plans and applies are logged in PR comments for auditability, (3) required approvals enforce team review before infrastructure changes"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["atlantis", "gitops", "terraform", "pr-workflow"]
     },
     {
       "id": "iac-09",
@@ -126,7 +134,8 @@
       ],
       "answer": "B",
       "explanation": "Suppression syntax in Terraform: add a comment #checkov:skip=CKV_AWS_XX:reason with a justification. This is appropriate for: (1) false positives where the control logic doesn't apply to the specific resource, (2) accepted risk that has been reviewed and documented (e.g., intentionally public S3 bucket hosting a website). Best practices: suppressions should require code review, log a ticket reference in the reason, and be reviewed periodically. Suppressing without justification is an anti-pattern that hides real issues.",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["checkov", "policy-as-code", "exceptions"]
     },
     {
       "id": "iac-10",
@@ -140,7 +149,8 @@
         "Implementation options: GitHub Actions path filters, a Makefile with dependency targets, or a custom CI script. Terragrunt's run-all with dependency graph is the most mature solution for this pattern",
         "Fallback for safety: always run static analysis (Checkov, validate) on all modules — it's fast. Reserve integration tests (Terratest, actual deployment) for impacted modules only"
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["terraform", "ci", "monorepo"]
     },
     {
       "id": "iac-11",
@@ -154,7 +164,8 @@
       ],
       "answer": "B",
       "explanation": "terraform import <resource_address> <cloud_resource_id> adds an existing resource to state. After import: (1) run terraform plan to see the diff between the existing resource config and your .tf file, (2) update your .tf to match, (3) confirm plan shows no changes. Use cases: migrating manually-created resources to IaC, importing resources created by another team's Terraform, recovering from state file corruption. Terraform 1.5+ supports import blocks in .tf files for declarative import workflows.",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "tags": ["terraform", "migration"]
     },
     {
       "id": "iac-12",
@@ -169,7 +180,8 @@
         "Deprecation process: announce deprecated versions in CHANGELOG, give 60-90 day migration window, provide migration guide. Don't delete old versions — callers may still be using them",
         "Private registry: publish modules to Terraform Cloud private registry or a self-hosted registry for discoverability and version management at scale"
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["terraform", "module-versioning", "iac"]
     },
     {
       "id": "iac-13",
@@ -183,7 +195,8 @@
       ],
       "answer": "B",
       "explanation": "Use case: a Namespace must exist before a Deployment can be created. Or a CRD must be installed before a Custom Resource that uses it. Sync waves: annotate resources with argocd.argoproj.io/sync-wave: '0' (applied first), '1' (applied after wave 0 is healthy), etc. Resources without annotation default to wave 0. This solves the chicken-and-egg problem of dependent resources in a single Application. For complex dependencies between different Applications, use App-of-Apps with sync policies.",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["argocd", "gitops", "sync-waves"]
     },
     {
       "id": "iac-14",
@@ -197,7 +210,8 @@
         "When to use Helm: consuming third-party software (install nginx-ingress with a Helm chart), distributing software as a reusable package, need complex conditional logic in manifests",
         "Combination: Helm renders base manifests, Kustomize applies environment-specific patches on top (post-rendering). This is common in ArgoCD and Flux"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["kustomize", "helm", "kubernetes", "environments"]
     },
     {
       "id": "iac-15",
@@ -211,7 +225,613 @@
         "State file access control: restrict S3 state bucket access to only the Atlantis service account. Bucket logging enabled. MFA delete enabled. Version the bucket for recovery",
         "Sensitive output marking: mark any Terraform outputs containing secrets as sensitive = true to prevent them from printing in plan/apply logs"
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["secrets", "terraform", "gitops", "security"]
+    },
+    {
+      "id": "iac-16",
+      "question": "What are the four principles of GitOps as defined by the CNCF OpenGitOps working group?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Version controlled, reviewed, tested, deployed",
+        "B) Declarative (desired state described declaratively), Versioned and Immutable (desired state stored in Git with full history), Pulled Automatically (approved changes automatically applied by software agents), Continuously Reconciled (agents continuously observe and correct drift)",
+        "C) Automated, Secure, Observable, Scalable",
+        "D) Deploy, Monitor, Rollback, Retry"
+      ],
+      "answer": "B",
+      "explanation": "The four OpenGitOps principles (opengitops.dev) are the definitional filter: a system claiming to do GitOps must satisfy all four. 'We deploy from Git' alone isn't GitOps — it's also required that the state is declarative, that the reconciliation is pull-based (not push), that it's continuous (not one-shot). Push-based CI that runs kubectl apply on merge is NOT GitOps by this definition. Memorize these four for every platform-engineering interview.",
+      "difficulty": "easy",
+      "tags": ["gitops", "opengitops", "principles"]
+    },
+    {
+      "id": "iac-17",
+      "question": "What's the key architectural difference between ArgoCD and Flux?",
+      "type": "multiple_choice",
+      "options": [
+        "A) ArgoCD is open source; Flux is commercial",
+        "B) ArgoCD is more monolithic with an integrated UI, CLI, and controller. Flux is a GitOps Toolkit — composable controllers (source-controller, kustomize-controller, helm-controller, notification-controller, image-automation-controller) that can be used independently or together. ArgoCD = all-in-one; Flux = composable building blocks",
+        "C) ArgoCD only works with Helm; Flux only works with Kustomize",
+        "D) They are identical in architecture"
+      ],
+      "answer": "B",
+      "explanation": "Both are CNCF graduated projects. ArgoCD ships a polished UI and a unified controller; it's easier to onboard and operate at smaller scale. Flux embraces the Unix-y separation of concerns — each controller does one thing. Flux is often easier to extend (add new source types, new delivery mechanisms) and fits well with teams that want to compose their own workflow. Neither is universally 'better'; the choice depends on team preferences for integrated vs composable tooling.",
+      "difficulty": "medium",
+      "tags": ["argocd", "flux", "architecture", "gitops"]
+    },
+    {
+      "id": "iac-18",
+      "question": "In a multi-cluster GitOps setup with 15 clusters, what's the hub-and-spoke pattern and its primary trade-off?",
+      "type": "multiple_choice",
+      "options": [
+        "A) A networking pattern unrelated to GitOps",
+        "B) Hub-and-spoke: one central GitOps controller (e.g., one ArgoCD instance in a management cluster) managing all 15 clusters remotely. Trade-off: simpler to operate and audit (single control plane) but higher blast radius — if the hub fails, reconciliation stops for all clusters. Alternative: one controller per cluster (more isolation, more operational cost)",
+        "C) A Kubernetes feature specific to Istio",
+        "D) A Terraform-only pattern"
+      ],
+      "answer": "B",
+      "explanation": "Hub-and-spoke is the common default for multi-cluster GitOps: one ArgoCD or Flux install in a central management cluster talks to all other clusters as managed targets. Pro: easier to operate, one place to see state, consistent policies. Con: blast radius — an outage or misconfiguration at the hub affects every spoke cluster. Alternatives: per-cluster controllers (cluster-per-team autonomy, more operational cost) or hybrid (per-env hub for isolation). The choice depends on trust boundaries and tolerance for central coupling.",
+      "difficulty": "medium",
+      "tags": ["gitops", "multi-cluster", "hub-and-spoke"]
+    },
+    {
+      "id": "iac-19",
+      "question": "Your org has 50 teams, 3 environments, and 15 clusters. For GitOps manifests, should you use one monorepo, repo-per-team, or repo-per-environment?",
+      "type": "open",
+      "key_points": [
+        "One monorepo: simplest to reason about, one place to look. Downsides at 50 teams: review noise, CODEOWNERS complexity, one repo's velocity limits become a bottleneck",
+        "Repo-per-team: natural ownership, teams move independently. Downsides: 50 repos to keep in sync with platform patterns, cross-team coordination harder, platform-level changes (e.g., adding a required label) become a multi-repo sweep",
+        "Repo-per-environment: forces promotion workflow to be explicit. Downsides: team ownership is awkward (a team's changes cross repos), environment drift risk if not well-disciplined",
+        "Common pragmatic pattern: one repo for platform-owned foundational resources (cluster config, shared services, policies), one repo per team for their workload manifests (with a CODEOWNERS-enforced structure). Environments as directories within team repos with promotion via PR",
+        "Key design principle: the repo topology should reflect the org's actual change-boundary structure. If teams release independently, give them independent repos. If environments are promoted atomically, give them per-env directories",
+        "Decision cost: repo topology is painful to change later (git history doesn't transplant cleanly). Plan with current org + reasonable growth, not theoretical edge cases"
+      ],
+      "difficulty": "hard",
+      "tags": ["gitops", "repo-topology", "scaling"]
+    },
+    {
+      "id": "iac-20",
+      "question": "How do you implement a two-person approval requirement for production changes in a GitOps workflow?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Ask two engineers to verbally confirm before merging",
+        "B) Branch protection on the production manifests repo/branch: require 2 approvals, require reviewer from CODEOWNERS, require status checks. Combined with: the GitOps controller auto-syncs from that branch, so merge is the only way to deploy. Two-person approval becomes a Git-level invariant, not a runtime check",
+        "C) Configure the admission controller to require two approvers",
+        "D) Use a separate ticketing system"
+      ],
+      "answer": "B",
+      "explanation": "The cleanest two-person-approval is at the Git layer: branch protection rules require 2 approvals on the prod branch/repo, and the GitOps controller auto-syncs from that branch. There's no way to deploy without a merged PR, and no way to merge without 2 approvals. Race conditions (merge + sync) are handled by the controller's natural behavior: it picks up the change after merge. Implementing approval at the admission-controller level is possible but harder to audit — Git-level is the auditable default.",
+      "difficulty": "medium",
+      "tags": ["gitops", "approval", "compliance"]
+    },
+    {
+      "id": "iac-21",
+      "question": "Design a break-glass procedure for making an emergency manual change to a GitOps-managed cluster, in a way that doesn't undermine the GitOps model.",
+      "type": "open",
+      "key_points": [
+        "Requirement 1: the procedure exists and is documented. Engineers who need it shouldn't have to invent one under pressure — that's when mistakes happen",
+        "Requirement 2: the procedure is observable. Every break-glass event fires an alert to the platform team (not 'silent' access). Usage is tracked as a metric",
+        "Requirement 3: the procedure has a specific time-bound. 'Pause GitOps reconciliation for namespace X for 1 hour' is better than 'open-ended override.' After the window, the controller resumes and will revert any drift unless the change was also committed to Git",
+        "Requirement 4: the procedure has an auto-expiring auditable authorization. A kubectl label or annotation that the controller recognizes; set by a time-limited RBAC binding",
+        "Requirement 5: the procedure has a follow-up — every break-glass event requires a ticket (incident or change) that includes what was done and why, reviewed by the platform team the next business day",
+        "Anti-pattern: break-glass that becomes the default. Track usage rate as a health metric. If 10+ events/month, the platform has a usability problem that break-glass is masking",
+        "Key principle: break-glass is a feature, not an exception. Treat it as part of the platform's product surface area, with its own SLOs, observability, and reviews"
+      ],
+      "difficulty": "hard",
+      "tags": ["gitops", "break-glass", "platform-as-product"]
+    },
+    {
+      "id": "iac-22",
+      "question": "A team says 'we use GitOps — we merge to main and our CI pipeline runs kubectl apply.' Why is this NOT GitOps, and what's the fix?",
+      "type": "multiple_choice",
+      "options": [
+        "A) This is GitOps — anything with Git is GitOps",
+        "B) This is push-based deployment disguised as GitOps. It violates two of the four OpenGitOps principles: (1) the controller is not inside the cluster continuously reconciling, so drift is not detected or corrected; (2) it's a one-shot push, not a continuous reconciliation loop. Fix: run a real GitOps controller (ArgoCD or Flux) in-cluster; CI's job ends at 'merge to main' — the controller handles apply",
+        "C) This is GitOps but needs a fancier name",
+        "D) It's GitOps only if using Helm"
+      ],
+      "answer": "B",
+      "explanation": "This is the single most common GitOps antipattern in the wild. Push-based CI running kubectl apply is not GitOps — it's continuous deployment with Git as a trigger. There's no drift detection, no continuous reconciliation, and the cluster state diverges silently whenever someone kubectl edits something. The fix is simple conceptually: replace the CI apply step with a GitOps controller in-cluster. The controller becomes the deployer; CI becomes the merge gate.",
+      "difficulty": "medium",
+      "tags": ["gitops", "antipattern", "push-vs-pull"]
+    },
+    {
+      "id": "iac-23",
+      "question": "A platform has GitOps for most workloads but allows manual kubectl access for 'emergencies.' After 6 months, manual access is the default for several teams. What's the antipattern and how do you fix it?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Ban manual kubectl access immediately",
+        "B) Antipattern: 'ClickOps for emergencies' normalized into everyday use. Fix: (1) make break-glass observable (every override fires an alert and is tracked), (2) make the override auto-expire (time-bound), (3) track the break-glass rate as a platform-health metric visible to leadership, (4) run quarterly reviews on why overrides happened — usually reveals platform usability gaps the team is working around, (5) for teams with chronic override usage, treat it as a product-fit problem (their workflow isn't supported), not as compliance noncompliance",
+        "C) Only the security team can detect this",
+        "D) Accept it as unavoidable"
+      ],
+      "answer": "B",
+      "explanation": "The ClickOps-for-emergencies antipattern is subtle: you allow break-glass for legitimate reasons, and the platform erodes because the emergency exception becomes the default. Prevention is design-level: break-glass must be observable, time-bound, and tracked. Fixing it after the fact usually reveals underlying platform-fit issues — teams don't use normal paths because the normal paths don't fit their workflow. Banning manual access without addressing the root cause just pushes teams to work around the platform elsewhere.",
+      "difficulty": "medium",
+      "tags": ["gitops", "antipattern", "break-glass"]
+    },
+    {
+      "id": "iac-24",
+      "question": "Why is 'manifests generated at apply-time' a GitOps antipattern, even if the generation is deterministic?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Because generation is slow",
+        "B) The artifact in Git is not what's applied to the cluster — the template is in Git, but the rendered manifest (after template substitution) is what gets applied. This breaks the 'versioned and immutable' principle: the thing in Git is not the thing in the cluster. Fix: commit the rendered manifest (after helm template or kustomize build) to Git, not just the template. Trade-off: repo size grows, but audit, rollback, and drift-detection all work correctly",
+        "C) Kubernetes doesn't support it",
+        "D) It only works with certain CI systems"
+      ],
+      "answer": "B",
+      "explanation": "The 'rendered vs template in Git' debate is a live one. Pure GitOps orthodoxy says: commit the rendered manifest, because that's what's applied and that's what drift detection compares against. Pragmatic practice often commits templates because rendered manifests are verbose. The compromise: commit templates + a CI step that renders and commits the output to a separate branch/repo, which the controller uses. Or use tools that render deterministically in-controller and can present the rendered version for inspection.",
+      "difficulty": "hard",
+      "tags": ["gitops", "antipattern", "rendering"]
+    },
+    {
+      "id": "iac-25",
+      "question": "What's the architectural trade-off between using Crossplane for infrastructure GitOps vs using Terraform with GitOps tools like Atlantis?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Crossplane is always better",
+        "B) Crossplane: controller-driven, continuous reconciliation, Kubernetes-native. Drift in cloud resources is automatically corrected. But: reconciliation is always-on, so you can't approve a plan before apply in the same way. Terraform+GitOps: plan-and-apply model with human approval on plan, but reconciliation is not continuous — drift between runs is not corrected unless a scheduled plan runs",
+        "C) They are equivalent",
+        "D) Only Crossplane supports AWS"
+      ],
+      "answer": "B",
+      "explanation": "The core trade-off is controller-model vs plan-model for infrastructure. Crossplane fits the GitOps principles cleanly — it's a controller that continuously reconciles. Terraform is plan-based: you see the diff, approve, then apply. Both have merit. Crossplane feels more native to GitOps but gives up the 'review the exact change before it happens' step. Terraform preserves that review but requires additional tooling (Atlantis, scheduled drift detection) to achieve continuous reconciliation. This debate is one of the most interesting live architectural conversations in the field.",
+      "difficulty": "hard",
+      "tags": ["crossplane", "terraform", "gitops", "infra-gitops"]
+    },
+    {
+      "id": "iac-26",
+      "question": "In a GitOps workflow, how should secrets be handled so they are not committed as plaintext?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Encode them in base64 — Kubernetes supports it",
+        "B) Either (1) External Secrets Operator with an external secrets store (Vault, cloud secrets manager), or (2) Sealed Secrets with cluster-public-key encryption, or (3) SOPS with age/KMS encryption at the manifest level. All three keep plaintext out of Git; choice depends on whether your org has existing secrets infrastructure (ESO) or wants secrets in Git (Sealed Secrets / SOPS)",
+        "C) Store them in environment variables in the CI system",
+        "D) Never use secrets with GitOps"
+      ],
+      "answer": "B",
+      "explanation": "GitOps-compatible secrets: ESO (secrets live in an external service; a CRD references them; controller syncs into native Kubernetes Secrets), Sealed Secrets (encrypted with cluster public key; controller decrypts; ciphertext in Git), SOPS (file-level encryption using KMS or age keys; decryption at manifest-apply time). Trade-offs: ESO adds operational dependency on the external service but centralizes secrets; Sealed Secrets keeps everything in Git but ties decryption to specific clusters; SOPS is flexible but adds tooling at the edit-step. All three are valid — pick based on your org's secrets infrastructure.",
+      "difficulty": "medium",
+      "tags": ["gitops", "secrets", "security"]
+    },
+    {
+      "id": "iac-27",
+      "question": "What specifically happens during a GitOps controller's 'reconciliation loop'?",
+      "type": "multiple_choice",
+      "options": [
+        "A) The controller runs kubectl apply in a loop",
+        "B) The controller continuously: (1) fetches the current desired state from Git (via polling or webhook), (2) retrieves the current actual state of managed resources from the Kubernetes API, (3) computes the diff, (4) if there's a difference, applies changes to converge actual state toward desired. This loop runs typically every 1-5 minutes (configurable). Drift between loops is corrected on the next cycle",
+        "C) The controller validates YAML syntax continuously",
+        "D) The controller waits for user commands"
+      ],
+      "answer": "B",
+      "explanation": "The reconciliation loop is the mechanical heart of GitOps. The loop is what makes it 'continuous reconciliation' — if someone kubectl edits a resource managed by the controller, the next reconciliation cycle reverts it. The frequency is tunable (ArgoCD default is 3 minutes; Flux default is 1 minute). Faster = faster drift correction but more load; slower = longer drift windows but less overhead. Understanding the loop is essential for reasoning about SLIs like reconciliation latency and drift detection time.",
+      "difficulty": "medium",
+      "tags": ["gitops", "reconciliation", "controller"]
+    },
+    {
+      "id": "iac-28",
+      "question": "Design an environment promotion flow for GitOps: a change goes from dev to staging to prod. What's the mechanism and what should be automated vs gated?",
+      "type": "open",
+      "key_points": [
+        "Mechanism: each environment has its own manifest set (either separate repos, per-env directories, or per-env branches). Promotion = copying/updating the manifest in the target environment",
+        "Dev: auto-deploy on merge to main (no gate). Rapid feedback is the goal",
+        "Staging: promotion is automated on successful dev testing (e.g., post-deploy smoke tests pass). Or PR-based with team review. Soak period before prod: typically 4-24 hours depending on risk",
+        "Prod: gated promotion — requires approval, often two-person review, sometimes additional approval from SRE or security for sensitive changes. Scheduled deploy windows (avoid Friday afternoons) for higher-risk changes",
+        "Automation: promotion PRs are automatically opened by the pipeline (e.g., image tag bumped in staging repo, then PR opened to prod repo); humans review and merge",
+        "Rollback: prod rollback is git revert on the prod repo — the controller applies the revert automatically. This should be drilled; expect it to happen occasionally",
+        "Tooling: a purpose-built tool like Argo Rollouts for canary/blue-green promotions, or image-automation-controller in Flux for automated image tag updates"
+      ],
+      "difficulty": "hard",
+      "tags": ["gitops", "environment-promotion", "cd"]
+    },
+    {
+      "id": "iac-29",
+      "question": "Why is pull-based reconciliation more secure than push-based CI deployment?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Pull is faster",
+        "B) In push-based: CI has credentials for every target cluster. Credentials must be stored in CI; compromise of CI = compromise of all clusters. In pull-based: the controller runs inside the cluster and pulls from Git. Cluster only needs Git read credentials; the cluster's own access credentials never leave the cluster. Smaller credential surface area. Credential rotation is easier",
+        "C) Pull and push are equally secure",
+        "D) Pull doesn't need authentication"
+      ],
+      "answer": "B",
+      "explanation": "This is the single most-cited security argument for GitOps. Push-based CI systems accumulate credentials to every environment they deploy to; the CI system becomes a high-value target. Pull-based reverses this: the cluster agent has only Git read credentials; it pulls what to do. This also simplifies audit — the cluster's own state tracks what was applied, not a separate CI log. For regulated environments, this credential model is often a hard requirement.",
+      "difficulty": "medium",
+      "tags": ["gitops", "security", "pull-vs-push"]
+    },
+    {
+      "id": "iac-30",
+      "question": "When would you choose ApplicationSet over the app-of-apps pattern in ArgoCD?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Always — ApplicationSet is strictly better",
+        "B) Choose ApplicationSet for templated, generator-driven workflows (one App per cluster, one App per Git directory, matrix combinations). Choose app-of-apps when you want a simple, version-controlled list of Applications that you compose manually. ApplicationSet is designed specifically for 'many similar apps from a template'; app-of-apps is for 'a curated collection'",
+        "C) Only ApplicationSet works with multi-cluster",
+        "D) They solve different unrelated problems"
+      ],
+      "answer": "B",
+      "explanation": "ApplicationSet's generators (cluster, git, list, matrix, merge) solve the 'N similar Applications' problem elegantly: add a new cluster → it gets the app automatically. App-of-apps predates ApplicationSet and is simpler for a manually-curated list of Applications. Many teams use both: ApplicationSets for templated fleet-wide apps, app-of-apps for curated foundational applications (monitoring stack, policy controllers, operators).",
+      "difficulty": "medium",
+      "tags": ["argocd", "applicationset", "multi-cluster"]
+    },
+    {
+      "id": "iac-31",
+      "question": "Why might 'GitOps reconciliation latency' be a platform SLI, and what target would you set?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It shouldn't be an SLI",
+        "B) Time from merge to live is a developer-experience metric. If it's 15 minutes, developers feel the platform is slow; if it's 1 minute, fast. Typical target: p95 under 5 minutes for most changes, under 2 minutes for hot-path applications. Components: Git webhook latency, controller polling interval, admission policy evaluation, Kubernetes reconciliation. Observing the breakdown helps locate slowness",
+        "C) It's a Kubernetes SLI, not a platform SLI",
+        "D) Only ArgoCD cares about this"
+      ],
+      "answer": "B",
+      "explanation": "Reconciliation latency (merge-to-live) is a tenant-experience metric. Slow reconciliation means developers wait longer to verify their changes, which hurts flow state and slows feedback. Breaking it down: webhook latency (Git → controller) is usually milliseconds; polling interval if no webhook (1-5 min); admission evaluation (usually <100ms but can spike); cluster reconciliation. Target should be calibrated against what matters to tenants: hot-path deploys might need <2min, background workloads can tolerate more.",
+      "difficulty": "medium",
+      "tags": ["gitops", "platform-sli", "reconciliation"]
+    },
+    {
+      "id": "iac-32",
+      "question": "Your platform is choosing between one monorepo for all Kubernetes manifests vs a polyrepo approach (repo per team). What's the honest trade-off?",
+      "type": "open",
+      "key_points": [
+        "Monorepo pros: single place to look, cross-cutting changes are atomic (one PR updates everything), consistent tooling enforcement via root-level CI, easier to refactor organization-wide patterns",
+        "Monorepo cons: review noise (teams see each other's PRs), CODEOWNERS can become complex, one team's velocity bottlenecks the repo, monorepo tooling (bazel-style) may be needed at scale",
+        "Polyrepo pros: natural team ownership, teams move independently, clear boundaries, each team can have their own CI and release cadence",
+        "Polyrepo cons: cross-cutting changes require a sweep (PR per repo), hard to enforce consistency without tooling, platform team spends more time building tooling to keep repos in sync",
+        "Pragmatic middle ground: one platform-owned repo for foundational config (cluster-level, platform services, cluster-wide policies), one repo per team for their workloads. Many real platforms converge on this",
+        "Decision factors: team size (5 teams fit in monorepo comfortably; 50 struggle), autonomy priority, existing tooling sophistication, whether you have dedicated tooling engineers to build polyrepo sync tooling",
+        "Not easily reversible: repo topology is painful to change later; decide with your current + projected org size, not theoretical scale"
+      ],
+      "difficulty": "hard",
+      "tags": ["gitops", "repo-topology", "monorepo"]
+    },
+    {
+      "id": "iac-33",
+      "question": "Why is a strict CODEOWNERS file on the GitOps manifests repo a security boundary, not just a code-review convenience?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It isn't — CODEOWNERS is just a convenience",
+        "B) In a GitOps workflow, merging the manifest IS the deploy. CODEOWNERS + branch protection = who can approve a merge = who can cause a deploy. Without CODEOWNERS, anyone with repo write access can merge their own PR into prod. With CODEOWNERS + required approvals, team A cannot approve team B's prod changes. The file becomes an access-control artifact equivalent to Kubernetes RBAC",
+        "C) CODEOWNERS applies only to source code, not YAML",
+        "D) It matters only in large orgs"
+      ],
+      "answer": "B",
+      "explanation": "In push-based deployment, CODEOWNERS is advisory; the real deploy access control is who has CI credentials. In GitOps, merge = deploy, so CODEOWNERS IS the deploy access control. Combined with branch protection (required reviews, required status checks, require-review-from-owners), you get a Git-native deploy authorization layer. This is one of the under-appreciated security properties of GitOps: it pushes deploy authorization into a well-understood Git workflow rather than a separate credentials system.",
+      "difficulty": "medium",
+      "tags": ["gitops", "codeowners", "security", "access-control"]
+    },
+    {
+      "id": "iac-34",
+      "question": "When is GitOps the WRONG choice for a workload?",
+      "type": "multiple_choice",
+      "options": [
+        "A) GitOps is always right",
+        "B) GitOps is weaker fit when: (1) workload state is inherently imperative (batch jobs triggered from external events, migrations that run once), (2) the desired state is data-driven and changes faster than is practical to commit (real-time trading systems with dynamic parameters), (3) the workload has strong interactive-operation requirements (a game server where admins make live changes during a match). For most infrastructure and most applications, GitOps is the default; these are edge cases",
+        "C) GitOps only fits Go applications",
+        "D) GitOps doesn't work with databases"
+      ],
+      "answer": "B",
+      "explanation": "GitOps assumes desired state is declarative and stable enough to live in Git. For state that's inherently imperative, event-driven, or data-rapidly-changing, GitOps fights the workload rather than supporting it. Recognizing these edge cases is a senior signal — candidates who insist 'everything should be GitOps' miss the architectural fit question. That said, the edge cases are genuinely edge — 90%+ of workloads are a good GitOps fit.",
+      "difficulty": "medium",
+      "tags": ["gitops", "fit", "architecture"]
+    },
+    {
+      "id": "iac-35",
+      "question": "What's the 'rollback by git revert' pattern in GitOps, and why is it superior to typical rollback mechanisms?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It's slower than other rollback methods",
+        "B) In GitOps: rollback = git revert the offending commit, merge, controller reconciles back to pre-change state. Superior because: (1) it's the same mechanism as deploy (no special rollback tooling), (2) it's auditable (the revert PR is a record), (3) it works for any change type (workload, config, policy), (4) it respects approval gates (the revert PR still goes through review). Compared to 'kubectl rollout undo' or proprietary rollback tools, git-revert is uniform and auditable",
+        "C) It only works for small clusters",
+        "D) It's the same as any other rollback"
+      ],
+      "answer": "B",
+      "explanation": "One of GitOps's most underrated benefits: rollback is trivial because deploy is a Git operation. No separate rollback tool, no 'rollout history' with tribal knowledge of what version is safe. Revert the commit, merge, controller converges. On-call engineers can teach new hires rollback in 2 minutes: 'find the bad PR in git, revert it, merge.' This is one of the common arguments to give a GitOps-skeptical team: their rollback story gets dramatically simpler.",
+      "difficulty": "easy",
+      "tags": ["gitops", "rollback"]
+    },
+    {
+      "id": "iac-36",
+      "question": "What's the key positioning difference between OPA (Open Policy Agent) and Kyverno for Kubernetes policy-as-code?",
+      "type": "multiple_choice",
+      "options": [
+        "A) OPA is faster than Kyverno",
+        "B) OPA is a general-purpose policy engine (not Kubernetes-specific) with its own DSL (Rego); used via OPA Gatekeeper for Kubernetes admission. Kyverno is Kubernetes-specific, uses YAML (no separate DSL), and has Kubernetes-native primitives like validate/mutate/generate/cleanup policies. OPA is more flexible and reusable across non-K8s contexts; Kyverno is more ergonomic for teams that only need Kubernetes policy",
+        "C) They do different unrelated things",
+        "D) OPA is only for admission; Kyverno is only for runtime"
+      ],
+      "answer": "B",
+      "explanation": "The positioning captures the trade-off: flexibility vs ergonomics. OPA's Rego is a powerful, general-purpose policy language — the same engine that writes Terraform policies can write Kubernetes policies, Kafka policies, HTTP gateway policies. But Rego has a learning curve. Kyverno sacrifices generality for ergonomics: you write policies in YAML, familiar to anyone who writes Kubernetes manifests. Teams that only need Kubernetes policy often find Kyverno faster to adopt; teams that need cross-system policy gravitate to OPA.",
+      "difficulty": "medium",
+      "tags": ["opa", "kyverno", "policy-as-code", "comparison"]
+    },
+    {
+      "id": "iac-37",
+      "question": "Describe the Rego evaluation model — how does a Rego policy decide whether to allow or deny?",
+      "type": "open",
+      "key_points": [
+        "Rego is a declarative query language — you write rules that produce values or sets, evaluated against input data",
+        "Common admission-control shape: input is the admission review (the resource being admitted); a 'deny' rule returns messages when the resource violates a constraint. No deny messages = allowed",
+        "Rule evaluation: each rule is a set of expressions; the rule 'holds' (produces its value) only if all its expressions evaluate to true. Rules can reference other rules, package-scoped constants, and built-in functions",
+        "Default values: 'default allow = false' means 'allow' is false unless a rule explicitly sets it to true",
+        "Partial evaluation and aggregation: Rego can aggregate results across resources (e.g., 'at least one pod per namespace must be healthy'); this is powerful but adds complexity",
+        "Testing: Rego policies are tested with 'opa test' using a unit-test file that provides input fixtures and expected results. Untested policies decay rapidly; the test file IS the policy's documentation"
+      ],
+      "difficulty": "hard",
+      "tags": ["opa", "rego", "policy-as-code"]
+    },
+    {
+      "id": "iac-38",
+      "question": "What are Kyverno's four policy types and what does each do?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Allow, Deny, Warn, Audit",
+        "B) Validate (accept or reject resources), Mutate (modify resources — inject defaults, add labels), Generate (create new resources when a trigger resource appears, e.g., auto-create a default NetworkPolicy per namespace), Cleanup (delete resources when conditions are met, e.g., delete stale test namespaces)",
+        "C) Sync, Watch, Scan, Audit",
+        "D) Input, Filter, Transform, Output"
+      ],
+      "answer": "B",
+      "explanation": "Kyverno's four policy types cover the policy lifecycle. Validate is the most common (enforce a rule). Mutate handles defaults (every Pod gets a team label if missing). Generate is powerful: when a new namespace is created, auto-generate a default-deny NetworkPolicy and a baseline ResourceQuota. Cleanup addresses the long-tail problem of test resources accumulating. The four types together let Kyverno handle more than just admission — it becomes a lifecycle policy engine for Kubernetes.",
+      "difficulty": "easy",
+      "tags": ["kyverno", "policy-as-code"]
+    },
+    {
+      "id": "iac-39",
+      "question": "What's the difference between audit mode and enforce mode in policy-as-code tools, and how should they be used in a rollout?",
+      "type": "multiple_choice",
+      "options": [
+        "A) They are the same",
+        "B) Audit mode: the policy evaluates every affected resource and reports violations (via logs, PolicyReport CRDs in Kyverno, etc.), but does NOT block any resource. Enforce mode: violations block the resource (admission rejected). Rollout pattern: every new policy starts in audit for a bounded window (typically 1-2 weeks), review the findings, fix known-good-but-failing cases, then promote to enforce. Skipping audit is how you break production on day one",
+        "C) Audit is for security; enforce is for reliability",
+        "D) Enforce is deprecated"
+      ],
+      "answer": "B",
+      "explanation": "Audit-first is the definitional safe-rollout pattern for policy-as-code. In audit mode, you see every resource that would be blocked in the current shape — including resources you didn't know were affected. A 'simple' policy often reveals surprising edge cases. After 1-2 weeks of audit (bounded — don't leave policies in audit forever; they get ignored), fix the known legitimate violations (either update the resource or carve an exception), then promote to enforce. Policies that sit in audit for 6+ months are dead policies — visible, not acted on, and no longer providing value.",
+      "difficulty": "medium",
+      "tags": ["policy-as-code", "audit-mode", "enforce-mode", "rollout"]
+    },
+    {
+      "id": "iac-40",
+      "question": "What is the Kubernetes-native ValidatingAdmissionPolicy (VAP) and when should you use it over OPA Gatekeeper or Kyverno?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It's the same as a validating webhook",
+        "B) ValidatingAdmissionPolicy (GA in Kubernetes 1.30) is a built-in admission-control mechanism using CEL (Common Expression Language) evaluated in-process by the API server — no webhook round-trip. Use it for simple validations where the CEL expression is sufficient (label presence, field values, resource-name patterns). Use OPA/Kyverno for complex policies, cross-resource checks, or policies requiring external data",
+        "C) Only for testing",
+        "D) It requires a paid tier"
+      ],
+      "answer": "B",
+      "explanation": "VAP is a significant ecosystem addition: no webhook server to operate, evaluated in-process (lower latency, no webhook availability risk), and uses CEL (easier than Rego for simple cases). But CEL is less expressive than Rego or Kyverno's patterns. For simple 'every Deployment must have these labels' or 'this field must match this pattern' policies, VAP is the lightest solution. Complex policies — cross-resource validation, external data lookups, complex pattern matching — still require OPA or Kyverno. Many platforms now use VAP + Kyverno together.",
+      "difficulty": "medium",
+      "tags": ["kubernetes", "admission-control", "cel", "policy-as-code"]
+    },
+    {
+      "id": "iac-41",
+      "question": "What's the difference between 'guardrails' and 'gates' in platform engineering terminology?",
+      "type": "multiple_choice",
+      "options": [
+        "A) They are synonyms",
+        "B) Guardrails: preventive, automated, opinionated — they keep safe paths safe without slowing teams down (think: Kyverno policy that adds a default label automatically). Gates: manual approval steps that block progress until a human intervenes — slow, frustrating when overused, but necessary for irreversible or high-risk actions. A strong platform has many guardrails and few gates; a weak platform inverts the ratio",
+        "C) Guardrails are for security; gates are for reliability",
+        "D) They both refer to the same tool"
+      ],
+      "answer": "B",
+      "explanation": "This distinction is one of the most useful in platform-engineering vocabulary. Guardrails protect by default — they make the right path the easy path, automatically. Gates protect by blocking — they add friction every time. The senior platform mindset is: convert gates to guardrails wherever possible. Every manual approval step is a gate that will be resented and eventually routed around. Every automated constraint is a guardrail that becomes invisible when it's working. A platform with too many gates is a platform where the policy program is a tax; a platform with good guardrails is one where policy is invisible until it saves you.",
+      "difficulty": "easy",
+      "tags": ["guardrails", "gates", "policy-as-code"]
+    },
+    {
+      "id": "iac-42",
+      "question": "What are the four common policy-enforcement points in a platform, and what is each best at?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Build, Test, Deploy, Monitor",
+        "B) (1) Pre-commit: fast local feedback; best for style, simple lints (e.g., tflint, hadolint). (2) CI (shift-left): before merge; best for complex validation that's expensive locally (Checkov, Conftest on Terraform plans). (3) Admission: at cluster entry; best for platform-wide invariants that must hold regardless of how the resource was created (required labels, image registries). (4) Runtime: after deployment; best for continuous compliance scanning, drift detection",
+        "C) Development, Staging, Production, DR",
+        "D) Morning, Afternoon, Evening, Night"
+      ],
+      "answer": "B",
+      "explanation": "The four enforcement points have different cost/value profiles. Pre-commit is fastest feedback but easiest to bypass. CI is bypass-resistant (runs on every PR) but needs CI minutes. Admission is the strongest guarantee — nothing enters the cluster without passing — but adds latency to deploys. Runtime catches drift and runtime-only violations but is the slowest feedback. A mature policy program uses multiple points for defense-in-depth: local linting for immediate feedback, CI for PR-time validation, admission for cluster-entry, runtime for ongoing compliance.",
+      "difficulty": "medium",
+      "tags": ["policy-as-code", "enforcement-points", "shift-left"]
+    },
+    {
+      "id": "iac-43",
+      "question": "Design an exception process for policy violations that doesn't undermine the policy.",
+      "type": "open",
+      "key_points": [
+        "Exceptions must be requestable through a clear path — either a CRD (e.g., Kyverno PolicyException), a label on the resource, or a documented workflow",
+        "Exceptions must be time-bound — no permanent exceptions. Typical window: 30-90 days with a renewal process",
+        "Exceptions must have a required justification — a ticket reference, a description of the business reason, and a named owner who will re-evaluate at expiry",
+        "Exceptions must be tracked as a metric: total active exceptions, exceptions by team, exceptions approaching expiry. If one team has 20+ active exceptions, the policy may be miscalibrated for their workflow — investigate",
+        "Exceptions should be reviewed on a cadence (monthly or quarterly): are these still needed? Do any point to a policy revision? Are any about to expire and need renewal?",
+        "The exception request must be faster than bypassing the policy. If a legitimate exception takes 2 weeks and bypassing takes 5 minutes, the policy has lost",
+        "Anti-pattern: the permanent exception. Track exceptions that have been renewed 3+ times — these are signals that either the policy needs updating or the exception should become a permitted variant"
+      ],
+      "difficulty": "hard",
+      "tags": ["policy-as-code", "exceptions", "platform-as-product"]
+    },
+    {
+      "id": "iac-44",
+      "question": "'The permanent exception' is a common policy-as-code antipattern. Why is it corrosive and how do you prevent it?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It's fine — some exceptions are legitimately permanent",
+        "B) A permanent exception is a policy that has been selectively disabled for a team or workload and never revisited. Corrosive because: (1) it hides what should have been a policy revision (the policy didn't fit; the exception never pushed that signal upstream), (2) it grows — other teams notice and request similar exceptions, (3) it creates a two-tier platform (compliant teams vs excepted teams). Prevention: time-bound exceptions with forced re-evaluation, exception-count metrics reviewed quarterly, and treating 3+ renewals as a signal to revise the policy itself",
+        "C) It's a Kubernetes-specific problem",
+        "D) Kyverno prevents it automatically"
+      ],
+      "answer": "B",
+      "explanation": "The permanent exception erodes policy value silently. The team with the exception has no incentive to change; the policy-owner has no signal that their policy was wrong. Six months later, three other teams have similar exceptions and the policy is effectively optional. Prevention is process: every exception has an expiry, every exception requires justification, exception metrics are reviewed, and exceptions that keep renewing are treated as policy-revision triggers rather than just re-approved.",
+      "difficulty": "medium",
+      "tags": ["policy-as-code", "antipattern", "exceptions"]
+    },
+    {
+      "id": "iac-45",
+      "question": "Why is 'the untested policy' an antipattern, and what does a tested policy look like?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Policies don't need tests because they're simple rules",
+        "B) An untested policy is code that only runs in production — the first time you know it works (or doesn't) is when it blocks a real deploy. A tested policy has unit tests with both compliant and non-compliant inputs (opa test for Rego, a Kyverno test file with example resources). Tests serve as living documentation of the policy's intent and catch regressions when the policy is updated",
+        "C) Only open-source policies need tests",
+        "D) Testing is for code, not configuration"
+      ],
+      "answer": "B",
+      "explanation": "Policy-as-code is code. It has edge cases, interactions, and regressions. Without tests, you discover policy bugs in production — when a legitimate resource is blocked or a malicious one is allowed. A tested policy runs the policy against fixture resources in CI: known-compliant, known-non-compliant, and edge cases. The test file IS the documentation: readers learn what the policy allows and denies from the test inputs. Untested policies rot the same way untested code does, just with higher blast radius.",
+      "difficulty": "medium",
+      "tags": ["policy-as-code", "antipattern", "testing"]
+    },
+    {
+      "id": "iac-46",
+      "question": "Why is Conftest considered a 'shift-left' tool for policy-as-code?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Because it's named after a leftward motion",
+        "B) Conftest runs OPA/Rego policies against configuration files (Terraform plans, Kubernetes manifests, Dockerfiles, Helm values) in CI — before merge, before deploy, before admission. 'Shift-left' = moving checks earlier in the pipeline where they're cheap to fix. Finding a policy violation at PR time is seconds to fix; finding it at admission is a broken deploy; finding it in production is an incident",
+        "C) It only works on Linux",
+        "D) It's the only policy tool"
+      ],
+      "answer": "B",
+      "explanation": "Shift-left is the principle of catching problems as early as possible. Conftest is purpose-built for this: pre-commit or CI hooks run Rego policies against config files, giving developers immediate feedback. By the time the resource reaches admission, most violations are already fixed. This reduces admission-controller load, reduces failed deploys, and moves feedback to where it's cheapest. Conftest + admission-controller policy is a common defense-in-depth pattern — same Rego, two enforcement points.",
+      "difficulty": "easy",
+      "tags": ["conftest", "shift-left", "ci", "policy-as-code"]
+    },
+    {
+      "id": "iac-47",
+      "question": "You're starting a new Kubernetes-only platform with a small team. Should you choose OPA (Gatekeeper) or Kyverno for policy-as-code?",
+      "type": "open",
+      "key_points": [
+        "Default for Kubernetes-only: Kyverno. YAML-native policies are easier for teams familiar with Kubernetes manifests. No DSL learning curve",
+        "Choose OPA (Gatekeeper) if: (1) you already use Rego elsewhere in the org (Terraform policies, service-mesh policies) and want unified tooling, (2) you have policies that are difficult to express in Kyverno's declarative YAML shape, (3) you have strong Rego expertise on the team",
+        "Kyverno advantages for platform teams: policy authoring in YAML is accessible to more engineers, the policy types (validate/mutate/generate/cleanup) map directly to common needs, PolicyReport CRDs are a natural audit surface",
+        "OPA advantages: more flexible for non-trivial logic, more established (older project with broader community), Rego is a transferable skill beyond Kubernetes",
+        "Practical path: start with Kyverno for simple policies and Conftest (OPA) for Terraform. If complex Kubernetes policies arise that Kyverno can't handle, add Gatekeeper for those specific cases. Don't try to use both for the same policy surface",
+        "Think about evolution: Kubernetes 1.30+ ValidatingAdmissionPolicy (built-in CEL) covers many simple cases without either tool. Platform evolution: VAP for simple, Kyverno for typical, OPA/Gatekeeper for complex edge cases"
+      ],
+      "difficulty": "hard",
+      "tags": ["policy-as-code", "opa", "kyverno", "tooling-choice"]
+    },
+    {
+      "id": "iac-48",
+      "question": "Why did Kyverno choose YAML over a separate DSL like Rego, and what's the cost of that choice?",
+      "type": "multiple_choice",
+      "options": [
+        "A) YAML is faster to parse",
+        "B) Kyverno's hypothesis: Kubernetes policy authors already read and write YAML. A YAML-based policy language means any K8s engineer can read a Kyverno policy without learning a new language. The cost: YAML's expressive limits. Complex logic that's natural in Rego requires awkward workarounds in Kyverno. But for the 80% case of Kubernetes policy (label enforcement, field validation, simple patterns), YAML is sufficient",
+        "C) YAML was required by Kubernetes",
+        "D) DSLs are always bad"
+      ],
+      "answer": "B",
+      "explanation": "Kyverno's YAML-over-DSL choice is a product decision: lower barrier to entry for the common case. Many teams with Kubernetes expertise but no Rego experience find Kyverno approachable; OPA felt harder. The cost is real — complex policies that require multi-step logic, cross-resource evaluation, or rich pattern matching are awkward in Kyverno. The trade-off: broader policy-authoring access, narrower expressivity. The right tool depends on what your policy needs look like.",
+      "difficulty": "medium",
+      "tags": ["kyverno", "rego", "policy-as-code"]
+    },
+    {
+      "id": "iac-49",
+      "question": "Describe a safe rollout sequence for introducing a new platform-wide policy.",
+      "type": "open",
+      "key_points": [
+        "Week 0: design and document the policy — what rule, what risk it mitigates, what the intended effect is, what false-positive / false-negative rates are acceptable",
+        "Week 1: deploy in audit mode. Do NOT enforce. Collect violations",
+        "Week 1-2: review violations. Are they all legitimate (i.e., things you want to block) or are there false positives? Fix false positives (either the policy or the targeted resources). Audit-mode findings ARE the test of the policy",
+        "Week 2: promote to enforce for a small scope (one namespace, one team) first. Measure: any impact on their deploys? Is the violation message clear enough for them to self-remediate?",
+        "Week 3+: expand enforce scope gradually — one team per week, or one namespace per week. Per-scope rollout catches surprises before they affect everyone",
+        "Ongoing: track exception requests. A high rate = policy miscalibrated; revise. Low rate and all resolving quickly = healthy",
+        "Anti-pattern: audit mode forever (nobody acts on findings; policy is decorative). Anti-pattern: straight to enforce at cluster scope (break production for every team at once). The middle path — audit then gradual enforce — is the senior default"
+      ],
+      "difficulty": "hard",
+      "tags": ["policy-as-code", "rollout", "sequencing"]
+    },
+    {
+      "id": "iac-50",
+      "question": "An admission controller goes down. What's the difference between fail-open and fail-closed behavior, and when should each be used?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Fail-open is always better",
+        "B) Fail-open: if the webhook is unreachable, admission requests are allowed through (no policy evaluation). Safer for developer velocity — admission controller issues don't block deploys. Risk: policy enforcement is bypassed during the outage. Fail-closed: requests are denied if the webhook is unreachable. Safer for compliance — no unchecked resources are admitted. Risk: admission-controller outage = no deploys for anyone. Default to fail-open for most admission controllers; use fail-closed for high-security invariants that must NEVER be bypassed",
+        "C) They are the same",
+        "D) Kubernetes chooses automatically"
+      ],
+      "answer": "B",
+      "explanation": "The fail-open vs fail-closed trade-off is one of the most important admission-controller configurations. For a 'nice-to-have' policy (encourage-labels, suggest-limits), fail-open is correct — the controller going down shouldn't halt deploys. For a compliance-mandatory policy (PCI-required encryption, HIPAA-required labels), fail-closed is correct — the policy is too important to ever bypass. Choose per-policy. Platform teams often run multiple admission controllers with mixed configurations: fail-open for most, fail-closed for the few that must never be bypassed.",
+      "difficulty": "medium",
+      "tags": ["admission-control", "reliability", "policy-as-code"]
+    },
+    {
+      "id": "iac-51",
+      "question": "Why might ValidatingAdmissionPolicy (VAP) be faster than OPA Gatekeeper or Kyverno for simple admission policies?",
+      "type": "multiple_choice",
+      "options": [
+        "A) CEL is a faster language than Rego",
+        "B) VAP is evaluated in-process by the Kubernetes API server — no webhook round-trip. OPA and Kyverno run as separate webhook services; every admission request that matches their policies incurs a network hop, serialization, and remote evaluation. For simple policies where CEL is expressive enough, VAP saves the webhook overhead (typically 10-100ms per admission request)",
+        "C) VAP is paid software",
+        "D) VAP runs on faster hardware"
+      ],
+      "answer": "B",
+      "explanation": "VAP's in-process evaluation is a significant architectural improvement for common cases. No webhook availability dependency, no network latency, no separate service to operate. The limit is CEL's expressivity: simple field checks, label presence, pattern matches are all natural in CEL; complex cross-resource or aggregation logic isn't. Many platforms now use VAP for their simple policies (reducing webhook load), reserving OPA/Kyverno for policies that need their richer features.",
+      "difficulty": "medium",
+      "tags": ["cel", "admission-control", "performance"]
+    },
+    {
+      "id": "iac-52",
+      "question": "What does it mean to treat 'policy as a product, not as a mandate,' and why does it matter?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Policy should be sold commercially",
+        "B) Treating policy as a product means: policies have users (the teams they affect), a clear value proposition (the risk they mitigate), clear error messages (teams can self-remediate without platform team help), exception processes that respect user autonomy, and metrics (adoption, exception rate, bypass rate). Treating it as a mandate means: policies are decreed from above, error messages are cryptic, exceptions are hard, teams resent them and route around them. The former scales; the latter erodes",
+        "C) Policy has nothing to do with products",
+        "D) Policy shouldn't have users"
+      ],
+      "answer": "B",
+      "explanation": "The product framing changes everything about how a policy program lands. Policy-as-product means investing in the error message (a team should understand from the rejection what's wrong and how to fix it), the exception process (fast, justified, time-bound), and the feedback loop (policy owners track rejections, revise policies when they consistently misfire). Policy-as-mandate is the SRE/security-as-gatekeeper pattern: policies are rules to be followed, compliance is the measure, teams are suspects. Strong platform engineers articulate this distinction explicitly.",
+      "difficulty": "easy",
+      "tags": ["policy-as-code", "platform-as-product", "philosophy"]
+    },
+    {
+      "id": "iac-53",
+      "question": "Who should own policies in a platform team, and how often should they be reviewed?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Policies don't need owners",
+        "B) Each policy has a named owner (an individual or a specific rotating role on the platform team). The owner is responsible for the policy's lifecycle: reviewing findings, responding to exception requests, revising the policy when it misfires. Review cadence: quarterly for active policies, immediately if exception-request rate spikes. Policies without an owner decay — no one notices when they're stale or misfiring",
+        "C) Only the security team can own them",
+        "D) Every engineer owns every policy"
+      ],
+      "answer": "B",
+      "explanation": "Ownerless policies are the single most common policy-rot pattern. A policy shipped by someone who then moved teams becomes orphaned — no one knows what it does, no one maintains it, and no one has authority to revise or retire it. Assigning a named owner (with a documented rotation if the owner leaves) keeps the policy accountable. Review cadence matters too: policies drift out of usefulness, and quarterly review is the minimum discipline to catch that drift.",
+      "difficulty": "medium",
+      "tags": ["policy-as-code", "ownership"]
+    },
+    {
+      "id": "iac-54",
+      "question": "Your platform wants to align with the CIS Kubernetes Benchmark. What's the honest relationship between the benchmark and policy-as-code?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Policy-as-code can implement every CIS control",
+        "B) The CIS Benchmark is a comprehensive set of security recommendations. Some are policy-as-code candidates (prevent privileged containers, require resource limits, enforce RBAC patterns). Others are configuration-level (set correct API-server flags) and not admission-time. Others are procedural (document incident response). Use policy-as-code for the admission-time subset, configuration-as-code for the cluster-config subset, and process for the procedural subset. Don't force-fit everything into one tool",
+        "C) CIS only applies to open-source Kubernetes",
+        "D) CIS is deprecated"
+      ],
+      "answer": "B",
+      "explanation": "The instinct to encode every security recommendation as policy-as-code is understandable but wrong. Many CIS controls are about cluster-wide configuration (control plane flags, etcd encryption) that happens once at cluster creation, not per-resource. Others are operational processes (incident-review cadence, access reviews) that policy can't enforce. A good security posture uses multiple mechanisms: cluster configuration via Terraform/IaC, admission policies for per-resource controls, runtime scanning for drift, and documented processes for the procedural items.",
+      "difficulty": "medium",
+      "tags": ["policy-as-code", "cis", "compliance"]
+    },
+    {
+      "id": "iac-55",
+      "question": "For a Terraform-heavy platform, where should policy-as-code run and what's the trade-off?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Only at cloud provider level",
+        "B) At multiple points: (1) pre-commit hook for immediate developer feedback (tflint, basic Rego via Conftest), (2) CI on the plan output — the most important gate, runs on every PR, catches violations before merge, (3) cloud-provider-level controls (AWS SCPs, Azure Policy, GCP Org Policy) as a defense-in-depth layer that catches bypass attempts. Trade-off: more enforcement points = more operational complexity but stronger defense-in-depth. The CI-on-plan check is the single most important — it catches 90% of violations cheaply",
+        "C) After deployment only",
+        "D) Only in Terraform Cloud"
+      ],
+      "answer": "B",
+      "explanation": "Terraform policy-as-code is most valuable at plan-time in CI. The plan shows exactly what will change; Rego can evaluate the plan JSON against deny rules; the PR is blocked until compliance is met. Cloud-provider-level policies (SCPs, Azure Policy) catch bypass attempts and enforce org-wide invariants that individual Terraform users shouldn't be able to override. Pre-commit is nice for immediate feedback but easy to bypass. The CI+cloud-provider combination is the pragmatic default: shift-left for developer velocity, cloud-level for organizational safety.",
+      "difficulty": "hard",
+      "tags": ["terraform", "policy-as-code", "enforcement-points"]
     }
   ]
 }

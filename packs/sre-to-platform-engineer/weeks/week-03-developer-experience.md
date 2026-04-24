@@ -224,7 +224,7 @@ Target: 3+ on both. A "4" on Prompt A is particularly impressive in interviews.
 ### From the repo
 
 ```bash
-prep quiz --bank platform-engineer --topic devex
+prep quiz --topic platform-engineer
 ```
 
 Alternatively, review `quiz_banks/platform-engineer.json` for questions tagged `dora`, `space`, `devex`, or `productivity-metrics`.

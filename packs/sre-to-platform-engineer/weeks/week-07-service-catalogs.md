@@ -231,7 +231,7 @@ Target: 3+ on both.
 ### From the repo
 
 ```bash
-prep quiz --bank platform-engineer --topic catalog
+prep quiz --topic platform-engineer
 ```
 
 Alternatively, review `quiz_banks/platform-engineer.json` for questions tagged `catalog`, `scaffolder`, `backstage`, `self-service`, or `templates`.
