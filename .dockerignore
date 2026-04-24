@@ -1,0 +1,53 @@
+# Python runtime artefacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+.python-version
+
+# Package build output
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Test & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Source control & CI
+.git/
+.github/
+.gitignore
+.gitattributes
+
+# Local development
+.claude/
+.env
+.env.local
+*.local
+node_modules/
+
+# Tests (application still works without them; excluding keeps image small)
+tests/
+
+# Documentation site (not needed in runtime image)
+docs/site/
+
+# Local workspace state
+.prep/
+prep-data/
