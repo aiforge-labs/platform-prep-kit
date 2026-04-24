@@ -218,7 +218,7 @@ Target: 3+ on both.
 ### From the repo
 
 ```bash
-prep quiz --topic iac-gitops
+prep quiz --topic iac-gitops --tag gitops
 ```
 
 Alternatively, review `quiz_banks/iac-gitops.json` for questions tagged `gitops`, `argocd`, `flux`, `reconciliation`, or `multi-cluster`.

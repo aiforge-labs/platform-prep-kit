@@ -13,15 +13,19 @@ import sys
 @click.option("--topic", type=str, default=None, help="Quiz topic or quiz bank id (defaults to today's topic).")
 @click.option("--difficulty", type=click.Choice(["easy", "medium", "hard"]), default=None,
               help="Filter questions by difficulty level.")
+@click.option("--tag", type=str, default=None,
+              help="Filter questions by tag (e.g., 'gitops', 'devex'). Use --list-tags to discover.")
 @click.option("--list", "list_banks", is_flag=True, default=False,
               help="List all available quiz banks with question counts.")
+@click.option("--list-tags", "list_tags_flag", is_flag=True, default=False,
+              help="List tags available in the selected --topic bank.")
 @click.option("--mock-interview", is_flag=True, default=False, help="Generate a mock interview prompt instead.")
 @click.option("--num", type=int, default=5, help="Number of questions (default: 5).")
 @click.option("--copy", is_flag=True, default=False, help="Copy AI quiz prompt to clipboard instead of running locally.")
 @click.option("--generate", is_flag=True, default=False, help="Generate new quiz questions using AI and save locally.")
 @click.option("--import-file", "import_file", type=str, default=None, help="Import quiz bank from a JSON file path or URL.")
 @click.option("--review", is_flag=True, default=False, help="Review previously missed questions (spaced repetition).")
-def quiz_cmd(topic, difficulty, list_banks, mock_interview, num, copy, generate, import_file, review):
+def quiz_cmd(topic, difficulty, tag, list_banks, list_tags_flag, mock_interview, num, copy, generate, import_file, review):
     """Run a quiz or generate a mock interview prompt."""
     try:
         from prep_agent.core.tracker import Tracker
@@ -41,6 +45,17 @@ def quiz_cmd(topic, difficulty, list_banks, mock_interview, num, copy, generate,
     # ------------------------------------------------------------------
     if list_banks:
         _print_quiz_banks()
+        return
+
+    # ------------------------------------------------------------------
+    # List tags for a bank — works without an initialised workspace
+    # ------------------------------------------------------------------
+    if list_tags_flag:
+        if not topic:
+            error("--list-tags requires --topic <bank-id>.")
+            sys.exit(1)
+        from prep_agent.core.quiz_engine import QuizEngine as _QE
+        _print_bank_tags(topic, _QE())
         return
 
     # ------------------------------------------------------------------
@@ -140,20 +155,38 @@ def quiz_cmd(topic, difficulty, list_banks, mock_interview, num, copy, generate,
 
     if effective_difficulty:
         info(f"Difficulty filter: {effective_difficulty}")
+    if tag:
+        info(f"Tag filter: {tag}")
 
     # ------------------------------------------------------------------
     # Local interactive quiz
     # ------------------------------------------------------------------
-    questions = engine.get_questions(topic_id=topic, num_questions=agent_num, difficulty=effective_difficulty)
+    questions = engine.get_questions(
+        topic_id=topic,
+        num_questions=agent_num,
+        difficulty=effective_difficulty,
+        tag=tag,
+    )
 
     # If agent-suggested difficulty yields nothing, fall back to unfiltered
     if not questions and effective_difficulty and not difficulty:
         info(f"No '{effective_difficulty}' questions found — using all difficulties.")
         effective_difficulty = None
-        questions = engine.get_questions(topic_id=topic, num_questions=agent_num, difficulty=None)
+        questions = engine.get_questions(
+            topic_id=topic,
+            num_questions=agent_num,
+            difficulty=None,
+            tag=tag,
+        )
 
     if not questions:
-        if difficulty:
+        if tag and difficulty:
+            warning(f"No questions for topic='{topic}' tag='{tag}' difficulty='{difficulty}'.")
+            info("Try --list-tags --topic {topic} to see available tags.")
+        elif tag:
+            warning(f"No questions tagged '{tag}' in '{topic}'.")
+            info(f"Try: prep quiz --topic {topic} --list-tags")
+        elif difficulty:
             warning(f"No '{difficulty}' questions found for '{topic}'.")
             info("Try without --difficulty to see all available questions.")
         else:
@@ -420,6 +453,41 @@ def _print_quiz_banks() -> None:
     click.echo(f"  {len(rows)} banks total. Use: prep quiz --topic <bank-id>")
     if any(r[2] + r[3] + r[4] > 0 for r in rows):
         click.echo("  Filter by difficulty: prep quiz --topic <id> --difficulty hard")
+    click.echo("  Filter by tag:        prep quiz --topic <id> --tag <tag>")
+    click.echo("  Discover tags:        prep quiz --topic <id> --list-tags")
+    click.echo()
+
+
+def _print_bank_tags(topic_id: str, engine) -> None:
+    """Print the tags used in a given quiz bank, with question counts per tag."""
+    bank = engine.load_quiz_bank(topic_id)
+    if not bank:
+        click.echo(f"Bank '{topic_id}' not found. Run 'prep quiz --list' to see available banks.")
+        return
+
+    tag_counts: dict[str, int] = {}
+    untagged = 0
+    for q in bank.get("questions", []):
+        qtags = q.get("tags") or []
+        if not qtags:
+            untagged += 1
+        for t in qtags:
+            tag_counts[t] = tag_counts.get(t, 0) + 1
+
+    total = len(bank.get("questions", []))
+    click.echo()
+    click.echo(click.style(f"  Tags in '{topic_id}' ({total} questions total)", bold=True))
+    click.echo("  " + "-" * 50)
+    if not tag_counts:
+        click.echo("  (no tags in this bank)")
+        click.echo()
+        return
+    for tag in sorted(tag_counts.keys()):
+        click.echo(f"  {tag:<35} {tag_counts[tag]:>5} questions")
+    if untagged:
+        click.echo(f"  {'(untagged)':<35} {untagged:>5} questions")
+    click.echo()
+    click.echo(f"  Use: prep quiz --topic {topic_id} --tag <tag>")
     click.echo()
 
 

@@ -219,7 +219,7 @@ Target: 3+ on both. A "4" on Prompt A often distinguishes a strong IC Platform E
 ### From the repo
 
 ```bash
-prep quiz --topic platform-engineer
+prep quiz --topic platform-engineer --tag idp
 ```
 
 Alternatively, review `quiz_banks/platform-engineer.json` for questions tagged `idp`, `backstage`, `five-planes`, or `platform-architecture`.

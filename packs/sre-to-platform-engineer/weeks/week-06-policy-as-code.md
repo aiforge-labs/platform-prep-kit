@@ -241,7 +241,7 @@ Target: 3+ on both. This topic is where "platform engineer" and "security engine
 ### From the repo
 
 ```bash
-prep quiz --topic iac-gitops
+prep quiz --topic iac-gitops --tag policy-as-code
 ```
 
 Alternatively, review `quiz_banks/iac-gitops.json` for questions tagged `opa`, `rego`, `kyverno`, `policy-as-code`, `admission-control`, or `guardrails`.

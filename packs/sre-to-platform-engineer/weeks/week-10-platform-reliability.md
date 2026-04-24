@@ -240,7 +240,7 @@ Target: 3+ on all three.
 ### From the repo
 
 ```bash
-prep quiz --topic sre-fundamentals
+prep quiz --topic sre-fundamentals --tag platform-reliability
 ```
 
 Alternatively, review `quiz_banks/sre-fundamentals.json` for questions tagged `slo`, `error-budget`, `platform-reliability`, or `postmortem`.

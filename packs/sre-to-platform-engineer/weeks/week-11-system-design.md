@@ -140,7 +140,7 @@ Write these down. They become your pre-interview self-briefing.
 ### From the repo
 
 ```bash
-prep quiz --topic platform-engineer
+prep quiz --topic platform-engineer --tag system-design
 ```
 
 Alternatively, review `quiz_banks/platform-engineer.json` for questions tagged `system-design`, `idp-design`, or `interview`.

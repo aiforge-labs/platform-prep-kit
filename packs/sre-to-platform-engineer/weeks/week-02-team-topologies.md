@@ -209,7 +209,7 @@ Target: 3+ on both.
 ### From the repo
 
 ```bash
-prep quiz --topic platform-engineer
+prep quiz --topic platform-engineer --tag team-topologies
 ```
 
 If that topic slug isn't in the quiz bank yet, review `quiz_banks/platform-engineer.json` for questions tagged `team-types`, `interaction-modes`, `org-design`, or `cognitive-load`.

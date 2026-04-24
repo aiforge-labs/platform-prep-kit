@@ -165,7 +165,7 @@ Examples of real perspectives (use your own — don't adopt any of these):
 ### From the repo
 
 ```bash
-prep quiz --topic interview-behavioral
+prep quiz --topic interview-behavioral --tag career-motivation
 ```
 
 Target: comfort with the question set, not a specific score. The quiz is more "have you thought about these" than "can you recite answers."

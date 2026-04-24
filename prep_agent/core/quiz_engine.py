@@ -38,6 +38,7 @@ class QuizEngine:
         topic_id: str,
         num_questions: int = 5,
         difficulty: str | None = None,
+        tag: str | None = None,
     ) -> list[dict]:
         """Get quiz questions for a topic. Mix difficulties if not specified.
 
@@ -45,11 +46,14 @@ class QuizEngine:
             topic_id: Identifier matching a quiz bank filename (without .json).
             num_questions: How many questions to return.
             difficulty: One of 'easy', 'medium', 'hard', or None for mixed.
+            tag: Optional tag to filter by (matches against each question's
+                 'tags' list). Questions without a 'tags' field or whose tag
+                 list does not contain the requested tag are excluded.
 
         Returns:
             List of question dicts, each containing:
             {id, question, type, options (if MC), key_points (if open),
-             difficulty, explanation}
+             difficulty, explanation, tags (optional)}
         """
         bank = self.load_quiz_bank(topic_id)
         if not bank:
@@ -58,6 +62,8 @@ class QuizEngine:
         questions = bank.get("questions", [])
         if difficulty:
             questions = [q for q in questions if q.get("difficulty") == difficulty]
+        if tag:
+            questions = [q for q in questions if tag in (q.get("tags") or [])]
 
         if len(questions) <= num_questions:
             selected = list(questions)
@@ -66,6 +72,17 @@ class QuizEngine:
 
         random.shuffle(selected)
         return selected
+
+    def list_tags(self, topic_id: str) -> list[str]:
+        """Return the sorted set of unique tags used in a given bank."""
+        bank = self.load_quiz_bank(topic_id)
+        if not bank:
+            return []
+        tags: set[str] = set()
+        for q in bank.get("questions", []):
+            for t in q.get("tags", []) or []:
+                tags.add(t)
+        return sorted(tags)
 
     def run_interactive_quiz(self, questions: list[dict]) -> dict:
         """Run an interactive terminal quiz session.
@@ -397,6 +414,12 @@ Begin with a brief introduction and your first question."""
                 kp = q.get("key_points")
                 if not isinstance(kp, list) or len(kp) == 0:
                     errors.append(f"{prefix}: open question must have non-empty key_points")
+
+            # tags are optional, but if present must be a list of strings
+            if "tags" in q:
+                tags = q["tags"]
+                if not isinstance(tags, list) or not all(isinstance(t, str) for t in tags):
+                    errors.append(f"{prefix}: 'tags' must be a list of strings")
 
         return errors
 

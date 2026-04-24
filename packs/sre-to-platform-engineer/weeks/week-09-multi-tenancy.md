@@ -256,7 +256,7 @@ Target: 3+ on both.
 ### From the repo
 
 ```bash
-prep quiz --topic platform-engineer
+prep quiz --topic platform-engineer --tag multi-tenancy
 ```
 
 Alternatively, review `quiz_banks/platform-engineer.json` for questions tagged `multi-tenancy`, `rbac`, `quota`, `cost-allocation`, or `finops`.
