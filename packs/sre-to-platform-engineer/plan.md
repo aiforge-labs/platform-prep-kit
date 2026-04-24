@@ -50,7 +50,7 @@ Phase 2 covers the building blocks most platform teams work with today. If you'r
 - Compare reference architectures (Backstage-centric, Humanitec-style, custom)
 - Position a "minimum viable platform" vs a mature IDP
 
-**Read / Apply / Articulate / Self-assess** — *content pending*
+**Full week content:** [`weeks/week-04-internal-developer-platforms.md`](weeks/week-04-internal-developer-platforms.md)
 
 ### Week 5: GitOps at Scale
 
@@ -59,7 +59,7 @@ Phase 2 covers the building blocks most platform teams work with today. If you'r
 - Compare Flux and ArgoCD for platform-team use cases
 - Understand infrastructure GitOps (Crossplane, cluster API) vs application GitOps
 
-**Read / Apply / Articulate / Self-assess** — *content pending*
+**Full week content:** [`weeks/week-05-gitops-at-scale.md`](weeks/week-05-gitops-at-scale.md)
 
 ### Week 6: Policy-as-Code and Guardrails
 
@@ -68,7 +68,7 @@ Phase 2 covers the building blocks most platform teams work with today. If you'r
 - Compare OPA/Rego, Kyverno, Conftest for different enforcement points (CI, admission, runtime)
 - Design a policy set for a multi-team Kubernetes platform
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.3*
+**Full week content:** [`weeks/week-06-policy-as-code.md`](weeks/week-06-policy-as-code.md)
 
 ---
 
