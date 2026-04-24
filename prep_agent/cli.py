@@ -76,6 +76,7 @@ _COMMANDS: list[tuple[str, str]] = [
     ("prep_agent.commands.insights_cmd",  "insights_cmd"),
     ("prep_agent.commands.build_cmd",    "build_cmd"),
     ("prep_agent.commands.serve_cmd",   "serve_cmd"),
+    ("prep_agent.commands.pack_cmd",    "pack_cmd"),
 ]
 
 
