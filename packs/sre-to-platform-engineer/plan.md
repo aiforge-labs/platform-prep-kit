@@ -50,7 +50,7 @@ Phase 2 covers the building blocks most platform teams work with today. If you'r
 - Compare reference architectures (Backstage-centric, Humanitec-style, custom)
 - Position a "minimum viable platform" vs a mature IDP
 
-**Read / Apply / Articulate / Self-assess** — *content pending*
+**Full week content:** [`weeks/week-04-internal-developer-platforms.md`](weeks/week-04-internal-developer-platforms.md)
 
 ### Week 5: GitOps at Scale
 
@@ -59,7 +59,7 @@ Phase 2 covers the building blocks most platform teams work with today. If you'r
 - Compare Flux and ArgoCD for platform-team use cases
 - Understand infrastructure GitOps (Crossplane, cluster API) vs application GitOps
 
-**Read / Apply / Articulate / Self-assess** — *content pending*
+**Full week content:** [`weeks/week-05-gitops-at-scale.md`](weeks/week-05-gitops-at-scale.md)
 
 ### Week 6: Policy-as-Code and Guardrails
 
@@ -68,7 +68,7 @@ Phase 2 covers the building blocks most platform teams work with today. If you'r
 - Compare OPA/Rego, Kyverno, Conftest for different enforcement points (CI, admission, runtime)
 - Design a policy set for a multi-team Kubernetes platform
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.3*
+**Full week content:** [`weeks/week-06-policy-as-code.md`](weeks/week-06-policy-as-code.md)
 
 ---
 
@@ -83,7 +83,7 @@ Phase 3 is where the work stops looking like "infra engineering" and starts look
 - Build a golden-path template (scaffolder) that handles 80% of cases without configuration
 - Decide where to be opinionated vs flexible
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.3*
+**Full week content:** [`weeks/week-07-service-catalogs.md`](weeks/week-07-service-catalogs.md)
 
 ### Week 8: Observability as a Platform Product
 
@@ -92,7 +92,7 @@ Phase 3 is where the work stops looking like "infra engineering" and starts look
 - Design an observability offering: what teams get by default, what they opt in to
 - Understand telemetry cost allocation and tenant fairness
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.3*
+**Full week content:** [`weeks/week-08-observability-as-platform-product.md`](weeks/week-08-observability-as-platform-product.md)
 
 ### Week 9: Multi-Tenancy, Isolation, Cost Allocation
 
@@ -101,7 +101,7 @@ Phase 3 is where the work stops looking like "infra engineering" and starts look
 - Design tenant isolation (network, compute, data) at a platform level
 - Build cost attribution that product teams can act on
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.3*
+**Full week content:** [`weeks/week-09-multi-tenancy.md`](weeks/week-09-multi-tenancy.md)
 
 ---
 
@@ -116,24 +116,28 @@ Phase 4 is about shipping the transition — turning everything learned into int
 - Design error-budget policies for platform teams
 - Handle platform incidents that affect many downstream teams
 
-**Read / Apply / Articulate / Self-assess** — *content in milestone 1.3*
+**Full week content:** [`weeks/week-10-platform-reliability.md`](weeks/week-10-platform-reliability.md)
 
 ### Week 11: System Design Interview Deep-Dive
 
 **Focus**
-- Mock 1: design an internal developer platform from zero for a 200-engineer org
-- Mock 2: design a deployment pipeline that supports 50 teams with different constraints
-- Mock 3: design a secrets management platform
+- Mock 1: design an IDP from zero for a 200-engineer org — [`mock/mock-1-idp-design.md`](mock/mock-1-idp-design.md)
+- Mock 2: IaC review and redesign — [`mock/mock-2-iac-review.md`](mock/mock-2-iac-review.md)
+- Mock 3: Platform incident response — [`mock/mock-3-platform-incident.md`](mock/mock-3-platform-incident.md)
 
-See [`mock/`](mock/) for the full scored exercises. Rubrics in [`rubrics/`](rubrics/).
+Rubrics in [`rubrics/`](rubrics/).
+
+**Full week content:** [`weeks/week-11-system-design.md`](weeks/week-11-system-design.md)
 
 ### Week 12: Behavioral + Closing
 
 **Focus**
 - Walk through your 20 STAR stories (see [`stories/`](stories/)) and pick your strongest 8
 - Practice: "tell me about a time you built something and nobody used it" (a platform-specific favorite)
-- Draft answers to: "why platform engineering?", "why now?", "what's the hardest part of being a platform engineer?"
+- Draft answers to: "why platform engineering?", "why now?", "what would you change about your current role?"
 - Rest, taper, don't over-prep the day before
+
+**Full week content:** [`weeks/week-12-behavioral.md`](weeks/week-12-behavioral.md)
 
 ---
 

@@ -191,7 +191,7 @@ Target: 3+ on both by end of week.
 Run the platform-engineer quiz, focused on Week 1 topics:
 
 ```bash
-prep quiz --bank platform-engineer --topic intro
+prep quiz --topic platform-engineer --tag platform-as-product
 ```
 
 Alternatively, review `quiz_banks/platform-engineer.json` for questions tagged `platform-as-product`, `platform-vs-sre`, or `adoption`.

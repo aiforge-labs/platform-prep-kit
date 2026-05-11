@@ -58,6 +58,101 @@ class TestQuizEngine:
         questions = engine.get_questions("test-topic", num_questions=10)
         assert len(questions) == 2  # Only 2 available
 
+    def _create_temp_prep_dir_with_tagged_bank(self):
+        """Fixture: bank with tags on some questions, none on others."""
+        tmpdir = tempfile.mkdtemp()
+        os.makedirs(os.path.join(tmpdir, "quiz_banks"), exist_ok=True)
+        bank = {
+            "topic_id": "tagged-topic",
+            "title": "Tagged Topic",
+            "version": 1,
+            "questions": [
+                {
+                    "id": "t1", "question": "Q1", "type": "multiple_choice",
+                    "options": ["A) a", "B) b", "C) c", "D) d"],
+                    "answer": "A", "explanation": "x", "difficulty": "easy",
+                    "tags": ["gitops", "argocd"],
+                },
+                {
+                    "id": "t2", "question": "Q2", "type": "multiple_choice",
+                    "options": ["A) a", "B) b", "C) c", "D) d"],
+                    "answer": "B", "explanation": "x", "difficulty": "medium",
+                    "tags": ["gitops", "flux"],
+                },
+                {
+                    "id": "t3", "question": "Q3", "type": "open",
+                    "key_points": ["p1", "p2"], "difficulty": "hard",
+                    "tags": ["policy-as-code"],
+                },
+                {
+                    "id": "t4", "question": "Q4 no tags", "type": "multiple_choice",
+                    "options": ["A) a", "B) b", "C) c", "D) d"],
+                    "answer": "C", "explanation": "x", "difficulty": "easy",
+                },
+            ],
+        }
+        with open(os.path.join(tmpdir, "quiz_banks", "tagged-topic.json"), "w") as f:
+            json.dump(bank, f)
+        return tmpdir
+
+    def test_get_questions_tag_filter(self):
+        from prep_agent.core.quiz_engine import QuizEngine
+        tmpdir = self._create_temp_prep_dir_with_tagged_bank()
+        engine = QuizEngine(prep_dir=tmpdir)
+        # gitops tag matches 2 questions
+        questions = engine.get_questions("tagged-topic", num_questions=10, tag="gitops")
+        assert len(questions) == 2
+        ids = sorted(q["id"] for q in questions)
+        assert ids == ["t1", "t2"]
+
+    def test_get_questions_tag_filter_combined_with_difficulty(self):
+        from prep_agent.core.quiz_engine import QuizEngine
+        tmpdir = self._create_temp_prep_dir_with_tagged_bank()
+        engine = QuizEngine(prep_dir=tmpdir)
+        # gitops + medium = only t2
+        questions = engine.get_questions(
+            "tagged-topic", num_questions=10, difficulty="medium", tag="gitops"
+        )
+        assert len(questions) == 1
+        assert questions[0]["id"] == "t2"
+
+    def test_get_questions_tag_filter_excludes_untagged(self):
+        from prep_agent.core.quiz_engine import QuizEngine
+        tmpdir = self._create_temp_prep_dir_with_tagged_bank()
+        engine = QuizEngine(prep_dir=tmpdir)
+        # Filter by any tag should exclude t4 (untagged)
+        questions = engine.get_questions("tagged-topic", num_questions=10, tag="flux")
+        assert len(questions) == 1
+        assert questions[0]["id"] == "t2"
+
+    def test_get_questions_tag_filter_no_match(self):
+        from prep_agent.core.quiz_engine import QuizEngine
+        tmpdir = self._create_temp_prep_dir_with_tagged_bank()
+        engine = QuizEngine(prep_dir=tmpdir)
+        questions = engine.get_questions("tagged-topic", num_questions=10, tag="nonexistent")
+        assert questions == []
+
+    def test_list_tags(self):
+        from prep_agent.core.quiz_engine import QuizEngine
+        tmpdir = self._create_temp_prep_dir_with_tagged_bank()
+        engine = QuizEngine(prep_dir=tmpdir)
+        tags = engine.list_tags("tagged-topic")
+        assert tags == ["argocd", "flux", "gitops", "policy-as-code"]
+
+    def test_validate_bank_rejects_bad_tags(self):
+        from prep_agent.core.quiz_engine import QuizEngine
+        bank = {
+            "topic_id": "x",
+            "questions": [{
+                "id": "q1", "question": "Q", "type": "multiple_choice",
+                "options": ["A) a", "B) b", "C) c", "D) d"],
+                "answer": "A", "difficulty": "easy",
+                "tags": "not-a-list",  # invalid — should be a list
+            }],
+        }
+        errors = QuizEngine.validate_bank(bank)
+        assert any("tags" in e for e in errors)
+
     def test_missing_quiz_bank(self):
         from prep_agent.core.quiz_engine import QuizEngine
         tmpdir = tempfile.mkdtemp()

@@ -1,7 +1,7 @@
 {
   "topic_id": "interview-behavioral",
   "topic_name": "Behavioral Interview Questions",
-  "version": 1,
+  "version": 2,
   "questions": [
     {
       "id": "b1",
@@ -14,7 +14,8 @@
         "Measurable outcome or result",
         "What you learned from it"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["technical-leadership", "decision-making"]
     },
     {
       "id": "b2",
@@ -27,7 +28,8 @@
         "Resolution: compromise, escalation, or outcome",
         "Relationship impact: maintained trust despite disagreement"
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["influence", "pushback"]
     },
     {
       "id": "b3",
@@ -40,7 +42,8 @@
         "Mentoring and skill development approach",
         "Measurable outcomes (team size, delivery metrics, etc.)"
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["team-building", "leadership"]
     },
     {
       "id": "b4",
@@ -53,7 +56,8 @@
         "Specific changes you made afterward",
         "How it made you a better leader/engineer"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["failure-stories", "learning"]
     },
     {
       "id": "b5",
@@ -66,7 +70,8 @@
         "Concrete examples of enabling velocity while maintaining security",
         "Cultural approach: security as enabler, not blocker"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["security", "trade-offs"]
     },
     {
       "id": "b6",
@@ -79,7 +84,8 @@
         "How you applied the new knowledge in practice",
         "Outcome and ongoing learning approach"
       ],
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "tags": ["learning", "adaptability"]
     },
     {
       "id": "b7",
@@ -92,7 +98,8 @@
         "Ensure buy-in from the team after the decision",
         "Follow up to validate the decision was correct"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["conflict", "decision-making"]
     },
     {
       "id": "b8",
@@ -105,7 +112,8 @@
         "Hands-on experimentation and PoCs",
         "Mentoring and cross-training"
       ],
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "tags": ["learning", "team-development"]
     },
     {
       "id": "b9",
@@ -118,7 +126,8 @@
         "Creative solutions or efficiency improvements",
         "Outcome and what you delivered"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["prioritization", "delivery"]
     },
     {
       "id": "b10",
@@ -132,7 +141,167 @@
         "Champion security advocates within development teams",
         "Celebrate security improvements alongside feature delivery"
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["security", "culture"]
+    },
+    {
+      "id": "b11",
+      "question": "Why platform engineering, for you?",
+      "type": "open",
+      "key_points": [
+        "A specific moment or experience that taught you platform work matters to you — not generic 'I like infrastructure'",
+        "The shape of the work you enjoy most: designing, implementing, enabling, teaching — name your center of gravity",
+        "The loop you want to optimize for — typically 'I build something, another engineer I don't know uses it months later, they tell me it made their work better'",
+        "Honest trade-off: what you're giving up by moving into this role (operational clarity of SRE, the adrenaline of incident response) and why that trade-off is right for you now",
+        "Anti-pattern to avoid: generic career-mechanical answer ('next step for growth') or framework-heavy answer (citing CNCF reports). The answer must be specifically yours",
+        "Length: 1-2 minutes. Feels natural, not rehearsed"
+      ],
+      "difficulty": "medium",
+      "tags": ["career-motivation", "why-platform"]
+    },
+    {
+      "id": "b12",
+      "question": "Why this move, why now?",
+      "type": "open",
+      "key_points": [
+        "A specific catalyst or moment — a reorg, a project that changed your sense of what you want, a mentor's comment, a role you watched unfold",
+        "Evidence of preparation — something concrete: reading you've done, a side project, conversations with platform engineers at 4+ companies, the 12-week self-directed curriculum you completed",
+        "Why not 2 years ago — what you were learning then that was valuable; honest, not self-deprecating",
+        "Why not 2 years from now — the overlap between SRE experience and platform role is sharp right now; in 2 years you'd be further from operational work and translation would be harder",
+        "Anti-pattern: 'the market is strong' (external-driven, reveals no internal push); 'I've been thinking about it for a while' (vague)",
+        "Length: 1-2 minutes"
+      ],
+      "difficulty": "medium",
+      "tags": ["career-motivation", "why-now"]
+    },
+    {
+      "id": "b13",
+      "question": "Tell me about something you built that didn't get the adoption you hoped for. What happened?",
+      "type": "open",
+      "key_points": [
+        "What you built and what adoption you expected (concrete numbers)",
+        "What you assumed about users that turned out to be wrong — and how you learned it was wrong",
+        "The signal that told you it wasn't landing — and how long it took you to see it (honest signal-latency)",
+        "What you did about it: kept iterating, rescoped, deprecated, learned and moved on",
+        "The second-order takeaway: what your process for building platform features has changed since",
+        "Anti-pattern: 'teams were resistant to change' (blame-shifting, disqualifying); 'it was used, just not as much as hoped' (hedging)",
+        "Strongest version: realization that you built the right tool for the wrong target state — a sign of systemic reflection"
+      ],
+      "difficulty": "medium",
+      "tags": ["failure-stories", "adoption"]
+    },
+    {
+      "id": "b14",
+      "question": "Tell me about a time you built an abstraction that turned out to be the wrong abstraction. How did you recognize it, and what did you do?",
+      "type": "open",
+      "key_points": [
+        "The problem you were solving and why the abstraction seemed right at the time (fairly described — wrong abstractions usually look right initially)",
+        "The early success — don't pretend it was obviously wrong from the start",
+        "The pattern of pressure — requests that felt like fighting the abstraction rather than using it",
+        "The recognition moment — specific and concrete, not 'over time we realized'",
+        "The decision: evolve, replace, or deprecate",
+        "What you took away about how to recognize this pattern earlier next time — a pattern detection heuristic you now apply",
+        "Example pattern to learn: 'when teams ask for custom or hybrid variants of a tier, the abstraction is collapsing'"
+      ],
+      "difficulty": "hard",
+      "tags": ["failure-stories", "abstraction", "technical-leadership"]
+    },
+    {
+      "id": "b15",
+      "question": "Describe a situation where a platform problem was brewing for months and you didn't see it until it became a real issue. What was the signal, and why did you miss it?",
+      "type": "open",
+      "key_points": [
+        "The problem that emerged and its consequence",
+        "The signal that had been visible but missed — ideally qualitative or systemic, not a standard metric",
+        "Honest reflection on why you missed it — attention blind spot, over-focus on aggregate metrics instead of per-tenant, bias toward happy-path signals",
+        "The consequence: what the missed signal cost in engineering hours, trust erosion, or business impact",
+        "What you changed about your attention habit afterward — a specific practice",
+        "No self-flagellation — appropriate weight, not performative regret",
+        "Strong version: the signal was in per-tenant trends you weren't looking at (only aggregate), or in a qualitative complaint pattern you didn't pattern-match to"
+      ],
+      "difficulty": "hard",
+      "tags": ["failure-stories", "attention", "signals"]
+    },
+    {
+      "id": "b16",
+      "question": "Walk me through a platform feature you shipped and then drove to adoption. What did the rollout actually look like, week by week?",
+      "type": "open",
+      "key_points": [
+        "Pre-launch design partners — specific teams that had input and shaped the design before GA",
+        "Launch criteria — what made you call it 'ready for general adoption,' beyond 'it compiles'",
+        "First 30 days: who adopted early, what friction emerged, what you fixed fast",
+        "Plateau-breaking move: the specific tactic that moved you past early-adopter-wall — often matching the new thing's UX to the existing copy-paste workflow",
+        "Long tail handling: the holdouts — did you make peace or keep pushing?",
+        "Adoption metric beyond count: depth of use, retention, whether teams came back",
+        "Anti-pattern: 'we announced it in all-hands' (no real product thinking about rollout)"
+      ],
+      "difficulty": "medium",
+      "tags": ["influence", "adoption", "platform-as-product"]
+    },
+    {
+      "id": "b17",
+      "question": "Tell me about a time you convinced someone who was initially skeptical of a platform direction. What was their objection, and what actually changed their mind?",
+      "type": "open",
+      "key_points": [
+        "Steelman the skeptic's objection — describe it fairly, not as a strawman",
+        "Acknowledge why their objection was legitimate — they were right about a real risk",
+        "The specific moment or evidence that changed their mind — usually not data; usually a demo, a pilot, a witnessed failure mode addressed, or a redesigned approach reflecting their concern",
+        "Outcome: did you earn a supporter, a neutral, or a tolerator? Be specific",
+        "What you took away from the skeptic's objection — did it reshape what you built?",
+        "Anti-pattern: 'I showed them the data' (reveals shallow understanding of influence); 'they came around eventually' (no specific moment)",
+        "Senior signal: describe the skeptic charitably — as a valuable source of critique, not as an obstacle"
+      ],
+      "difficulty": "medium",
+      "tags": ["influence", "skeptics"]
+    },
+    {
+      "id": "b18",
+      "question": "Describe a time you had to align multiple teams on a platform direction when they had competing interests. How did you resolve it?",
+      "type": "open",
+      "key_points": [
+        "Specific competing interests — what each team actually wanted and why, not generic 'different opinions'",
+        "Your map of negotiability: whose constraints were hard, whose were preferences",
+        "Alignment method — usually a written RFC with options and trade-offs, or an escalation path if alignment fails",
+        "The resolution: which side won, which side lost, and how you managed the 'lost' side (platform team taking on work to reduce their cost)",
+        "Follow-through: did the alignment hold, or did it drift? Honest about the answer",
+        "Key insight: alignment isn't consensus. Sometimes it means 'we all agree team A wins, team B is unhappy, and we've named the unhappiness'",
+        "Anti-pattern: 'we had meetings and reached consensus' (vague, no method)"
+      ],
+      "difficulty": "hard",
+      "tags": ["influence", "alignment", "politics"]
+    },
+    {
+      "id": "b19",
+      "question": "What's an opinionated default in a platform you've built or used that turned out to be the wrong opinion?",
+      "type": "open",
+      "key_points": [
+        "Pick a default with organizational consequences, not just technical ones",
+        "Examples: a required language that didn't survive a technology shift; a default observability baseline that over- or under-instrumented; a scaffolder so easy it encouraged microservice sprawl; a CODEOWNERS default assigning reviews to a team that couldn't keep up",
+        "Describe the signal that told you it was wrong",
+        "What you changed, and the trade-off you accepted in the replacement — every fix is a new opinion that will also age",
+        "Lesson about how you'd spot this pattern earlier next time",
+        "Avoid: 'all our defaults were fine' (not credible); minor examples (100m vs 50m CPU)",
+        "Senior signal: acknowledge that the default was right at the time; it's the evolution that made it wrong"
+      ],
+      "difficulty": "hard",
+      "tags": ["failure-stories", "opinionation", "reflection"]
+    },
+    {
+      "id": "b20",
+      "question": "Tell me about something you deprecated — a tool, service, or platform capability. How did you handle it?",
+      "type": "open",
+      "key_points": [
+        "The signal for deprecation — why now? Usually: maintenance debt exceeds value, newer capability replaces, or the original use case has evolved",
+        "Stakeholder map — who was using it, who'd be affected, who'd be relieved",
+        "Migration support from the platform team — not just 'we have docs,' but something concrete (writing the PRs for the thin users, pair-programming with medium users)",
+        "The edge case that held things up — there's always one; describe it honestly",
+        "Timeline: did you hit the original deadline or slip? How did you manage slippage?",
+        "Final flip — what happened on shutdown day",
+        "Hardest conversation — often with security or compliance wanting faster shutdown vs teams needing more time",
+        "Anti-pattern: 'we announced deprecation and gave 90 days' (reveals no real stakeholder work)"
+      ],
+      "difficulty": "hard",
+      "tags": ["technical-leadership", "deprecation", "migration"]
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "topic_id": "sre-fundamentals",
   "title": "Site Reliability Engineering Fundamentals",
-  "version": 1,
+  "version": 2,
   "questions": [
     {
       "id": "sre-01",
@@ -15,7 +15,8 @@
       ],
       "answer": "B",
       "explanation": "Error budget = (1 - 0.9995) × 30 days × 24 hours × 60 minutes = 0.0005 × 43,200 = 21.6 minutes. A 99.9% SLO allows 43.2 minutes; 99.99% allows 4.3 minutes; 99.95% sits between these.",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["slo", "error-budget"]
     },
     {
       "id": "sre-02",
@@ -29,7 +30,8 @@
       ],
       "answer": "B",
       "explanation": "A 30-day window has 720 hours. Exhausting it in 1 hour means burning 720× faster than the budget allows. But the budget is 0.1% of the window (for 99.9% SLO). Burn rate = 720 hours ÷ 50 hours at budget rate... The standard answer: 14.4× burn rate exhausts the budget in 5% of the window = 36 hours. To exhaust in 1 hour out of 720: 720/1 = 720? No — burn rate is defined as: (error rate / error budget rate). For 99.9% SLO, 1 hour represents 1/720 of the budget window, so you need to consume the ENTIRE budget in that 1 hour, meaning burn rate = 720/50... The Google SRE workbook defines it as: a burn rate of 14.4 exhausts the budget in 1/14.4 of the window (≈50 hours for a 30-day window). To exhaust in 1 hour: burn rate = 720 hours ÷ 1 hour = 720. However, the commonly cited 14.4 is the alert threshold for the 'will exhaust in 1 hour' critical alert per the SRE Workbook. Answer B (14.4) is the standard SRE workbook value for the critical burn rate alert.",
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["slo", "error-budget", "burn-rate"]
     },
     {
       "id": "sre-03",
@@ -43,7 +45,8 @@
       ],
       "answer": "B",
       "explanation": "SRE best practice is to alert on symptoms (user-visible impact) rather than causes. A CPU alert may fire when there is no user impact. An error rate alert fires only when users are actually experiencing failures. Symptom-based alerting reduces false positives and alert fatigue. Cause-based metrics are still valuable for dashboards and debugging, but should rarely be the primary paging alert.",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "tags": ["alerting", "slo", "symptom-based"]
     },
     {
       "id": "sre-04",
@@ -57,7 +60,8 @@
       ],
       "answer": "B",
       "explanation": "RED: Rate (how many requests per second), Errors (how many are failing per second, or % error rate), Duration (how long requests take — ideally tracked as a distribution with p50/p95/p99). RED is designed for service-level monitoring. The complementary USE method (Utilization, Saturation, Errors) is for resource-level monitoring (CPU, memory, disk).",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "tags": ["observability", "red-method"]
     },
     {
       "id": "sre-05",
@@ -71,7 +75,8 @@
       ],
       "answer": "C",
       "explanation": "Head-based sampling makes the sampling decision at the start of a request — before you know if it will be slow or fail. This means errors and slow requests are sampled at the same low rate as normal requests. Tail-based sampling buffers the trace until completion, then samples based on outcome (e.g., always sample if error, always sample if > p99 latency). This ensures important traces are kept at low storage cost.",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["observability", "tracing", "sampling"]
     },
     {
       "id": "sre-06",
@@ -85,7 +90,8 @@
       ],
       "answer": "B",
       "explanation": "A blameless post-mortem asks: why was it possible for a human error to cause this outcome? The actionable root cause is usually a system design issue: missing guardrails, unclear runbooks, insufficient testing, poor tooling, or excessive toil that led to fatigue. 'Human error' is a symptom; the root cause is the system that made the error consequential.",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "tags": ["postmortem", "blameless"]
     },
     {
       "id": "sre-07",
@@ -99,7 +105,8 @@
       ],
       "answer": "B",
       "explanation": "A circuit breaker wraps calls to a downstream service. When failure rate exceeds a threshold, the circuit 'opens' — subsequent calls fail immediately without attempting the downstream call. This prevents: (1) resource exhaustion from stacking slow calls, (2) amplifying load on an already-struggling service, (3) cascading failures through the call graph. The circuit periodically attempts a 'half-open' test call to check if the service has recovered.",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "tags": ["resilience", "circuit-breaker"]
     },
     {
       "id": "sre-08",
@@ -113,7 +120,8 @@
         "Remaining budget = 43.2 - 29 = 14.2 minutes (approximately 33% remaining)",
         "Implication: With 14 minutes remaining for the rest of the month, the team should be cautious about risky deployments and consider whether to invoke error budget policy"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["slo", "error-budget"]
     },
     {
       "id": "sre-09",
@@ -126,7 +134,8 @@
         "Quantification method: time tracking categories (toil vs overhead vs engineering work) reviewed in weekly retrospectives",
         "Outcome: a quantified toil backlog that can be prioritized for automation investment. Each automation removes recurring burden permanently — compound returns"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["toil", "automation"]
     },
     {
       "id": "sre-10",
@@ -140,7 +149,8 @@
       ],
       "answer": "B",
       "explanation": "Without jitter, clients that all fail at the same time (e.g., during a brief network blip) will all retry at the same calculated interval (e.g., all retry after 1 second, then all retry after 2 seconds). This synchronized retry storm overwhelms the recovering service just as it returns. Jitter adds a random offset (±10-50% of delay) so clients desynchronize their retries, spreading load over time.",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["resilience", "retry", "jitter"]
     },
     {
       "id": "sre-11",
@@ -153,7 +163,8 @@
         "Common game day scenarios: kill a random instance, inject latency into a dependency, fill disk on a node, cut a network path, simulate AZ failure",
         "Post-game-day: document what broke, what held, and create improvement action items with owners and due dates — the game day is only valuable if learnings are acted upon"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["chaos-engineering", "game-day", "resilience"]
     },
     {
       "id": "sre-12",
@@ -167,7 +178,8 @@
       ],
       "answer": "B",
       "explanation": "OpenTelemetry (OTel) provides: (1) a specification (how telemetry data should be structured), (2) SDKs and auto-instrumentation libraries for collecting traces, metrics, and logs. It is vendor-neutral — you instrument once. Jaeger and Zipkin are backends that store and query trace data. OTel exports to them. This separation means you can switch from Jaeger to Tempo (or any OTel-compatible backend) without re-instrumenting your code.",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["observability", "opentelemetry", "tracing"]
     },
     {
       "id": "sre-13",
@@ -181,7 +193,8 @@
         "Why two windows: short window detects fast; long window filters noise. BOTH must be true to fire the alert — this dramatically reduces false positives compared to single-window alerting",
         "Prometheus example: alert fires when (1h burn rate) > 14.4 AND (5m burn rate) > 14.4"
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["slo", "burn-rate", "alerting"]
     },
     {
       "id": "sre-14",
@@ -195,7 +208,8 @@
       ],
       "answer": "B",
       "explanation": "Load shedding is a controlled degradation strategy: when the system cannot handle all incoming requests, reject the least important ones (with a 503/429) rather than letting the system collapse entirely. Example: during high load, reject background sync requests but still serve interactive user requests. Better to serve 80% of requests well than to degrade all 100% into timeout failures. Implemented via priority queues, admission control, or request classification.",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["resilience", "load-shedding"]
     },
     {
       "id": "sre-15",
@@ -208,7 +222,8 @@
         "Why it matters even if within SLO: 1% of users are having a 10× worse experience. For a service with 1M requests/day that's 10,000 users per day hitting 2s latency",
         "Fix approaches: request prioritization, request timeout + retry on fresh instance (avoids cold path), query optimization, connection pool sizing, caching for expensive operations"
       ],
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["latency", "observability", "percentiles"]
     },
     {
       "id": "sre-16",
@@ -222,7 +237,8 @@
       ],
       "answer": "B",
       "explanation": "Liveness probe failure → Kubernetes restarts the container (it's alive but broken, e.g., deadlocked). Readiness probe failure → Kubernetes removes the pod from the Service endpoints (stops sending traffic) but does NOT restart it. Readiness is used during: startup (not ready until warmed up), processing (not ready while handling a long transaction), and graceful shutdown (stop receiving traffic before the process exits). A pod can be live but not ready.",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "tags": ["kubernetes", "probes"]
     },
     {
       "id": "sre-17",
@@ -236,7 +252,8 @@
         "Latency: end-to-end processing time. SLO: 'runs complete within 4 hours of scheduled start'. Relevant if downstream systems depend on the output by a specific time",
         "Error budget policy for batch: if 3 runs fail in 30 days, freeze changes to the pipeline until the root cause is fixed"
       ],
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "tags": ["slo", "batch", "data-pipelines"]
     },
     {
       "id": "sre-18",
@@ -250,7 +267,311 @@
       ],
       "answer": "B",
       "explanation": "Noisy neighbor is a cloud performance interference problem: multiple tenants share physical hardware, and a resource-hungry workload degrades others. Mitigations: (1) dedicated instances or dedicated hosts (expensive), (2) resource limits and requests in Kubernetes to prevent single pods from consuming all node resources, (3) node affinity rules to separate noisy workloads, (4) monitoring for CPU steal time and I/O wait as indicators of noisy neighbor impact, (5) selecting premium instance types with guaranteed performance (e.g., AWS dedicated tenancy).",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "tags": ["multi-tenancy", "noisy-neighbor", "resilience"]
+    },
+    {
+      "id": "sre-19",
+      "question": "What's the key distinction between 'platform SLIs' and 'application SLIs'?",
+      "type": "multiple_choice",
+      "options": [
+        "A) They measure the same thing at different scale",
+        "B) Application SLIs measure end-user experience of a specific app (e.g., p99 latency of checkout). Platform SLIs measure tenant experience of consuming the platform (e.g., deploy pipeline success rate, scaffolder latency, catalog freshness). Platform SLIs protect internal engineering teams; app SLIs protect end users. Both matter; they require different instincts",
+        "C) Platform SLIs are always internal; app SLIs are external",
+        "D) Platform SLIs don't exist"
+      ],
+      "answer": "B",
+      "explanation": "A common interview tell: candidates who describe 'platform SLIs' as just 'uptime of the platform's components' miss the tenant-experience framing. Strong platform SLIs measure what tenants experience: how reliably can they deploy, how long does scaffolding take, how fresh is the catalog, how accurate is cost reporting. The platform can be 'up' by component metrics and still failing its tenants. Platform SLIs close that gap.",
+      "difficulty": "medium",
+      "tags": ["platform-reliability", "platform-sli", "slo"]
+    },
+    {
+      "id": "sre-20",
+      "question": "List 5 platform SLIs that reflect tenant experience (not infrastructure uptime).",
+      "type": "open",
+      "key_points": [
+        "Deploy pipeline success rate: % of developer-initiated deploys completing within expected time. Not 'CI uptime' — the end-to-end experience",
+        "Scaffolder / new-service-creation latency: p95 time from 'start template' to 'service registered and ready for first commit.' A direct DevEx metric",
+        "Catalog freshness: % of services whose owner metadata is less than 90 days old (decay-aware). A stale catalog is a failed platform",
+        "Observability ingestion lag: p95 time from event generation to visibility in Grafana/Prometheus. Slow observability erodes trust in the platform",
+        "Policy evaluation latency: p95 admission-controller decision time. Slow admission = slow deploys",
+        "Tenant onboarding time: hours from 'team requested' to 'team can ship first service.' An operational SLO revealing platform-as-product health",
+        "Cost-report accuracy: attributed cost / total cloud spend. Below 90% and teams dispute every bill",
+        "Break-glass event rate: manual overrides per month. A process SLI — tracking it prevents normalization of bypasses"
+      ],
+      "difficulty": "hard",
+      "tags": ["platform-reliability", "platform-sli", "devex"]
+    },
+    {
+      "id": "sre-21",
+      "question": "What should a platform team's error-budget policy actually do when budget is consumed?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Send a Slack notification and hope it gets noticed",
+        "B) Have real consequences for the platform team's roadmap: at 25% budget consumed, early warning; at 50%, formal stop on non-critical platform feature work in the related area; at 100%, freeze platform roadmap until recovery. The error budget must affect the platform team's behavior, not just be a dashboard widget",
+        "C) Nothing — error budgets are aspirational",
+        "D) Shift the problem to the tenants' budgets"
+      ],
+      "answer": "B",
+      "explanation": "Error-budget policies without teeth are the most common SRE antipattern. The budget exists to force the trade-off: when you're consuming it, feature velocity stops until reliability improves. For platform teams, this means the platform team's own roadmap pauses — an uncomfortable but necessary constraint. Critically, the freeze affects the platform team, not the tenants (their roadmaps continue, even though the platform being degraded may effectively pause them). Naming this dependency explicitly in the policy is mature.",
+      "difficulty": "medium",
+      "tags": ["platform-reliability", "error-budget-policy"]
+    },
+    {
+      "id": "sre-22",
+      "question": "During a platform-wide incident affecting 12 tenants, what's the right comms posture vs a single-app incident?",
+      "type": "multiple_choice",
+      "options": [
+        "A) The same — send one status update when the incident is resolved",
+        "B) Platform incidents require proactive comms within 5 minutes of establishing a hypothesis — silence is worse than imperfect information. Unlike single-app incidents (where the owning team usually knows), platform incidents affect many stakeholders who depend on the platform and won't see each other's signals. Send: initial scoped acknowledgment, regular updates at stated intervals, resolution message. Differentiate: general all-tenants message + individual escalation path for urgent cases (e.g., a team with a P1 customer impact)",
+        "C) Wait until root cause is fully understood",
+        "D) Only send comms after the postmortem is written"
+      ],
+      "answer": "B",
+      "explanation": "Comms-first posture is one of the defining platform-vs-SRE incident-response differences. In an app incident, the owning team usually knows their service is broken; comms can be tighter. In a platform incident, 12 separate tenant teams are blocked with no shared context. Silence creates a 'is the platform broken or is it just us?' fog that erodes trust. Proactive comms — even 'we're investigating, update in 15 minutes' — is higher-value than a polished update delivered late.",
+      "difficulty": "medium",
+      "tags": ["platform-reliability", "incident-response", "comms"]
+    },
+    {
+      "id": "sre-23",
+      "question": "In a platform incident postmortem, a tenant team's bad Kyverno policy crashed the shared admission controller. Who is responsible, and what's in the corrective action list?",
+      "type": "open",
+      "key_points": [
+        "Primary responsibility: the platform. The individual team triggered the failure, but the platform allowed a single team's policy to cause a platform-wide outage. The postmortem's corrective-action weight sits on the platform side",
+        "The engineer who merged the policy is NOT named in the postmortem (blameless principle). Their action was a symptom of the platform's missing controls, not the root cause",
+        "Platform-level corrective actions: (1) mandatory audit-mode soak for new policies (no direct-to-enforce), (2) per-tenant policy isolation — one team's bad policy should not affect others, (3) admission-controller SLI with paging at 500ms median so the latency climb is detected faster, (4) gradual rollout of platform-wide changes (canary — apply to 1 namespace first)",
+        "Process-level corrective actions: two-person review standard for platform changes, PTO-aware review routing (the failing PR had a rubber-stamp review from someone on leave)",
+        "Documentation: break-glass procedure for bypassing admission in an active incident, with observability on break-glass usage",
+        "What's NOT in the postmortem: blame for the engineer, 'we'll be more careful' as a corrective action, vague recommendations without owners",
+        "Multi-tenant postmortem bonus: quantify blast radius. 12 tenants affected × average N end-users each = specific business-impact number. This prevents platform incidents being under-prioritized relative to single-app incidents"
+      ],
+      "difficulty": "hard",
+      "tags": ["platform-reliability", "postmortem", "blameless"]
+    },
+    {
+      "id": "sre-24",
+      "question": "Why is 'blast radius' a larger and more nuanced concept in platform incidents than in single-app incidents?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It's the same concept at both levels",
+        "B) Single-app blast radius = users of that app. Platform blast radius = tenants (teams) × their users × their dependencies. Platform incidents have second-order blast: a deploy-pipeline outage may cause delayed deploys to downstream customer-facing services, amplifying impact in ways the platform team doesn't directly see. Quantifying full blast radius in platform postmortems prevents these incidents being under-counted relative to their actual business impact",
+        "C) Platform incidents never have blast radius",
+        "D) Blast radius is only a security term"
+      ],
+      "answer": "B",
+      "explanation": "Platform incidents tend to be under-prioritized because the platform team sees them but the downstream tenant impact is diffused across many teams and doesn't surface as a concentrated business metric. A 30-minute deploy-pipeline outage might quietly cost hundreds of engineering-hours across 30 teams — but no single team screams loudly enough for leadership to notice. Quantifying blast radius (teams × their users × their business criticality) in postmortems counteracts this and drives appropriate investment in platform reliability.",
+      "difficulty": "medium",
+      "tags": ["platform-reliability", "blast-radius"]
+    },
+    {
+      "id": "sre-25",
+      "question": "What should RTO/RPO considerations for the PLATFORM itself look like, distinct from RTO/RPO for applications?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Platforms don't need DR planning",
+        "B) The platform is critical-path infrastructure — if it goes down, every tenant's workflow stops. Platform RTO/RPO should consider: recovery time for the GitOps controller, catalog service, observability backend, policy engines, and scaffolder. RTO is usually tight (minutes to hours) because 40 teams can't ship during platform downtime. RPO for stateful platform services (catalog, observability) depends on data sensitivity; for stateless (controllers, scaffolder) usually zero since state is in Git",
+        "C) Platforms have the same RTO/RPO as apps",
+        "D) Only cloud providers care about this"
+      ],
+      "answer": "B",
+      "explanation": "Platforms are often unconsciously treated as lower-tier than the apps they support, but they're gating infrastructure for every tenant. If the platform's catalog service is down, deploys fail. If the GitOps controller is down, no change reaches the cluster. Platform RTO/RPO should be at least as aggressive as the most-critical tenant's — because the platform is the floor. Strong platform teams run DR drills on platform components specifically, not just on the workloads they host.",
+      "difficulty": "medium",
+      "tags": ["platform-reliability", "rto", "rpo", "dr"]
+    },
+    {
+      "id": "sre-26",
+      "question": "How should a platform team categorize and respond to 'platform toil'?",
+      "type": "open",
+      "key_points": [
+        "Category 1 — Tenant-facing toil: onboarding requests, quota changes, break-glass approvals, policy exceptions. Address via: self-service automation. If a request happens 5+ times per month, build a self-serve path",
+        "Category 2 — Infrastructure toil: cluster upgrades, certificate rotations, backup verification, scaling events. Address via: automation (GitOps, controllers) where possible; reserve for scheduled maintenance the rest",
+        "Category 3 — Data toil: catalog metadata cleanup, cost-attribution fixes, stale-resource detection, orphaned-service cleanup. Address via: periodic jobs + metrics for the platform team's own attention",
+        "Prioritization: quantify hours/week per category. The highest-volume category is usually the right target for automation investment",
+        "What's NOT toil for platform teams: tenant conversations (discovery, user research), policy design, architecture decisions, postmortems, documentation — these are high-value engineering even when repetitive",
+        "Measurement: weekly time-tracking in these categories, reviewed monthly. If toil exceeds 50%, the platform is over-operated and under-built"
+      ],
+      "difficulty": "medium",
+      "tags": ["platform-reliability", "toil", "automation"]
+    },
+    {
+      "id": "sre-27",
+      "question": "What's the 'platform-team velocity vs tenant-velocity' trade-off, and how does it differ from classic SRE-vs-developer tension?",
+      "type": "open",
+      "key_points": [
+        "Classic SRE tension: reliability vs feature velocity within one team's context. Error budget is the mechanism for balancing",
+        "Platform-specific twist: the platform team has TWO velocities to manage — their own (shipping platform features) and their tenants' (shipping products). They are coupled but not identical",
+        "If the platform team maximizes its own velocity at the expense of stability, tenants suffer. If the platform team over-invests in stability, the platform stagnates and tenants' velocity is capped by platform limitations",
+        "The dependency asymmetry: the platform team affects tenants' velocity. When the platform is degraded or has missing features, tenants slow down. But tenants' velocity doesn't symmetrically affect the platform team's velocity — the platform team can ship features independently of what tenants do",
+        "Implication for error-budget policy: when the platform's error budget is consumed, the platform team's roadmap freezes. Tenants are not frozen — they continue to ship. But they may effectively slow because the platform is degraded",
+        "Senior move: the platform team treats tenant velocity as a first-class output metric. The platform's success is measured partly by how fast the tenants can ship, not just by the platform's own release count"
+      ],
+      "difficulty": "hard",
+      "tags": ["platform-reliability", "velocity", "error-budget"]
+    },
+    {
+      "id": "sre-28",
+      "question": "Why is 'break-glass event rate' a platform-health SLI, not just an incident metric?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It's an incident-only metric",
+        "B) Break-glass events signal the platform's normal paths didn't fit the tenant's situation. A few per quarter are healthy (the platform is flexible). Many per month indicate systemic mismatch — policies too strict, exception process too slow, or a capability the platform should offer but doesn't. Tracking the rate surfaces the mismatch before it erodes trust. Specific threshold: 3+ per month per team warrants investigation",
+        "C) Break-glass should be eliminated, not measured",
+        "D) Only the security team tracks it"
+      ],
+      "answer": "B",
+      "explanation": "Break-glass rate is a leading indicator of platform-policy fit. If it's near zero, the platform is either well-designed OR so rigid nothing can be done (check adoption metrics to distinguish). Rising break-glass rate means the platform is falling behind tenant needs — policies haven't evolved, exception process is slow, or a new use case isn't supported. A healthy platform responds to rising break-glass rate by investigating the root cause, not by tightening break-glass access.",
+      "difficulty": "medium",
+      "tags": ["platform-reliability", "break-glass", "platform-sli"]
+    },
+    {
+      "id": "sre-29",
+      "question": "'Who observes the observers?' — what does platform-level observability for the observability stack itself look like?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Observability doesn't need to be observed",
+        "B) The observability stack itself needs SLIs: Prometheus ingestion lag (how long from metric generation to queryable?), Grafana query latency, logs-to-search lag, trace-to-UI lag, storage backend availability. These are observed by a minimal out-of-band system (often the platform's infrastructure monitoring running on different hardware) so a failure in the main observability stack doesn't blind everyone. Platform teams with mature observability offerings always have an out-of-band minimal monitor",
+        "C) Only the cloud provider handles this",
+        "D) It's the same as application observability"
+      ],
+      "answer": "B",
+      "explanation": "A mature observability platform assumes the main observability stack will occasionally fail. The minimal out-of-band monitor (often a separate Prometheus on separate infrastructure, or a managed external service) watches the observability stack itself: is ingestion flowing? Are queries working? Are alerts firing? Without this, a failure in the main observability stack is invisible — the platform team finds out when tenants notice they have no dashboards.",
+      "difficulty": "hard",
+      "tags": ["observability", "platform-reliability"]
+    },
+    {
+      "id": "sre-30",
+      "question": "Why might 'cost-report accuracy' be a platform SLI?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Only finance cares about cost",
+        "B) If the platform offers cost attribution as a capability (showback, chargeback), its accuracy is a product promise. Teams make decisions based on the reported cost; inaccurate reports lead to wrong decisions. SLI: (attributed cost / total cloud spend) should stay above 90-95%. Below that, teams dispute bills and lose trust in the capability. Critical if the org is doing chargeback",
+        "C) Costs don't need SLIs",
+        "D) It's only a finance metric"
+      ],
+      "answer": "B",
+      "explanation": "Cost-attribution accuracy is often overlooked as an SLI, but it's essential for any platform doing FinOps. If 20% of cloud spend is unattributed, every team's bill is 20% speculative, and trust in the capability erodes. Treating it as an SLI — with a target, monitoring, and recovery actions if it drops — is the mature approach. For organizations doing chargeback specifically, >95% accuracy is typically required before chargeback can function without constant dispute.",
+      "difficulty": "medium",
+      "tags": ["platform-sli", "finops", "cost-allocation"]
+    },
+    {
+      "id": "sre-31",
+      "question": "What does 'catalog freshness' mean as an SLI, and how would you measure it?",
+      "type": "multiple_choice",
+      "options": [
+        "A) How often the catalog UI is updated",
+        "B) The percentage of catalog entries whose metadata has been updated within a recent window (e.g., 90 days) and whose owning team still exists. Measured by: parsing catalog entries, checking last-update timestamps, cross-referencing with team directory. An SLO target like '95% of services have metadata updated in last 90 days' keeps the catalog useful. Without freshness tracking, catalogs rot silently",
+        "C) Frequency of catalog backups",
+        "D) Not a real metric"
+      ],
+      "answer": "B",
+      "explanation": "Catalogs that aren't measured for freshness decay. The value of a catalog is the reliability of its data: alerts route correctly because owner is current, scaffolder uses correct conventions because templates are maintained, on-call pages the right team because ownership is live. A stale catalog looks functional but misdirects everything. Treating freshness as an SLI forces periodic health attention — if freshness drops below SLO, it's a signal that catalog ownership or tooling needs investment.",
+      "difficulty": "medium",
+      "tags": ["platform-sli", "catalog", "catalog-decay"]
+    },
+    {
+      "id": "sre-32",
+      "question": "Why might 'scaffolder latency' be a platform SLI worth tracking?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It's not worth tracking",
+        "B) The scaffolder is often the first impression a developer has of the platform. Slow scaffolder = slow platform in their mind. Specifically: p95 time from 'developer clicks create service' to 'service is committable and deployable' — target typically <10 minutes. Tracking reveals regressions (a new feature slowing things down) before they erode adoption, and surfaces opportunities to parallelize or cache",
+        "C) Only Backstage has this metric",
+        "D) Scaffolders are always fast enough"
+      ],
+      "answer": "B",
+      "explanation": "Scaffolder latency is a leading indicator of platform adoption health. New-service creation is usually an infrequent event per team but a high-visibility one — it's how teams experience the platform when they're evaluating it for a new service. If the scaffolder takes 45 minutes when it used to take 10, something regressed; tracking this SLI catches the drift. Fast scaffolders (under 5 minutes from start to committable repo) feel magical and drive adoption; slow ones drive workarounds.",
+      "difficulty": "easy",
+      "tags": ["platform-sli", "scaffolder", "devex"]
+    },
+    {
+      "id": "sre-33",
+      "question": "Why is 'admission-controller latency' a platform SLI, not just an ops metric?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It's invisible to developers",
+        "B) Admission latency directly affects deploy time. If the admission controller takes 5 seconds per resource decision, a deploy with 20 resources takes 100 seconds in admission alone. Visible to developers as slow deploys. An SLI target (e.g., p95 admission latency < 200ms) makes this visible, and catches regressions from policy complexity before developers complain",
+        "C) Only Kyverno cares about this",
+        "D) It's only relevant in multi-cluster setups"
+      ],
+      "answer": "B",
+      "explanation": "Admission latency is usually invisible until it's awful. Each new admission policy adds evaluation time; the cumulative effect sneaks up on platforms. A 50ms baseline can become 500ms after a quarter of policy additions, and deploys start feeling sluggish. Tracking admission latency as an SLI with an explicit target creates pressure to keep policies efficient — and surfaces opportunities to use Kubernetes 1.30+ CEL-based ValidatingAdmissionPolicy (in-process, lower latency) over webhook-based controllers for simple cases.",
+      "difficulty": "medium",
+      "tags": ["platform-sli", "admission-control", "policy-as-code"]
+    },
+    {
+      "id": "sre-34",
+      "question": "A platform-shared Prometheus has a cardinality explosion caused by one tenant. What's the platform-level response that prevents recurrence (not just fixes this one)?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Scale Prometheus up and absorb the cost",
+        "B) (1) Immediate: drop the offending label at the OTel Collector for that tenant, restoring service for everyone. (2) Short-term: enforce per-tenant cardinality budgets at the Collector or Prometheus ingester — any tenant exceeding their budget is throttled, not allowed to affect others. (3) Long-term: alerting on per-tenant cardinality growth with automated notification before budget exhaustion. Structural isolation > reactive firefighting",
+        "C) Ban all custom metrics",
+        "D) Only the offending team's problem"
+      ],
+      "answer": "B",
+      "explanation": "The platform-framing insight: cardinality explosion from one tenant is a multi-tenancy isolation failure, not just a Prometheus problem. If one team can blow up the shared instance, the platform doesn't have proper tenant isolation. The right response has three time horizons: immediate mitigation, short-term isolation enforcement, long-term detection. Each tenant's metric budget should be enforceable and visible — if a tenant approaches their limit, they get a warning and can take action before their cardinality impacts others.",
+      "difficulty": "hard",
+      "tags": ["observability", "multi-tenancy", "cardinality"]
+    },
+    {
+      "id": "sre-35",
+      "question": "How should a 'telemetry budget' per tenant be structured so it's enforceable and fair?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Equal allocation for every tenant",
+        "B) Baseline allocation (e.g., 10k metric series, X GB logs, Y% trace sampling) — free to every tenant. Additional capacity via tiers — opt-in with explicit cost signal (either internal credits or real dollars). Enforcement at the ingestion layer (OTel Collector or Prometheus ingester) with rate limits and drop rules. Visibility: tenant sees their consumption vs budget; platform team sees aggregate + outliers. Without enforcement, budgets are theoretical; without visibility, enforcement feels arbitrary",
+        "C) No budgets — let all tenants use what they need",
+        "D) Budgets only in regulated environments"
+      ],
+      "answer": "B",
+      "explanation": "Telemetry budgets exist because observability resources are finite and shared. The design needs three elements together: baseline (useful for free), tiers (paid opt-ins with clear cost), enforcement (at the ingestion layer so abuse is blocked, not just flagged). Budgets without enforcement are ignored; enforcement without visibility feels punitive. Equal budgets for unequal teams fail too — a small team and a large team have different legitimate needs. Tiered opt-in structure handles this fairly.",
+      "difficulty": "medium",
+      "tags": ["observability", "telemetry-budget", "multi-tenancy"]
+    },
+    {
+      "id": "sre-36",
+      "question": "Why does 'dashboard rot' happen, and what's the platform-level design that prevents it?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Dashboards don't rot",
+        "B) Dashboards rot because: the team that created them changes/leaves, the underlying metrics change or are renamed, queries break silently, and nobody notices until they need the dashboard and find it useless. Platform-level prevention: (1) dashboards-as-code versioned with the service repo; (2) auto-generated dashboards from catalog + SLO metadata (no per-service bespoke dashboards); (3) retire dashboards automatically when the service is deprecated; (4) link dashboards to catalog ownership so routing follows team changes",
+        "C) Only Grafana has this problem",
+        "D) Dashboards should be rebuilt quarterly"
+      ],
+      "answer": "B",
+      "explanation": "Dashboards are data artifacts, not documents. When they're treated as documents (one-off creations nobody owns), they rot. Platform-level solutions treat them as versioned artifacts tied to service metadata — created with the service, versioned with its code, retired with its deprecation. When this integration works, dashboard freshness is a consequence of catalog health rather than a separate discipline.",
+      "difficulty": "medium",
+      "tags": ["observability", "dashboard-rot", "catalog"]
+    },
+    {
+      "id": "sre-37",
+      "question": "What makes the OpenTelemetry Collector a 'policy enforcement point' for platform observability?",
+      "type": "multiple_choice",
+      "options": [
+        "A) Nothing — it's just a passthrough",
+        "B) The Collector sits in the telemetry path and can enforce: sampling rules (head or tail), rate limits per tenant, attribute scrubbing (remove PII), label normalization (enforce mandatory tags), routing (different signal types to different backends), and cost controls (drop high-cardinality series before they hit storage). Running it as a platform component gives the platform team a policy hook without requiring tenants to change instrumentation",
+        "C) Only OpenTelemetry Cloud has this feature",
+        "D) It's a Kubernetes-only feature"
+      ],
+      "answer": "B",
+      "explanation": "The Collector is one of the highest-leverage platform components precisely because it's a policy point. The platform team can enforce invariants — mandatory tags for cost attribution, PII scrubbing, per-tenant rate limits, sampling rules — at the Collector, transparent to tenants. Without the Collector, each tenant must implement these individually (error-prone, inconsistent); with it, the policy is applied uniformly and centrally. Treating the Collector as a policy point (not just a passthrough) multiplies the platform team's leverage.",
+      "difficulty": "medium",
+      "tags": ["observability", "otel-collector", "policy-as-code"]
+    },
+    {
+      "id": "sre-38",
+      "question": "Platform observability offering = 'we deploy Grafana and Prometheus.' Why is this framing inadequate?",
+      "type": "multiple_choice",
+      "options": [
+        "A) It's adequate",
+        "B) 'We deploy tools' is infrastructure framing, not product framing. A real platform observability offering provides: zero-config baseline dashboards generated from catalog metadata, SLO-based alert templates, per-service scorecard, per-tenant budgets with visibility, cost signals, documentation teams can actually use. The tooling is the commodity; the opinionated wiring, defaults, and self-service configuration are the product. Without these, teams get an empty Grafana URL and figure it out alone",
+        "C) Teams should build it themselves",
+        "D) Grafana alone is the complete answer"
+      ],
+      "answer": "B",
+      "explanation": "The most common observability antipattern in platform teams: 'we deployed the tools, teams can use them.' Teams arrive at an empty Grafana with no dashboards, no alerts, no guidance. They don't know what to measure, where to put dashboards, how to write alerts. Result: observability adoption stalls, teams fly blind, incidents take longer to resolve. The product-framing version has opinionated defaults that make the baseline useful without effort — the tooling is necessary but nowhere near sufficient.",
+      "difficulty": "easy",
+      "tags": ["observability", "platform-as-product"]
     }
   ]
 }

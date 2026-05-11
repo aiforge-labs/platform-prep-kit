@@ -1,6 +1,6 @@
 # STAR Story Prompts
 
-20 prompts to practice translating SRE experience into platform-engineering framing. Content will be populated in milestone 1.4.
+20 prompts to practice translating SRE experience into platform-engineering framing. Used mainly in Week 12 (Behavioral + Closing).
 
 ---
 
@@ -16,27 +16,40 @@ Interviewers for platform engineer roles listen for a specific *framing*, not sp
 
 Same underlying work. Completely different signal to the interviewer.
 
-## Structure (to be populated)
+---
 
-Each prompt in milestone 1.4 will include:
+## Structure
+
+Each prompt includes:
 
 - **Prompt** — an interview-style question
 - **SRE trap** — how an SRE typically answers this (and why it reads as weak)
 - **Platform framing** — what the interviewer is actually listening for
 - **Coaching rubric** — 4–5 criteria to self-score your answer
-- **Example STAR** — a sample answer hitting all the criteria (your real story, in this framing)
+- **Example shape** — a sample answer scaffold (replace with your real story)
 
-## Coverage (target)
+## Categories
 
-The 20 prompts cover:
+The 20 prompts are organized into 6 category files:
 
-- Technical leadership (3 prompts): designing a system, making a trade-off, deprecating something
-- Customer/developer empathy (4 prompts): finding real pain, saying no to a request, migrating reluctant users
-- Reliability-to-platform translation (4 prompts): translating on-call learnings into platform features
-- Influence without authority (3 prompts): driving adoption, cross-team alignment, convincing skeptics
-- Failure stories (3 prompts): a platform nobody used, a wrong abstraction, a missed signal
-- Career and motivation (3 prompts): why platform, why now, what you'd change about your current role
+| File | Prompts | Focus |
+|---|---|---|
+| [`01-technical-leadership.md`](01-technical-leadership.md) | 3 | Designing, trade-offs, deprecating |
+| [`02-customer-empathy.md`](02-customer-empathy.md) | 4 | Finding pain, saying no, migration, validation |
+| [`03-reliability-to-platform.md`](03-reliability-to-platform.md) | 4 | On-call learnings, postmortems, cross-team reliability, runbook-to-capability |
+| [`04-influence-without-authority.md`](04-influence-without-authority.md) | 3 | Adoption, alignment, skeptics |
+| [`05-failure-stories.md`](05-failure-stories.md) | 3 | Nobody used, wrong abstraction, missed signal |
+| [`06-career-motivation.md`](06-career-motivation.md) | 3 | Why platform, why now, what you'd change |
 
-## Placeholder
+## How to use them
 
-Content pending milestone 1.4.
+1. Work through the categories in order (Week 12 recommends 1.5 hours of review, 2–3 hours of practice).
+2. For each prompt, identify the story from your career that maps to it.
+3. Draft a 2–3 minute answer following the Example shape.
+4. Score with the rubric for that prompt.
+5. Record yourself delivering it. Listen back.
+6. Revisit in Week 12 for the final polish — pick your strongest 8 of the 20 for interview day.
+
+## The "point of view" question
+
+A common additional prompt at senior level — *"tell me something you believe about platform engineering that many of your peers disagree with"* — is covered in [`../weeks/week-12-behavioral.md`](../weeks/week-12-behavioral.md), because it's meta to the 20 STAR prompts.
