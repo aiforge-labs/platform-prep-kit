@@ -85,7 +85,8 @@ page = st.sidebar.radio(
 )
 
 st.sidebar.divider()
-st.sidebar.caption("Platform Prep Kit v0.1.0")
+from prep_agent import __version__ as _pkg_version
+st.sidebar.caption(f"Platform Prep Kit v{_pkg_version}")
 st.sidebar.caption("All data stays local in ~/.prep/")
 
 # ---------------------------------------------------------------------------

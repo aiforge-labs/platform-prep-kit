@@ -34,9 +34,11 @@ async def _lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 def create_app() -> FastAPI:
     """Build and return the configured FastAPI application."""
 
+    from prep_agent import __version__
+
     app = FastAPI(
         title="Platform Prep Kit",
-        version="0.1.0",
+        version=__version__,
         docs_url=None,
         redoc_url=None,
         lifespan=_lifespan,
@@ -47,6 +49,7 @@ def create_app() -> FastAPI:
 
     # Jinja2 templates
     templates = Jinja2Templates(directory=str(_TEMPLATES_DIR))
+    templates.env.globals["app_version"] = __version__
     app.state.templates = templates
 
     # CSRF middleware
@@ -82,6 +85,7 @@ def create_app() -> FastAPI:
     from prep_agent.web.routes.onboarding import router as onboarding_router
     from prep_agent.web.routes.settings import router as settings_router
     from prep_agent.web.routes.portfolio import router as portfolio_router
+    from prep_agent.web.routes.help import router as help_router
 
     app.include_router(dashboard_router)
     app.include_router(today_router)
@@ -91,10 +95,11 @@ def create_app() -> FastAPI:
     app.include_router(onboarding_router)
     app.include_router(settings_router)
     app.include_router(portfolio_router)
+    app.include_router(help_router)
 
     # Health check
     @app.get("/health")
     async def health():
-        return {"status": "ok", "version": "0.1.0"}
+        return {"status": "ok", "version": __version__}
 
     return app
