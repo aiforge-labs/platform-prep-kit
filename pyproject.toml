@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "platform-prep-kit"
-version = "0.1.0"
+version = "1.0.0"
 description = "Your personal career coaching CLI — systematically prepare for any role with study plans, reminders, and optional AI integration."
 readme = "README.md"
 license = {text = "MIT"}
@@ -66,6 +66,9 @@ dev = [
     "pytest-cov>=4.0",
     "httpx>=0.24",
 ]
+e2e = [
+    "pytest-playwright>=0.5",
+]
 
 [project.scripts]
 prep = "prep_agent.cli:main"
@@ -80,3 +83,8 @@ include = ["prep_agent*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "e2e: end-to-end browser tests (require playwright + chromium; opt-in)",
+]
+# Skip e2e by default — they need a browser. Run with: pytest -m e2e
+addopts = "-m 'not e2e'"

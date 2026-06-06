@@ -19,7 +19,7 @@ from rich.text import Text
 console = Console()
 
 APP_NAME = "Platform Prep Kit"
-APP_VERSION = "0.1.0"
+from prep_agent import __version__ as APP_VERSION
 
 # ------------------------------------------------------------------
 # Banner

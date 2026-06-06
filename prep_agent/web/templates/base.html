@@ -14,7 +14,7 @@
         <nav class="sidebar">
             <div class="sidebar-header">
                 <h1 class="logo">Platform Prep Kit</h1>
-                <span class="version">v0.1.0</span>
+                <span class="version">v{{ app_version }}</span>
             </div>
             <ul class="nav-links">
                 <li><a href="/" class="nav-link {% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a></li>
@@ -24,6 +24,7 @@
                 <li><a href="/knowledge" class="nav-link {% if active_page == 'knowledge' %}active{% endif %}">Knowledge</a></li>
                 <li><a href="/portfolio" class="nav-link {% if active_page == 'portfolio' %}active{% endif %}">Portfolio</a></li>
                 <li><a href="/settings" class="nav-link {% if active_page == 'settings' %}active{% endif %}">Settings</a></li>
+                <li><a href="/help" class="nav-link {% if active_page == 'help' %}active{% endif %}">Help</a></li>
             </ul>
         </nav>
 

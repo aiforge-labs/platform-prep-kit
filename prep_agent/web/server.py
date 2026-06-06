@@ -54,3 +54,7 @@ def run(
         factory=True,
         log_level="info",
     )
+
+
+if __name__ == "__main__":
+    run()

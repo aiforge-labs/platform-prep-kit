@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% set active_page = "help" %}
+{% block title %}Help & Support - Platform Prep Kit{% endblock %}
+
+{% block content %}
+<h2>Help &amp; Support</h2>
+
+<p class="text-muted">
+    Everything you need to run Platform Prep Kit locally, get the most out of it,
+    and contribute back. All data stays on your machine in <code>~/.prep/</code>.
+</p>
+
+<section class="card" style="margin-top: 1.5rem;">
+    <h3>Running locally</h3>
+    <p>Get the web UI up in under a minute. Requires Python 3.10+.</p>
+    <ol>
+        <li>
+            <strong>Install</strong>
+            <pre><code>pip install platform-prep-kit[ui]
+# or, from a clone:
+pip install -e ".[ui]"</code></pre>
+        </li>
+        <li>
+            <strong>Start the server</strong>
+            <pre><code>prep serve</code></pre>
+            Opens this dashboard at <code>http://127.0.0.1:8080</code>.
+        </li>
+        <li>
+            <strong>Run a quiz from the CLI</strong> (optional)
+            <pre><code>prep quiz --tag mitre-atlas</code></pre>
+        </li>
+    </ol>
+    <p class="text-muted">
+        Trouble? Check <a href="/health">/health</a> returns <code>{"status":"ok"}</code>,
+        and that port 8080 isn't already in use (<code>lsof -iTCP:8080 -sTCP:LISTEN</code>).
+    </p>
+</section>
+
+<section class="card" style="margin-top: 1.5rem;">
+    <h3>Using the app</h3>
+    <ul>
+        <li><strong><a href="/today">Today</a></strong> — your current day's study card. Mark done when finished.</li>
+        <li><strong><a href="/study">Study Plan</a></strong> — full multi-week plan, filterable by week and track.</li>
+        <li><strong><a href="/quiz">Quizzes</a></strong> — practice questions tagged by topic (MITRE ATLAS, NIST AI RMF, OWASP LLM Top 10, etc.).</li>
+        <li><strong><a href="/knowledge">Knowledge</a></strong> — deep-dive packs you can check off section by section.</li>
+        <li><strong><a href="/portfolio">Portfolio</a></strong> — role-specific project templates with rubrics, to show on your CV/LinkedIn.</li>
+        <li><strong><a href="/settings">Settings</a></strong> — change role template, reminder schedule, integrations.</li>
+    </ul>
+</section>
+
+<section class="card" style="margin-top: 1.5rem;">
+    <h3>Contributing</h3>
+    <p>
+        Found a bug, want to add a knowledge pack, or have a new role template to ship?
+        Contributions are welcome.
+    </p>
+    <ol>
+        <li>Fork the repo on <a href="https://github.com/aiforge-labs/platform-prep-kit" target="_blank" rel="noopener">GitHub</a></li>
+        <li>Create a feature branch (<code>git checkout -b feat/your-idea</code>)</li>
+        <li>Run the test suite: <code>make test</code></li>
+        <li>Open a pull request — small, focused PRs merge fastest</li>
+    </ol>
+    <p>
+        Read <a href="https://github.com/aiforge-labs/platform-prep-kit/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a>
+        for code style, commit-message conventions, and how knowledge packs / project templates are structured.
+    </p>
+    <h4 style="margin-top: 1rem;">Good first contributions</h4>
+    <ul>
+        <li>Add a knowledge pack for a topic you know well (Markdown file in <code>knowledge_packs/</code>)</li>
+        <li>Add quiz questions tagged by topic (<code>quiz_banks/*.yml</code>)</li>
+        <li>Add a role template (<code>project_templates/*.yml</code>) — RAG eval, security ML, MLOps, etc.</li>
+        <li>Improve docs or fix a typo</li>
+    </ul>
+</section>
+
+<section class="card" style="margin-top: 1.5rem;">
+    <h3>Get support</h3>
+    <ul>
+        <li><a href="https://github.com/aiforge-labs/platform-prep-kit/issues" target="_blank" rel="noopener">Report a bug or request a feature</a> (GitHub Issues)</li>
+        <li><a href="https://github.com/aiforge-labs/platform-prep-kit/discussions" target="_blank" rel="noopener">Discuss ideas &amp; share your study plans</a> (GitHub Discussions)</li>
+        <li><a href="https://github.com/aiforge-labs/platform-prep-kit/blob/main/SECURITY.md" target="_blank" rel="noopener">Report a security issue</a> privately</li>
+    </ul>
+</section>
+
+<section class="card" style="margin-top: 1.5rem;">
+    <h3>About this build</h3>
+    <p>
+        Version: <code>{{ app_version }}</code> &nbsp;·&nbsp;
+        <a href="/health" target="_blank">Health check</a> &nbsp;·&nbsp;
+        License: MIT
+    </p>
+</section>
+{% endblock %}

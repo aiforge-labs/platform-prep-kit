@@ -13,7 +13,7 @@ from typing import Any
 
 import click
 
-__version__ = "0.1.0"
+from prep_agent import __version__
 
 # ---------------------------------------------------------------------------
 # Lazy-loading helper
