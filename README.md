@@ -6,7 +6,7 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-193%20passed-brightgreen.svg)](#testing)
+[![Tests](https://img.shields.io/badge/tests-221%20passed-brightgreen.svg)](#testing)
 
 ---
 
@@ -72,7 +72,7 @@ The agent analyzes your profile against the job requirements, identifies gaps, a
 ```
 $ prep init --job-url "https://..." --resume ~/resume.pdf
 
-Platform Prep Kit v0.1.0
+Platform Prep Kit v1.0.0
   Job analyzed: Cloud Security Lead
   Resume parsed: 15 years experience, 4 certs
   Fitment score: 74/100
